@@ -1,2 +1,2 @@
 # go-link
-Service for sharing link aliases within a company
+Service for creating and sharing memorable URL aliases
