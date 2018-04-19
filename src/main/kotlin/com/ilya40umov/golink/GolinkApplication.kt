@@ -1,4 +1,4 @@
-package com.ilya40umov.golink.golink
+package com.ilya40umov.golink
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

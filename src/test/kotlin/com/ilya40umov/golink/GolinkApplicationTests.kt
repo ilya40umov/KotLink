@@ -1,4 +1,4 @@
-package com.ilya40umov.golink.golink
+package com.ilya40umov.golink
 
 import org.junit.Test
 import org.junit.runner.RunWith
