@@ -7,10 +7,9 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class GolinkApplicationTests {
+class GoLinkApplicationTest {
 
-	@Test
-	fun contextLoads() {
-	}
-
+    @Test
+    fun `application context should load successfully`() {
+    }
 }

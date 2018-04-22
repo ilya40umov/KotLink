@@ -11,7 +11,7 @@ allprojects {
 }
 
 buildscript {
-    val kotlinVersion by extra { "1.2.30" }
+    val kotlinVersion by extra { "1.2.40" }
     val springBootVersion by extra { "2.0.1.RELEASE" }
     repositories {
         mavenCentral()
@@ -49,15 +49,20 @@ tasks {
 }
 
 dependencies {
+    val kotlinLoggingVersion by extra { "1.4.9" }
+
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-cache")
     compile("org.springframework.boot:spring-boot-starter-validation")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-webflux")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("io.projectreactor:reactor-test")
 }
