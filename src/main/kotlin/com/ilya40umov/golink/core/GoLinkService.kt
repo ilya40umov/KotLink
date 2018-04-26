@@ -1,6 +1,6 @@
 package com.ilya40umov.golink.core
 
-import com.ilya40umov.golink.LINK_SEPARATOR
+import com.ilya40umov.golink.alias.Alias
 import com.ilya40umov.golink.alias.AliasRepository
 import org.springframework.stereotype.Service
 
@@ -8,26 +8,22 @@ import org.springframework.stereotype.Service
 class GoLinkService(private val aliasRepository: AliasRepository) {
 
     fun findRedirectUrlByLink(userProvidedLink: String): String? =
-        normalizeLink(userProvidedLink).let(aliasRepository::findByFullLink).let { it?.redirectUrl }
+        aliasRepository.findByFullLink(userProvidedLink)
+            .let { it?.redirectUrl }
 
-    fun suggestLinksByPrefix(userProvidedLinkPrefix: String): OpenSearchSuggestions =
-        normalizeLink(userProvidedLinkPrefix).let { normalizedPrefix ->
-            val aliases = aliasRepository.findByFullLinkPrefix(normalizedPrefix)
-            val denormalizedLinks = aliases.map { it.fullLink }.map(this::denormalizeLink)
-            OpenSearchSuggestions(
-                prefix = normalizedPrefix,
-                links = denormalizedLinks,
-                descriptions = denormalizedLinks,
-                // TODO create URLs in format /go/redirect?link=xyz instead of sending out redirect URLs
-                redirectUrls = aliases.map { it.redirectUrl }
-            )
-        }
-
-    private fun normalizeLink(link: String): String {
-        return link.trim().replace("\\s+".toRegex(), LINK_SEPARATOR)
+    fun suggestAliasesByLinkPrefix(userProvidedLinkPrefix: String): OpenSearchSuggestions {
+        val aliases = aliasRepository.findByFullLinkPrefix(userProvidedLinkPrefix)
+        val fullLinks = aliases.map { it.fullLink }
+        return OpenSearchSuggestions(
+            prefix = userProvidedLinkPrefix,
+            links = fullLinks,
+            descriptions = fullLinks,
+            redirectUrls = aliases.map { it.redirectUrl }
+        )
     }
 
-    private fun denormalizeLink(goLink: String): String {
-        return goLink.trim { it <= ' ' }.replace(LINK_SEPARATOR, " ")
+    fun searchAliasesMatchingInput(userProvidedInput: String): List<Alias> {
+        val keywords = userProvidedInput.split("\\s+".toRegex())
+        return aliasRepository.findWithAtLeastOneOfKeywords(keywords)
     }
 }

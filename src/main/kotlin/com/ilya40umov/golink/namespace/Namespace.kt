@@ -1,6 +1,8 @@
 package com.ilya40umov.golink.namespace
 
-/** Serves as a container for aliases. */
+/**
+ * Groups aliases that start with a common keyword, which is very helpful for isolating aliases between teams/projects.
+ */
 data class Namespace(
     val id: Int,
     val keyword: String
