@@ -7,6 +7,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        jcenter()
     }
 }
 
@@ -63,6 +64,13 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-reflect")
     compile("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
+    val kluentVersion by extra { "1.36" }
+    val kJsonAssertVersion by extra { "0.1.0" }
+    val mockitoKotlinVersion by extra { "2.0.0-alpha01" }
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("io.projectreactor:reactor-test")
+    testCompile("org.amshove.kluent:kluent:$kluentVersion")
+    testCompile("com.gregwoodfill.assert:kotlin-json-assert:$kJsonAssertVersion")
+    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion")
 }
