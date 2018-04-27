@@ -6,7 +6,7 @@
 <body>
 <h2 th:if="${aliases.isEmpty()}">Found no matching aliases</h2>
 <h2 th:if="${!(aliases.isEmpty())}">Found aliases:</h2>
-<ul th:each="alias: ${aliases}">
+<ul id="found-aliases" th:each="alias: ${aliases}">
     <li><a href="/" th:text="${alias.fullLink}" th:attr="href=${alias.redirectUrl}">alias</a></li>
 </ul>
 </body>

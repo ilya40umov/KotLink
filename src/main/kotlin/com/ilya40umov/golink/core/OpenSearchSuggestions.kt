@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import com.ilya40umov.golink.alias.Alias
 
 /**
  * Suggestions in a format defined by:
@@ -15,7 +16,14 @@ data class OpenSearchSuggestions(
     val links: List<String>,
     val descriptions: List<String>,
     val redirectUrls: List<String>
-)
+) {
+    constructor(prefix: String, aliases: List<Alias>) : this(
+        prefix = prefix,
+        links = aliases.map { it.fullLink },
+        descriptions = aliases.map { it.fullLink },
+        redirectUrls = aliases.map { it.redirectUrl }
+    )
+}
 
 class OpenSearchSuggestionsSerializer(t: Class<OpenSearchSuggestions>? = null)
     : StdSerializer<OpenSearchSuggestions>(t) {

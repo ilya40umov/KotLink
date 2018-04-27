@@ -13,13 +13,7 @@ class GoLinkService(private val aliasRepository: AliasRepository) {
 
     fun suggestAliasesByLinkPrefix(userProvidedLinkPrefix: String): OpenSearchSuggestions {
         val aliases = aliasRepository.findByFullLinkPrefix(userProvidedLinkPrefix)
-        val fullLinks = aliases.map { it.fullLink }
-        return OpenSearchSuggestions(
-            prefix = userProvidedLinkPrefix,
-            links = fullLinks,
-            descriptions = fullLinks,
-            redirectUrls = aliases.map { it.redirectUrl }
-        )
+        return OpenSearchSuggestions(userProvidedLinkPrefix, aliases)
     }
 
     fun searchAliasesMatchingInput(userProvidedInput: String): List<Alias> {
