@@ -1,7 +1,7 @@
 package com.ilya40umov.golink.core
 
 import com.ilya40umov.golink.INBOX_ALIAS
-import com.ilya40umov.golink.alias.AliasRepository
+import com.ilya40umov.golink.alias.AliasRepo
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -15,7 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class GoLinkServiceTest {
 
-    private val aliasRepository = mock<AliasRepository> {}
+    private val aliasRepository = mock<AliasRepo> {}
     private val goLinkService = GoLinkService(aliasRepository)
 
     @Test

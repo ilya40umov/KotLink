@@ -4,7 +4,7 @@ import com.ilya40umov.golink.namespace.Namespace
 import org.springframework.stereotype.Repository
 
 @Repository
-class AliasRepository {
+class AliasRepo {
 
     private val defaultNamespace = Namespace(id = 1, keyword = "")
     private val aliases = mutableListOf<Alias>().apply {

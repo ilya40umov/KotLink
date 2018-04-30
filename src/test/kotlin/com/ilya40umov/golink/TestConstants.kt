@@ -5,6 +5,10 @@ import com.ilya40umov.golink.namespace.Namespace
 
 val DEFAULT_NAMESPACE = Namespace(id = 1, keyword = "")
 
+const val ABC_NAMESPACE_ID = 2L
+
+val ABC_NAMESPACE = Namespace(id = ABC_NAMESPACE_ID, keyword = "abc")
+
 val INBOX_ALIAS = Alias(
     id = 1,
     namespace = DEFAULT_NAMESPACE,
