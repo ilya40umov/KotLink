@@ -60,7 +60,6 @@ tasks {
         reports {
             xml.apply {
                 isEnabled = true
-                destination = File("$buildDir/reports/jacoco/report.xml")
             }
             html.apply {
                 isEnabled = false
