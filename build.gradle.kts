@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 allprojects {
@@ -26,6 +27,7 @@ buildscript {
 
 plugins {
     java
+    jacoco
 }
 
 apply {
@@ -45,6 +47,24 @@ tasks {
         kotlinOptions {
             jvmTarget = "1.8"
             freeCompilerArgs = listOf("-Xjsr305=strict")
+        }
+    }
+    tasks.withType<Test> {
+        testLogging.apply {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+            exceptionFormat = TestExceptionFormat.FULL
+        }
+    }
+    withType<JacocoReport> {
+        reports {
+            xml.apply {
+                isEnabled = true
+                destination = File("$buildDir/reports/jacoco/report.xml")
+            }
+            html.apply {
+                isEnabled = false
+            }
         }
     }
 }

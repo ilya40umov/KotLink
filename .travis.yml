@@ -10,8 +10,11 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew check
+  - ./gradlew check jacocoTestReport
 
-# TODO report code coverage
-# after_success:
-# - ./gradlew jacocoTestReport coveralls
+before_install:
+  - sudo apt-get install jq
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
+
+after_success:
+  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r build/reports/jacoco/report.xml
