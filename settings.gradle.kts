@@ -1,1 +1,1 @@
-rootProject.name = "golink"
+rootProject.name = "kotlink"

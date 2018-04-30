@@ -1,4 +1,4 @@
-package com.ilya40umov.golink.namespace
+package org.kotlink.namespace
 
 import javax.validation.constraints.Pattern
 

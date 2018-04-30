@@ -1,8 +1,8 @@
-package com.ilya40umov.golink.namespace
+package org.kotlink.namespace
 
-import com.ilya40umov.golink.ABC_NAMESPACE
-import com.ilya40umov.golink.ABC_NAMESPACE_ID
-import com.ilya40umov.golink.DEFAULT_NAMESPACE
+import org.kotlink.ABC_NAMESPACE
+import org.kotlink.ABC_NAMESPACE_ID
+import org.kotlink.DEFAULT_NAMESPACE
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify

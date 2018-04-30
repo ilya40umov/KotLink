@@ -1,9 +1,9 @@
-package com.ilya40umov.golink.core
+package org.kotlink.core
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gregwoodfill.assert.shouldEqualJson
-import com.ilya40umov.golink.INBOX_ALIAS
-import com.ilya40umov.golink.INIT_ALIAS
+import org.kotlink.INBOX_ALIAS
+import org.kotlink.INIT_ALIAS
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4

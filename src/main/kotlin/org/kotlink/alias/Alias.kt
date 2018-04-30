@@ -1,6 +1,6 @@
-package com.ilya40umov.golink.alias
+package org.kotlink.alias
 
-import com.ilya40umov.golink.namespace.Namespace
+import org.kotlink.namespace.Namespace
 
 /** Represents a memorable link that leads to a certain not-so-memorable URL. */
 data class Alias(

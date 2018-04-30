@@ -1,10 +1,10 @@
-package com.ilya40umov.golink.core
+package org.kotlink.core
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
-import com.ilya40umov.golink.alias.Alias
+import org.kotlink.alias.Alias
 
 /**
  * Suggestions in a format defined by:

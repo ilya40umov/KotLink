@@ -1,11 +1,11 @@
-package com.ilya40umov.golink
+package org.kotlink
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class GoLinkApplication
+class KotLinkApplication
 
 fun main(args: Array<String>) {
-    runApplication<GoLinkApplication>(*args)
+    runApplication<KotLinkApplication>(*args)
 }

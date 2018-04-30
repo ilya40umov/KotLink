@@ -1,10 +1,10 @@
-package com.ilya40umov.golink.core
+package org.kotlink.core
 
-import com.ilya40umov.golink.INBOX_ALIAS
-import com.ilya40umov.golink.INIT_ALIAS
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kotlink.INBOX_ALIAS
+import org.kotlink.INIT_ALIAS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -17,38 +17,38 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath
 
 @RunWith(SpringRunner::class)
-@WebMvcTest(GoLinkController::class)
-class GoLinkControllerTest {
+@WebMvcTest(LinkResolutionController::class)
+class LinkResolutionControllerTest {
 
     @Autowired
     private lateinit var mvc: MockMvc
 
     @MockBean
-    private lateinit var goLinkService: GoLinkService
+    private lateinit var linkResolutionService: LinkResolutionService
 
     @Test
     fun `redirectByAlias should redirect to link's URL if alias exists`() {
-        whenever(goLinkService.findRedirectUrlByLink("inbox"))
+        whenever(linkResolutionService.findRedirectUrlByLink("inbox"))
             .thenReturn("https://inbox.google.com")
 
-        mvc.perform(get("/go/redirect?link=inbox"))
+        mvc.perform(get("/link/redirect?link=inbox"))
             .andExpect(status().isFound)
             .andExpect(redirectedUrl("https://inbox.google.com"))
     }
 
     @Test
     fun `redirectByAlias should redirect to search endpoint if alias does not exist`() {
-        mvc.perform(get("/go/redirect?link=abc"))
+        mvc.perform(get("/link/redirect?link=abc"))
             .andExpect(status().isFound)
-            .andExpect(redirectedUrl("/go/search?input=abc"))
+            .andExpect(redirectedUrl("/link/search?input=abc"))
     }
 
     @Test
     fun `suggestAliases should return suggestions in opensearch format if mode is opensearch`() {
-        whenever(goLinkService.suggestAliasesByLinkPrefix("in"))
+        whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
             .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
 
-        mvc.perform(get("/go/suggest?link=in&mode=opensearch"))
+        mvc.perform(get("/link/suggest?link=in&mode=opensearch"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
             .andExpect(jsonPath("$[0]").value("in"))
@@ -63,10 +63,10 @@ class GoLinkControllerTest {
 
     @Test
     fun `suggestAliases should return suggestions in simple format if mode is not present`() {
-        whenever(goLinkService.suggestAliasesByLinkPrefix("in"))
+        whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
             .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
 
-        mvc.perform(get("/go/suggest?link=in&mode=simple"))
+        mvc.perform(get("/link/suggest?link=in&mode=simple"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
             .andExpect(jsonPath("$[0]").value(INBOX_ALIAS.fullLink))
@@ -75,10 +75,10 @@ class GoLinkControllerTest {
 
     @Test
     fun `searchLinks should return the aliases that matched the input`() {
-        whenever(goLinkService.searchAliasesMatchingInput("inbox"))
+        whenever(linkResolutionService.searchAliasesMatchingInput("inbox"))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        mvc.perform(get("/go/search?input=inbox"))
+        mvc.perform(get("/link/search?input=inbox"))
             .andExpect(status().isOk)
             .andExpect(xpath("""/html/body/ul[@id="found-aliases"]/li[1]/a[text()]""")
                 .string(INBOX_ALIAS.fullLink))

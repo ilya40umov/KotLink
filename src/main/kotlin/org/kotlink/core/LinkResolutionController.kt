@@ -1,4 +1,4 @@
-package com.ilya40umov.golink.core
+package org.kotlink.core
 
 import mu.KotlinLogging
 import org.springframework.stereotype.Controller
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.view.RedirectView
 
 @Controller
-@RequestMapping("/go")
-class GoLinkController(private val goLinkService: GoLinkService) {
+@RequestMapping("/link")
+class LinkResolutionController(private val linkResolutionService: LinkResolutionService) {
 
     private val logger = KotlinLogging.logger {}
 
     @GetMapping("/redirect")
     fun redirectByAlias(@RequestParam("link") link: String): RedirectView {
-        return RedirectView(goLinkService.findRedirectUrlByLink(link) ?: "/go/search?input=$link").also {
+        return RedirectView(linkResolutionService.findRedirectUrlByLink(link) ?: "/link/search?input=$link").also {
             logger.info { "Performing redirect: $link => $it.url" }
         }
     }
@@ -27,7 +27,7 @@ class GoLinkController(private val goLinkService: GoLinkService) {
     fun suggestAliases(
         @RequestParam("link") linkPrefix: String,
         @RequestParam("mode", required = false, defaultValue = "simple") mode: String): Any {
-        val suggestions = goLinkService.suggestAliasesByLinkPrefix(linkPrefix)
+        val suggestions = linkResolutionService.suggestAliasesByLinkPrefix(linkPrefix)
         logger.info { "Suggested for $linkPrefix - ${suggestions.links}" }
         return when (mode) {
             "opensearch" -> suggestions
@@ -41,7 +41,7 @@ class GoLinkController(private val goLinkService: GoLinkService) {
 
     @GetMapping("/search")
     fun searchLinks(@RequestParam("input") input: String, model: Model): String {
-        val searchResults = goLinkService.searchAliasesMatchingInput(input)
+        val searchResults = linkResolutionService.searchAliasesMatchingInput(input)
         model.addAttribute("input", input)
         model.addAttribute("aliases", searchResults)
         return "search"

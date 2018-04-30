@@ -1,4 +1,4 @@
-package com.ilya40umov.golink
+package org.kotlink
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class GoLinkApplicationTest {
+class KotLinkApplicationTest {
 
     @Test
     fun `application context should load successfully`() {

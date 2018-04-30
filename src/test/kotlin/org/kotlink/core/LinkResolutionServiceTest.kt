@@ -1,7 +1,5 @@
-package com.ilya40umov.golink.core
+package org.kotlink.core
 
-import com.ilya40umov.golink.INBOX_ALIAS
-import com.ilya40umov.golink.alias.AliasRepo
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -10,26 +8,28 @@ import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kotlink.INBOX_ALIAS
+import org.kotlink.alias.AliasRepo
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class GoLinkServiceTest {
+class LinkResolutionServiceTest {
 
     private val aliasRepository = mock<AliasRepo> {}
-    private val goLinkService = GoLinkService(aliasRepository)
+    private val kotLinkService = LinkResolutionService(aliasRepository)
 
     @Test
     fun `findRedirectUrlByLink should return redirect url if link is found`() {
         whenever(aliasRepository.findByFullLink(eq(INBOX_ALIAS.link))).doReturn(INBOX_ALIAS)
 
-        val redirectUrl = goLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
+        val redirectUrl = kotLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
 
         redirectUrl shouldEqual INBOX_ALIAS.redirectUrl
     }
 
     @Test
     fun `findRedirectUrlByLink should return no url if link is not found`() {
-        val redirectUrl = goLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
+        val redirectUrl = kotLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
 
         redirectUrl.shouldBeNull()
     }
@@ -39,7 +39,7 @@ class GoLinkServiceTest {
         whenever(aliasRepository.findByFullLinkPrefix("in"))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        val suggestions = goLinkService.suggestAliasesByLinkPrefix("in")
+        val suggestions = kotLinkService.suggestAliasesByLinkPrefix("in")
 
         suggestions shouldEqual OpenSearchSuggestions(
             prefix = "in",
@@ -54,7 +54,7 @@ class GoLinkServiceTest {
         whenever(aliasRepository.findWithAtLeastOneOfKeywords(listOf("inbox", "gmail")))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        val aliases = goLinkService.searchAliasesMatchingInput("inbox gmail")
+        val aliases = kotLinkService.searchAliasesMatchingInput("inbox gmail")
 
         aliases shouldEqual listOf(INBOX_ALIAS)
     }

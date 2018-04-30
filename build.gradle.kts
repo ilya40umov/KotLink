@@ -2,7 +2,7 @@ import org.gradle.api.tasks.bundling.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 allprojects {
-    group = "com.ilya40umov"
+    group = "org.kotlink"
     version = "0.0.1-SNAPSHOT"
 
     repositories {

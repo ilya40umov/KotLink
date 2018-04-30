@@ -1,7 +1,7 @@
-package com.ilya40umov.golink
+package org.kotlink
 
-import com.ilya40umov.golink.alias.Alias
-import com.ilya40umov.golink.namespace.Namespace
+import org.kotlink.alias.Alias
+import org.kotlink.namespace.Namespace
 
 val DEFAULT_NAMESPACE = Namespace(id = 1, keyword = "")
 

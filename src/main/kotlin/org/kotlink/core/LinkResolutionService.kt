@@ -1,11 +1,11 @@
-package com.ilya40umov.golink.core
+package org.kotlink.core
 
-import com.ilya40umov.golink.alias.Alias
-import com.ilya40umov.golink.alias.AliasRepo
+import org.kotlink.alias.Alias
+import org.kotlink.alias.AliasRepo
 import org.springframework.stereotype.Service
 
 @Service
-class GoLinkService(private val aliasRepo: AliasRepo) {
+class LinkResolutionService(private val aliasRepo: AliasRepo) {
 
     fun findRedirectUrlByLink(userProvidedLink: String): String? =
         aliasRepo.findByFullLink(userProvidedLink)
