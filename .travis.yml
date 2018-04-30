@@ -10,4 +10,8 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew clean check build
+  - ./gradlew check test
+
+# TODO report code coverage
+# after_success:
+# - ./gradlew jacocoTestReport coveralls
