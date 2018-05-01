@@ -1,6 +1,10 @@
+sudo: required
+
 language: java
 
-# https://docs.travis-ci.com/user/languages/java/#Caching
+services:
+  - docker
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -9,8 +13,14 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+before_script:
+  - ./environment/bin/kt_env_up
+
 script:
   - ./gradlew clean check jacocoTestReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+after_script:
+  - ./environment/bin/kt_env_down

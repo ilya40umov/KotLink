@@ -70,6 +70,8 @@ tasks {
 
 dependencies {
     val kotlinLoggingVersion by extra { "1.4.9" }
+    val postgresDriverVersion by extra { "42.2.2" }
+    val flywayVersion by extra { "5.0.7" }
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
@@ -78,10 +80,15 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-webflux")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
+
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+    compile("org.postgresql:postgresql:$postgresDriverVersion")
+    compile("org.flywaydb:flyway-core:$flywayVersion")
 
     val kluentVersion by extra { "1.36" }
     val kJsonAssertVersion by extra { "0.1.0" }

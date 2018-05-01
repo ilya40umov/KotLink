@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:postgresql://localhost:55432/kotlink
+    username: ktuser
+    password: ktpass
