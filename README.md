@@ -15,8 +15,6 @@ that will resolve aliases entered by the user in Omnibox after first typing `kt`
 Project is still in a very early stage and COMPLETELY UNUSABLE. :)
 
 ### TODOs
-* Multi module project
-* Code coverage plugin
 * Detekt plugin (static code analysis)
 * CRUD endpoint for aliases
 * env (Docker, Postgres, compose)
@@ -24,5 +22,20 @@ Project is still in a very early stage and COMPLETELY UNUSABLE. :)
 * vivaldi instructions
 * chrome plugin
 * firefox plugin
-* frontend with material and angular ???
+* frontend with material
 * security (oath)
+
+### Engineering Guide
+
+#### Software
+* jdk 8+
+* direnv
+* docker
+* docker-compose
+* Intellij IDEA
+
+#### Some useful commands
+* Start dependencies `kt_env_up`
+* Build application (also runs tests) `./gradlew build`
+* Run application in Terminal `./gradlew bootRun`
+* Stop dependencies `kt_env_down`

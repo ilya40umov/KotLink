@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker-compose -p kotlink -f environment/docker-compose.yaml down
