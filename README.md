@@ -4,24 +4,37 @@
 [![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-KotLink is a service for creating and sharing memorable URL aliases.
+KotLink is a solution for creating and sharing memorable URL aliases, 
+which takes its inspiration from Google's internal Go-Links system.
 
-The service will consist of a backend that will perform link resolution 
-and UI that will allow users to add/edit/delete aliases/namespaces.
-Then, there will be plugins available at least for Chrome and FireFox 
-that will resolve aliases entered by the user in Omnibox after first typing `kt`+whitespace.
+It works by letting people install a tiny browser extension 
+(which is not even necessary in case of Vivaldi browser)
+that activates when the person first types `go` in the status bar and then presses whitespace. 
+While activated, the extension is providing autocomplete based on the database on aliases,
+and after the user has hit enter, it will redirect the user to an actual URL that matches the provided alias.
+For example, if someone has already created an alias for `staging newrelic` 
+that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
+by typing `go` *whitespace* `staging newrelic` *enter*, the user will be redirected to the aforementioned link.
 
-### Project Status
-Project is still in a very early stage and COMPLETELY UNUSABLE. :)
+### Project Scope
+
+* Backend for storing and resolving aliases (In-Progress)
+* Frontend for managing aliases (Not started yet)
+* Chrome Plugin (Not started yet)
+* FireFox Plugin (Not started yet)
 
 ### TODOs
-* Detekt plugin (static code analysis)
-* CRUD endpoint for aliases
+* CRUD UI for namespaces
+* CRUD REST endpoint for aliases
+* CRUD UI for aliases
+* Security (oath for all endpoints / secrets for autocomplete)
 * vivaldi instructions
 * chrome plugin
 * firefox plugin
-* frontend with material
-* security (oath)
+* try Detekt (static code analysis)
+
+### Deployment Instructions
+TBA
 
 ### Engineering Guide
 
@@ -32,8 +45,8 @@ Project is still in a very early stage and COMPLETELY UNUSABLE. :)
 * docker-compose
 * Intellij IDEA
 
-#### Some useful commands
-* Start dependencies `kt_env_up`
-* Build application (also runs tests) `./gradlew build`
-* Run application in Terminal `./gradlew bootRun`
-* Stop dependencies `kt_env_down`
+#### How To Develop Locally
+* Start dependencies with `kt_env_up`
+* Build application (also runs tests) with `./gradlew build`
+* Run application in Terminal with `./gradlew bootRun` or in Intellij
+* Stop dependencies with `kt_env_down`
