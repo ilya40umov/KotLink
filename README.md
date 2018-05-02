@@ -10,7 +10,7 @@ which takes its inspiration from Google's internal Go-Links system.
 It works by letting people install a tiny browser extension 
 (which is not even necessary in case of Vivaldi browser)
 that activates when the person first types `go` in the status bar and then presses whitespace. 
-While activated, the extension is providing autocomplete based on the database on aliases,
+While activated, the extension is providing autocomplete based on the database of aliases,
 and after the user has hit enter, it will redirect the user to an actual URL that matches the provided alias.
 For example, if someone has already created an alias for `staging newrelic` 
 that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,

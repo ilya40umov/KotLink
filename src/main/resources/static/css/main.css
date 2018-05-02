@@ -1,0 +1,28 @@
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100%;
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.main-wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.search-input {
+    width: 350px;
+}

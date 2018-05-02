@@ -1,13 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>KotLink - Search</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KotLink</title>
+    <link rel="stylesheet" href="/webjars/material-components-web/0.35.0/dist/material-components-web.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="/js/ready.js"></script>
 </head>
-<body>
-<h2 th:if="${aliases.isEmpty()}">Found no matching aliases</h2>
-<h2 th:if="${!(aliases.isEmpty())}">Found aliases:</h2>
-<ul id="found-aliases" th:each="alias: ${aliases}">
-    <li><a href="/" th:text="${alias.fullLink}" th:attr="href=${alias.redirectUrl}">alias</a></li>
-</ul>
+<body class="mdc-typography">
+<header class="mdc-toolbar mdc-toolbar--fixed">
+    <div class="mdc-toolbar__row">
+        <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+            <span class="mdc-toolbar__title catalog-title">Search</span>
+        </section>
+    </div>
+</header>
+
+<div class="content-wrapper mdc-toolbar-fixed-adjust">
+    <nav id="menu-drawer" class="mdc-drawer mdc-drawer--permanent menu-drawer">
+        <div class="mdc-list-group">
+            <nav class="mdc-list">
+                <a class="mdc-list-item" href="#">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">swap_calls</i>Aliases
+                </a>
+                <a class="mdc-list-item" href="#">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>Namespaces
+                </a>
+                <hr class="mdc-list-divider">
+                <a class="mdc-list-item mdc-list-item--selected" href="#">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">search</i>Search
+                </a>
+                <a class="mdc-list-item" href="#">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">help</i>Help
+                </a>
+            </nav>
+        </div>
+    </nav>
+    <main class="main-wrapper">
+
+        <section>
+            <div class="mdc-text-field search-input">
+                <input type="text" class="mdc-text-field__input" id="my-text-field" th:value="${input}">
+                <label for="my-text-field" class="mdc-floating-label">Input</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            <button class="mdc-button mdc-button--raised">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">search</i>
+                Search
+            </button>
+        </section>
+
+        <h2 th:if="${aliases.isEmpty()}" class="mdc-typography--headline6">Found no matching aliases</h2>
+        <h2 th:if="${!(aliases.isEmpty())}" class="mdc-typography--headline6">Found aliases:</h2>
+        <ul id="found-aliases" th:each="alias: ${aliases}">
+            <li><a href="/" th:text="${alias.fullLink}" th:attr="href=${alias.redirectUrl}">alias</a></li>
+        </ul>
+
+    </main>
+</div>
+
+<script src="/webjars/material-components-web/0.35.0/dist/material-components-web.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
