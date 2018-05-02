@@ -19,7 +19,7 @@ class LinkResolutionServiceTest {
     private val kotLinkService = LinkResolutionService(aliasRepository)
 
     @Test
-    fun `findRedirectUrlByLink should return redirect url if link is found`() {
+    fun `'findRedirectUrlByLink' should return redirect url if link is found`() {
         whenever(aliasRepository.findByFullLink(eq(INBOX_ALIAS.link))).doReturn(INBOX_ALIAS)
 
         val redirectUrl = kotLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
@@ -28,14 +28,14 @@ class LinkResolutionServiceTest {
     }
 
     @Test
-    fun `findRedirectUrlByLink should return no url if link is not found`() {
+    fun `'findRedirectUrlByLink' should return no url if link is not found`() {
         val redirectUrl = kotLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
 
         redirectUrl.shouldBeNull()
     }
 
     @Test
-    fun `suggestAliasesByLinkPrefix should return suggestions created from matching aliases`() {
+    fun `'suggestAliasesByLinkPrefix' should return suggestions created from matching aliases`() {
         whenever(aliasRepository.findByFullLinkPrefix("in"))
             .thenReturn(listOf(INBOX_ALIAS))
 
@@ -50,7 +50,7 @@ class LinkResolutionServiceTest {
     }
 
     @Test
-    fun `searchAliasesMatchingInput split keywords in user input and return found aliases`() {
+    fun `'searchAliasesMatchingInput' split keywords in user input and return found aliases`() {
         whenever(aliasRepository.findWithAtLeastOneOfKeywords(listOf("inbox", "gmail")))
             .thenReturn(listOf(INBOX_ALIAS))
 

@@ -35,8 +35,7 @@ class NamespaceController(private val namespaceRepo: NamespaceRepo) {
         if (namespaceRepo.findByKeyword(namespace.keyword) != null) {
             return ResponseEntity(HttpStatus.CONFLICT)
         }
-        val assignedId = namespaceRepo.insert(namespace.copy(id = null)).id
-            ?: throw IllegalStateException("Created namespace was not assigned an ID")
+        val assignedId = namespaceRepo.insert(namespace.copy(id = null))
         return ResponseEntity(HttpHeaders().also {
             it.location = ucBuilder.path("/namespace/{id}").buildAndExpand(assignedId).toUri()
         }, HttpStatus.CREATED)

@@ -9,6 +9,7 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven("https://dl.bintray.com/kotlin/exposed")
     }
 }
 
@@ -72,6 +73,7 @@ dependencies {
     val kotlinLoggingVersion by extra { "1.4.9" }
     val postgresDriverVersion by extra { "42.2.2" }
     val flywayVersion by extra { "5.0.7" }
+    val exposedVersion by extra { "0.10.2" }
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
@@ -89,6 +91,8 @@ dependencies {
     compile("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
     compile("org.postgresql:postgresql:$postgresDriverVersion")
     compile("org.flywaydb:flyway-core:$flywayVersion")
+    compile("org.jetbrains.exposed:exposed:$exposedVersion")
+    compile("org.jetbrains.exposed:spring-transaction:$exposedVersion")
 
     val kluentVersion by extra { "1.36" }
     val kJsonAssertVersion by extra { "0.1.0" }

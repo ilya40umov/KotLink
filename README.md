@@ -17,7 +17,6 @@ Project is still in a very early stage and COMPLETELY UNUSABLE. :)
 ### TODOs
 * Detekt plugin (static code analysis)
 * CRUD endpoint for aliases
-* Repositories with https://github.com/JetBrains/Exposed https://github.com/bastman/spring-kotlin-exposed/blob/master/rest-api/src/main/kotlin/com/example/api/bookz/db/bookzRepo.kt
 * vivaldi instructions
 * chrome plugin
 * firefox plugin

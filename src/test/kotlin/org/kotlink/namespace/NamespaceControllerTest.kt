@@ -1,8 +1,5 @@
 package org.kotlink.namespace
 
-import org.kotlink.ABC_NAMESPACE
-import org.kotlink.ABC_NAMESPACE_ID
-import org.kotlink.DEFAULT_NAMESPACE
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -10,6 +7,9 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kotlink.ABC_NAMESPACE
+import org.kotlink.ABC_NAMESPACE_ID
+import org.kotlink.DEFAULT_NAMESPACE
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -34,7 +34,7 @@ class NamespaceControllerTest {
     private lateinit var namespaceRepo: NamespaceRepo
 
     @Test
-    fun `findAll returns all namespaces from repository`() {
+    fun `'findAll' should return all namespaces from repository`() {
         whenever(namespaceRepo.findAll()).thenReturn(listOf(DEFAULT_NAMESPACE, ABC_NAMESPACE))
 
         mvc.perform(get("/namespace"))
@@ -45,7 +45,7 @@ class NamespaceControllerTest {
     }
 
     @Test
-    fun `findAll returns no namespaces if repository is empty`() {
+    fun `'findAll' should return no namespaces if repository is empty`() {
         whenever(namespaceRepo.findAll()).thenReturn(listOf())
 
         mvc.perform(get("/namespace"))
@@ -54,7 +54,7 @@ class NamespaceControllerTest {
     }
 
     @Test
-    fun `findById returns corresponding namespace if specified ID exists`() {
+    fun `'findById' should return corresponding namespace if specified ID exists`() {
         whenever(namespaceRepo.findById(ABC_NAMESPACE_ID)).thenReturn(ABC_NAMESPACE)
 
         mvc.perform(get("/namespace/$ABC_NAMESPACE_ID"))
@@ -63,14 +63,14 @@ class NamespaceControllerTest {
     }
 
     @Test
-    fun `findById returns 404 if specified ID does not exist`() {
+    fun `'findById' should return 404 if specified ID does not exist`() {
         mvc.perform(get("/namespace/12345"))
             .andExpect(status().isNotFound)
     }
 
     @Test
-    fun `create returns 201 and location header if namespace is created successfully`() {
-        whenever(namespaceRepo.insert(any())).thenReturn(ABC_NAMESPACE)
+    fun `'create' should return 201 and location header if namespace is created successfully`() {
+        whenever(namespaceRepo.insert(any())).thenReturn(ABC_NAMESPACE.id)
 
         mvc.perform(
             post("/namespace")
@@ -81,7 +81,7 @@ class NamespaceControllerTest {
     }
 
     @Test
-    fun `create returns 409 if namespace matching this keyword already exists`() {
+    fun `'create' should return 409 if namespace matching this keyword already exists`() {
         whenever(namespaceRepo.findByKeyword(ABC_NAMESPACE.keyword)).thenReturn(ABC_NAMESPACE)
 
         mvc.perform(
@@ -92,7 +92,7 @@ class NamespaceControllerTest {
     }
 
     @Test
-    fun `delete returns 204 and removes namespace if specified ID exists`() {
+    fun `'delete' should return 204 and removes namespace if specified ID exists`() {
         whenever(namespaceRepo.findById(ABC_NAMESPACE_ID)).thenReturn(ABC_NAMESPACE)
 
         mvc.perform(delete("/namespace/$ABC_NAMESPACE_ID"))
@@ -102,7 +102,7 @@ class NamespaceControllerTest {
     }
 
     @Test
-    fun `delete returns 400 if specified ID does not exist`() {
+    fun `'delete' should return 400 if specified ID does not exist`() {
         mvc.perform(delete("/namespace/12345"))
             .andExpect(status().isBadRequest)
 

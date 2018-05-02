@@ -3,8 +3,10 @@ package org.kotlink.core
 import org.kotlink.alias.Alias
 import org.kotlink.alias.AliasRepo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class LinkResolutionService(private val aliasRepo: AliasRepo) {
 
     fun findRedirectUrlByLink(userProvidedLink: String): String? =

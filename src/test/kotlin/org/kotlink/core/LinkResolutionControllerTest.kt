@@ -27,7 +27,7 @@ class LinkResolutionControllerTest {
     private lateinit var linkResolutionService: LinkResolutionService
 
     @Test
-    fun `redirectByAlias should redirect to link's URL if alias exists`() {
+    fun `'redirectByAlias' should redirect to link's URL if alias exists`() {
         whenever(linkResolutionService.findRedirectUrlByLink("inbox"))
             .thenReturn("https://inbox.google.com")
 
@@ -37,14 +37,14 @@ class LinkResolutionControllerTest {
     }
 
     @Test
-    fun `redirectByAlias should redirect to search endpoint if alias does not exist`() {
+    fun `'redirectByAlias' should redirect to search endpoint if alias does not exist`() {
         mvc.perform(get("/link/redirect?link=abc"))
             .andExpect(status().isFound)
             .andExpect(redirectedUrl("/link/search?input=abc"))
     }
 
     @Test
-    fun `suggestAliases should return suggestions in opensearch format if mode is opensearch`() {
+    fun `'suggestAliases' should return suggestions in opensearch format if mode is opensearch`() {
         whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
             .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
 
@@ -62,7 +62,7 @@ class LinkResolutionControllerTest {
     }
 
     @Test
-    fun `suggestAliases should return suggestions in simple format if mode is not present`() {
+    fun `'suggestAliases' should return suggestions in simple format if mode is not present`() {
         whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
             .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
 
@@ -74,7 +74,7 @@ class LinkResolutionControllerTest {
     }
 
     @Test
-    fun `searchLinks should return the aliases that matched the input`() {
+    fun `'searchLinks' should return the aliases that matched the input`() {
         whenever(linkResolutionService.searchAliasesMatchingInput("inbox"))
             .thenReturn(listOf(INBOX_ALIAS))
 

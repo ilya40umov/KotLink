@@ -4,3 +4,8 @@ spring:
     url: jdbc:postgresql://localhost:55432/kotlink
     username: ktuser
     password: ktpass
+
+logging:
+  level:
+    org.springframework.web.servlet: INFO
+    Exposed: DEBUG
