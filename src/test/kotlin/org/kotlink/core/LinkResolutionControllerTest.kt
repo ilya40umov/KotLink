@@ -1,6 +1,7 @@
 package org.kotlink.core
 
 import com.nhaarman.mockitokotlin2.whenever
+import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.INBOX_ALIAS
@@ -11,10 +12,10 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath
 
 @RunWith(SpringRunner::class)
 @WebMvcTest(LinkResolutionController::class)
@@ -80,7 +81,6 @@ class LinkResolutionControllerTest {
 
         mvc.perform(get("/link/search?input=inbox"))
             .andExpect(status().isOk)
-            .andExpect(xpath("""/html/body/ul[@id="found-aliases"]/li[1]/a[text()]""")
-                .string(INBOX_ALIAS.fullLink))
+            .andExpect(content().string(Matchers.containsString(INBOX_ALIAS.fullLink)))
     }
 }

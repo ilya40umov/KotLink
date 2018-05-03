@@ -1,8 +1,7 @@
-document.addEventListener("DOMContentLoaded", function (event) {
-    var tfs = document.querySelectorAll(
-        '.mdc-text-field:not([data-demo-no-auto-js])'
-    );
-    for (var i = 0, tf; tf = tfs[i]; i++) {
-        mdc.textField.MDCTextField.attachTo(tf);
+window.ktReady(function () {
+    if (!mdc) {
+        console.error("mdc is still not available!");
+        return;
     }
+    mdc.autoInit();
 });

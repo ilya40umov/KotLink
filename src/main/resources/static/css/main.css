@@ -1,3 +1,13 @@
+/*
+ * General Layout
+ */
+
+:root {
+    --mdc-theme-primary: #3D5AFE;
+    --mdc-theme-secondary: #536DFE;
+    --mdc-theme-background: #f4f4f4;
+}
+
 html {
     height: 100%;
 }
@@ -21,8 +31,40 @@ body {
 .main-wrapper {
     padding-left: 16px;
     padding-right: 16px;
+    width: 100%;
 }
+
+.kt-ready-detect {
+    position: relative;
+}
+
+/*
+ * Search Page
+ */
 
 .search-input {
     width: 350px;
+}
+
+.search-result-list--icon-placeholders .mdc-list-item__graphic {
+    background-color: var(--mdc-theme-text-icon-on-background, rgba(0, 0, 0, 0.38));
+}
+
+.mdc-list--avatar-list .mdc-list-item__graphic {
+    margin-left: 0;
+    margin-right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.mdc-list-item__graphic {
+    margin-left: 0;
+    margin-right: 32px;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
 }
