@@ -66,7 +66,7 @@ window.ktReady = (() => {
         if (elapsedTimeMs > POLL_MAX_WAIT_MS) {
             clearInterval(pollTimer);
             removeDetectionDom();
-            console.error("Timed out waiting for JS and CSS to load after " + POLL_MAX_WAIT_MS + " ms");
+            console.log("Timed out waiting for JS and CSS to load after " + POLL_MAX_WAIT_MS + " ms");
         }
     }
 
