@@ -1,5 +1,5 @@
 window.ktReady(function () {
-    if (!mdc) {
+    if (!Boolean(window.mdc)) {
         console.error("mdc is still not available!");
         return;
     }
