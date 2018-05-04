@@ -1,6 +1,6 @@
-package org.kotlink.alias
+package org.kotlink.api.alias
 
-import org.kotlink.namespace.Namespace
+import org.kotlink.api.namespace.Namespace
 
 /** Represents a memorable link that leads to a certain not-so-memorable URL. */
 data class Alias(

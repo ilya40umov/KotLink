@@ -1,4 +1,4 @@
-package org.kotlink.core
+package org.kotlink.api.resolution
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
@@ -9,7 +9,7 @@ import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.INBOX_ALIAS
-import org.kotlink.alias.AliasRepo
+import org.kotlink.api.alias.AliasRepo
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)

@@ -1,4 +1,4 @@
-package org.kotlink.namespace
+package org.kotlink.api.namespace
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.kotlink.dao.NoKeyGeneratedException
+import org.kotlink.core.dao.NoKeyGeneratedException
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 

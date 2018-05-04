@@ -1,4 +1,4 @@
-package org.kotlink.namespace
+package org.kotlink.api.namespace
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
@@ -37,7 +37,7 @@ class NamespaceControllerTest {
     fun `'findAll' should return all namespaces from repository`() {
         whenever(namespaceRepo.findAll()).thenReturn(listOf(DEFAULT_NAMESPACE, ABC_NAMESPACE))
 
-        mvc.perform(get("/namespace"))
+        mvc.perform(get("/api/namespace"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
             .andExpect(jsonPath("$[0].keyword").value(DEFAULT_NAMESPACE.keyword))
@@ -48,7 +48,7 @@ class NamespaceControllerTest {
     fun `'findAll' should return no namespaces if repository is empty`() {
         whenever(namespaceRepo.findAll()).thenReturn(listOf())
 
-        mvc.perform(get("/namespace"))
+        mvc.perform(get("/api/namespace"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$").isEmpty)
     }
@@ -57,14 +57,14 @@ class NamespaceControllerTest {
     fun `'findById' should return corresponding namespace if specified ID exists`() {
         whenever(namespaceRepo.findById(ABC_NAMESPACE_ID)).thenReturn(ABC_NAMESPACE)
 
-        mvc.perform(get("/namespace/$ABC_NAMESPACE_ID"))
+        mvc.perform(get("/api/namespace/$ABC_NAMESPACE_ID"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.keyword").value(ABC_NAMESPACE.keyword))
     }
 
     @Test
     fun `'findById' should return 404 if specified ID does not exist`() {
-        mvc.perform(get("/namespace/12345"))
+        mvc.perform(get("/api/namespace/12345"))
             .andExpect(status().isNotFound)
     }
 
@@ -73,11 +73,11 @@ class NamespaceControllerTest {
         whenever(namespaceRepo.insert(any())).thenReturn(ABC_NAMESPACE.id)
 
         mvc.perform(
-            post("/namespace")
+            post("/api/namespace")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""{"keyword":"abc"}"""))
             .andExpect(status().isCreated)
-            .andExpect(header().string("Location", Matchers.endsWith("/namespace/$ABC_NAMESPACE_ID")))
+            .andExpect(header().string("Location", Matchers.endsWith("/api/namespace/$ABC_NAMESPACE_ID")))
     }
 
     @Test
@@ -85,7 +85,7 @@ class NamespaceControllerTest {
         whenever(namespaceRepo.findByKeyword(ABC_NAMESPACE.keyword)).thenReturn(ABC_NAMESPACE)
 
         mvc.perform(
-            post("/namespace")
+            post("/api/namespace")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""{"keyword":"abc"}"""))
             .andExpect(status().isConflict)
@@ -95,7 +95,7 @@ class NamespaceControllerTest {
     fun `'delete' should return 204 and removes namespace if specified ID exists`() {
         whenever(namespaceRepo.findById(ABC_NAMESPACE_ID)).thenReturn(ABC_NAMESPACE)
 
-        mvc.perform(delete("/namespace/$ABC_NAMESPACE_ID"))
+        mvc.perform(delete("/api/namespace/$ABC_NAMESPACE_ID"))
             .andExpect(status().isNoContent)
 
         verify(namespaceRepo).deleteById(ABC_NAMESPACE_ID)
@@ -103,7 +103,7 @@ class NamespaceControllerTest {
 
     @Test
     fun `'delete' should return 400 if specified ID does not exist`() {
-        mvc.perform(delete("/namespace/12345"))
+        mvc.perform(delete("/api/namespace/12345"))
             .andExpect(status().isBadRequest)
 
         verify(namespaceRepo, times(0)).deleteById(any())

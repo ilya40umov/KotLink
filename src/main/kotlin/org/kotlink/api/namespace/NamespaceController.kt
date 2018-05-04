@@ -1,4 +1,4 @@
-package org.kotlink.namespace
+package org.kotlink.api.namespace
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/namespace")
+@RequestMapping("/api/namespace")
 class NamespaceController(private val namespaceRepo: NamespaceRepo) {
 
     @GetMapping
@@ -37,7 +37,7 @@ class NamespaceController(private val namespaceRepo: NamespaceRepo) {
         }
         val assignedId = namespaceRepo.insert(namespace.copy(id = null))
         return ResponseEntity(HttpHeaders().also {
-            it.location = ucBuilder.path("/namespace/{id}").buildAndExpand(assignedId).toUri()
+            it.location = ucBuilder.path("/api/namespace/{id}").buildAndExpand(assignedId).toUri()
         }, HttpStatus.CREATED)
     }
 

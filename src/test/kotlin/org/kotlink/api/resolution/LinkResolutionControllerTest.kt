@@ -1,7 +1,6 @@
-package org.kotlink.core
+package org.kotlink.api.resolution
 
 import com.nhaarman.mockitokotlin2.whenever
-import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.INBOX_ALIAS
@@ -12,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -32,16 +30,16 @@ class LinkResolutionControllerTest {
         whenever(linkResolutionService.findRedirectUrlByLink("inbox"))
             .thenReturn("https://inbox.google.com")
 
-        mvc.perform(get("/link/redirect?link=inbox"))
+        mvc.perform(get("/api/link/redirect?link=inbox"))
             .andExpect(status().isFound)
             .andExpect(redirectedUrl("https://inbox.google.com"))
     }
 
     @Test
     fun `'redirectByAlias' should redirect to search endpoint if alias does not exist`() {
-        mvc.perform(get("/link/redirect?link=abc"))
+        mvc.perform(get("/api/link/redirect?link=abc"))
             .andExpect(status().isFound)
-            .andExpect(redirectedUrl("/link/search?input=abc"))
+            .andExpect(redirectedUrl("/ui/search?input=abc"))
     }
 
     @Test
@@ -49,7 +47,7 @@ class LinkResolutionControllerTest {
         whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
             .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
 
-        mvc.perform(get("/link/suggest?link=in&mode=opensearch"))
+        mvc.perform(get("/api/link/suggest?link=in&mode=opensearch"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
             .andExpect(jsonPath("$[0]").value("in"))
@@ -67,20 +65,11 @@ class LinkResolutionControllerTest {
         whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
             .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
 
-        mvc.perform(get("/link/suggest?link=in&mode=simple"))
+        mvc.perform(get("/api/link/suggest?link=in&mode=simple"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$").isArray)
             .andExpect(jsonPath("$[0]").value(INBOX_ALIAS.fullLink))
             .andExpect(jsonPath("$[1]").value(INIT_ALIAS.fullLink))
     }
 
-    @Test
-    fun `'searchLinks' should return the aliases that matched the input`() {
-        whenever(linkResolutionService.searchAliasesMatchingInput("inbox"))
-            .thenReturn(listOf(INBOX_ALIAS))
-
-        mvc.perform(get("/link/search?input=inbox"))
-            .andExpect(status().isOk)
-            .andExpect(content().string(Matchers.containsString(INBOX_ALIAS.fullLink)))
-    }
 }

@@ -1,6 +1,6 @@
-package org.kotlink.alias
+package org.kotlink.api.alias
 
-import org.kotlink.namespace.Namespace
+import org.kotlink.api.namespace.Namespace
 import org.springframework.stereotype.Repository
 
 @Repository

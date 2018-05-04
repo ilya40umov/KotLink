@@ -1,10 +1,10 @@
-package org.kotlink.core
+package org.kotlink.api.resolution
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
-import org.kotlink.alias.Alias
+import org.kotlink.api.alias.Alias
 
 /**
  * Suggestions in a format defined by:

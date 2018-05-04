@@ -1,7 +1,7 @@
-package org.kotlink.core
+package org.kotlink.api.resolution
 
-import org.kotlink.alias.Alias
-import org.kotlink.alias.AliasRepo
+import org.kotlink.api.alias.Alias
+import org.kotlink.api.alias.AliasRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

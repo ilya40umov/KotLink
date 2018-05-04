@@ -1,4 +1,4 @@
-package org.kotlink.namespace
+package org.kotlink.api.namespace
 
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain

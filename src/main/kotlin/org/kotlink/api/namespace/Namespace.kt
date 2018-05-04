@@ -1,4 +1,4 @@
-package org.kotlink.namespace
+package org.kotlink.api.namespace
 
 import javax.validation.constraints.Pattern
 

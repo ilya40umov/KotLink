@@ -1,4 +1,4 @@
-package org.kotlink.core
+package org.kotlink.api.resolution
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.gregwoodfill.assert.shouldEqualJson
@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.INIT_ALIAS
+import org.kotlink.api.resolution.OpenSearchSuggestions
 
 @RunWith(JUnit4::class)
 class OpenSearchSuggestionsSerializerTest {
