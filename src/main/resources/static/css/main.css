@@ -4,8 +4,9 @@
 
 :root {
     --mdc-theme-primary: #3D5AFE;
-    --mdc-theme-secondary: #536DFE;
+    --mdc-theme-secondary: #018786;
     --mdc-theme-background: #F4F4F4;
+    --danger-color: #FF5252;
 }
 
 html {
@@ -38,6 +39,23 @@ body {
     position: relative;
 }
 
+.mdc-button.secondary-text-button {
+    background-color: var(--mdc-theme-secondary, #018786);
+}
+
+.mdc-button.danger-text-button {
+    background-color: var(--danger-color, #FF5252);
+}
+
+.mdl-data-table {
+    width: 100%;
+}
+
+.layout-spacer {
+    display: block;
+    margin-top: 0.5em;
+}
+
 /*
  * Search Page
  */
@@ -47,7 +65,7 @@ body {
 }
 
 .search-result-list--icon-placeholders .mdc-list-item__graphic {
-    background-color: var(--mdc-theme-text-icon-on-background, rgba(0, 0, 0, 0.38));
+    background-color: rgba(0, 0, 0, 0.38);
 }
 
 .mdc-list--avatar-list .mdc-list-item__graphic {

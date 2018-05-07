@@ -4,6 +4,8 @@ spring:
     url: jdbc:postgresql://localhost:55432/kotlink
     username: ktuser
     password: ktpass
+  thymeleaf:
+    cache: false
 
 logging:
   level:

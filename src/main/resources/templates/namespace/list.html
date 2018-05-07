@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="layout">
+<head>
+    <title>KotLink - List Namespaces</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="layout-spacer"></div>
+    <div class="mdc-card">
+        <div class="mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+                <button class="mdc-button mdc-button--raised">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+                    New Namespace
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="layout-spacer"></div>
+    <div class="mdc-card">
+        <table class="mdl-data-table">
+            <thead>
+            <tr>
+                <th width="15%">ID</th>
+                <th>Keyword</th>
+                <th width="10%"></th>
+                <th width="10%"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="namespace: ${namespaces}">
+                <td th:text="${namespace.id}">123</td>
+                <td>
+                    <span th:if="${namespace.keyword.isEmpty()}" style="font-style: italic">(default)</span>
+                    <span th:unless="${namespace.keyword.isEmpty()}" th:text="${namespace.keyword}"></span>
+                </td>
+                <td>
+                    <button class="mdc-button mdc-button--raised secondary-text-button">
+                        <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button class="mdc-button mdc-button--raised danger-text-button">
+                        <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

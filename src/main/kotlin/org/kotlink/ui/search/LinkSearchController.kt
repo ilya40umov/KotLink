@@ -16,6 +16,6 @@ class LinkSearchController(private val linkResolutionService: LinkResolutionServ
         val searchResults = linkResolutionService.searchAliasesMatchingInput(input)
         model.addAttribute("input", input)
         model.addAttribute("aliases", searchResults)
-        return "search"
+        return "search/results"
     }
 }

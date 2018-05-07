@@ -1,11 +1,12 @@
-package org.kotlink.ui.search
+package org.kotlink.ui.namespace
 
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kotlink.ABC_NAMESPACE
 import org.kotlink.INBOX_ALIAS
-import org.kotlink.api.resolution.LinkResolutionService
+import org.kotlink.api.namespace.NamespaceRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -15,19 +16,18 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @RunWith(SpringRunner::class)
-@WebMvcTest(LinkSearchController::class)
-class LinkSearchControllerTest {
+@WebMvcTest(NamespaceCrudController::class)
+class NamespaceCrudControllerTest {
 
     @Autowired
     private lateinit var mvc: MockMvc
 
     @MockBean
-    private lateinit var linkResolutionService: LinkResolutionService
+    private lateinit var namespaceRepo: NamespaceRepo
 
     @Test
-    fun `'searchLinks' should return the page with aliases that matched the input`() {
-        whenever(linkResolutionService.searchAliasesMatchingInput("inbox"))
-            .thenReturn(listOf(INBOX_ALIAS))
+    fun `'listNamespaces' should return the page with all namespaces`() {
+        whenever(namespaceRepo.findAll()).thenReturn(listOf(ABC_NAMESPACE))
 
         mvc.perform(MockMvcRequestBuilders.get("/ui/search?input=inbox"))
             .andExpect(MockMvcResultMatchers.status().isOk)

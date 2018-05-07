@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KotLink</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/material-components-web@0.35.1/dist/material-components-web.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="../static/css/material-table.css" th:href="@{/css/material-table.css}">
+    <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+
+    <script src="../static/js/ready.js" th:src="@{/js/ready.js}"></script>
+</head>
+<body class="mdc-typography">
+
+<header class="mdc-toolbar mdc-toolbar--fixed">
+    <div class="mdc-toolbar__row">
+        <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+            <span class="mdc-toolbar__title catalog-title">Search</span>
+        </section>
+    </div>
+</header>
+
+<div class="content-wrapper mdc-toolbar-fixed-adjust">
+
+    <nav id="menu-drawer" class="mdc-drawer mdc-drawer--permanent menu-drawer">
+        <div class="mdc-list-group">
+            <div class="layout-spacer"></div>
+            <nav class="mdc-list">
+                <a class="mdc-list-item mdc-list-item--selected" href="#" th:href="@{/ui/search}">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">search</i>Search
+                </a>
+                <a class="mdc-list-item" href="#">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">swap_calls</i>Aliases
+                </a>
+                <a class="mdc-list-item" href="#" th:href="@{/ui/namespace}">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>Namespaces
+                </a>
+                <hr class="mdc-list-divider">
+                <a class="mdc-list-item" href="#">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">help</i>Help
+                </a>
+            </nav>
+        </div>
+    </nav>
+
+    <main layout:fragment="content" class="main-wrapper"></main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/material-components-web@0.35.1/dist/material-components-web.js"
+        async></script>
+<script src="../static/js/main.js" th:src="@{/js/main.js}" async></script>
+</body>
+</html>
