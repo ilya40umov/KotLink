@@ -5,7 +5,6 @@ import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.ABC_NAMESPACE
-import org.kotlink.INBOX_ALIAS
 import org.kotlink.api.namespace.NamespaceRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -26,11 +25,11 @@ class NamespaceCrudControllerTest {
     private lateinit var namespaceRepo: NamespaceRepo
 
     @Test
-    fun `'listNamespaces' should return the page with all namespaces`() {
+    fun `'listNamespaces' should render page with all namespaces`() {
         whenever(namespaceRepo.findAll()).thenReturn(listOf(ABC_NAMESPACE))
 
-        mvc.perform(MockMvcRequestBuilders.get("/ui/search?input=inbox"))
+        mvc.perform(MockMvcRequestBuilders.get("/ui/namespace?input=inbox"))
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(INBOX_ALIAS.fullLink)))
+            .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(ABC_NAMESPACE.keyword)))
     }
 }
