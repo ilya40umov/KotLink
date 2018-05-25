@@ -1,4 +1,4 @@
-package org.kotlink.config
+package org.kotlink.shared.config
 
 import org.jetbrains.exposed.spring.SpringTransactionManager
 import org.springframework.context.annotation.Bean

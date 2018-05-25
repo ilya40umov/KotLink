@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.kotlink.core.dao.NoKeyGeneratedException
+import org.kotlink.shared.exposed.NoKeyGeneratedException
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 

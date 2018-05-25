@@ -1,6 +1,6 @@
 package org.kotlink.api.resolution
 
-import mu.KotlinLogging
+import mu.KLogging
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,8 +11,6 @@ import org.springframework.web.servlet.view.RedirectView
 @Controller
 @RequestMapping("/api/link")
 class LinkResolutionController(private val linkResolutionService: LinkResolutionService) {
-
-    private val logger = KotlinLogging.logger {}
 
     @GetMapping("/redirect")
     fun redirectByAlias(@RequestParam("link") link: String): RedirectView {
@@ -38,4 +36,5 @@ class LinkResolutionController(private val linkResolutionService: LinkResolution
         }
     }
 
+    companion object: KLogging()
 }

@@ -18,10 +18,15 @@
 </head>
 <body class="mdc-typography">
 
+<!--/* @thymesVar id="selectedView" type="org.kotlink.ui.UiView" */-->
+
 <header class="mdc-toolbar mdc-toolbar--fixed">
     <div class="mdc-toolbar__row">
         <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-            <span class="mdc-toolbar__title catalog-title">Search</span>
+            <span class="mdc-toolbar__title catalog-title"
+                  th:text="${(selectedView != null) ? selectedView.title : 'KotLink UI'}">
+                Title
+            </span>
         </section>
     </div>
 </header>
@@ -32,17 +37,29 @@
         <div class="mdc-list-group">
             <div class="layout-spacer"></div>
             <nav class="mdc-list">
-                <a class="mdc-list-item mdc-list-item--selected" href="#" th:href="@{/ui/search}">
+                <a class="mdc-list-item mdc-list-item--selected"
+                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).SEARCH) ? ' mdc-list-item--selected' : '' }"
+                   href="#"
+                   th:href="@{/ui/search}">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">search</i>Search
                 </a>
-                <a class="mdc-list-item" href="#">
+                <a class="mdc-list-item"
+                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).LIST_ALIASES) ? ' mdc-list-item--selected' : '' }"
+                   href="#"
+                   th:href="@{/ui/alias}">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">swap_calls</i>Aliases
                 </a>
-                <a class="mdc-list-item" href="#" th:href="@{/ui/namespace}">
+                <a class="mdc-list-item"
+                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).LIST_NAMESPACES) ? ' mdc-list-item--selected' : '' }"
+                   href="#"
+                   th:href="@{/ui/namespace}">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>Namespaces
                 </a>
                 <hr class="mdc-list-divider">
-                <a class="mdc-list-item" href="#">
+                <a class="mdc-list-item"
+                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).HELP) ? ' mdc-list-item--selected' : '' }"
+                   href="#"
+                   th:href="@{/ui/help}">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">help</i>Help
                 </a>
             </nav>
