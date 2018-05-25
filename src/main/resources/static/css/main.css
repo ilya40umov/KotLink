@@ -7,6 +7,7 @@
     --mdc-theme-secondary: #018786;
     --mdc-theme-background: #F4F4F4;
     --danger-color: #FF5252;
+    --auxiliary-color: #448aff;
 }
 
 html {
@@ -41,6 +42,10 @@ body {
 
 .mdc-button.secondary-text-button {
     background-color: var(--mdc-theme-secondary, #018786);
+}
+
+.mdc-button.auxiliary-text-button {
+    background-color: var(--auxiliary-color, #fffc55);
 }
 
 .mdc-button.danger-text-button {

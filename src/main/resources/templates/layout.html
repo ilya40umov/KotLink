@@ -23,10 +23,26 @@
 <header class="mdc-toolbar mdc-toolbar--fixed">
     <div class="mdc-toolbar__row">
         <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
-            <span class="mdc-toolbar__title catalog-title"
+            <div class="mdc-toolbar__title catalog-title"
+                 style="width: 220px;"
                   th:text="${(selectedView != null) ? selectedView.title : 'KotLink UI'}">
                 Title
-            </span>
+            </div>
+            <div class="mdc-card__action-buttons" style="margin-top: auto; margin-bottom: auto">
+                <button class="mdc-button mdc-button--raised secondary-text-button" style="width: 12em;">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+                    New Alias
+                </button>
+            </div>
+            <div class="mdc-card__action-buttons" style="padding-left: 1em; margin-top: auto; margin-bottom: auto">
+                <button class="mdc-button mdc-button--raised auxiliary-text-button">
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+                    New Namespace
+                </button>
+            </div>
+        </section>
+        <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
+
         </section>
     </div>
 </header>

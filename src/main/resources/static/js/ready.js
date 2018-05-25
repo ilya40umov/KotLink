@@ -7,7 +7,9 @@
  * resources have finished loading, the given handler function will be invoked synchronously (in the same call stack).
  * Handlers are invoked in FIFO order.
  */
-window.ktReady = (() => {
+window.kt = {};
+
+kt.onReady = (() => {
     const POLL_INTERVAL_MS = 100;
     const POLL_MAX_WAIT_MS = 60 * 1000;
 
@@ -30,6 +32,9 @@ window.ktReady = (() => {
     function isReady() {
         if (isReadyCached) {
             return true;
+        }
+        if (document.body == null) {
+            return false;
         }
         ensureDetectionDom();
         const isDomWithCss = getComputedStyle(testDom).position === "relative";
@@ -94,3 +99,8 @@ window.ktReady = (() => {
         startTimer();
     };
 })();
+
+// make sure auto init is called because anything else
+kt.onReady(() => {
+    mdc.autoInit();
+});

@@ -1,4 +1,3 @@
-/* global mdc */
-window.ktReady(function () {
-    mdc.autoInit();
+kt.onReady(() => {
+    // nothing to do
 });
