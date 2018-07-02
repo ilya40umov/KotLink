@@ -51,9 +51,11 @@ tasks {
         }
     }
     tasks.withType<Test> {
+        doFirst {
+            environment("SPRING_PROFILES_ACTIVE", "ci")
+        }
         testLogging.apply {
             events("passed", "skipped", "failed")
-            showStandardStreams = true
             exceptionFormat = TestExceptionFormat.FULL
         }
     }

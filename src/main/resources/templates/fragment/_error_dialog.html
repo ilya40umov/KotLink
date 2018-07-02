@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<!--/* @thymesVar id="error_message" type="java.lang.String" */-->
+<body>
+<th:block layout:fragment="error_dialog" th:if="${error_message}">
+    <aside id="error-dialog"
+           class="mdc-dialog"
+           role="alertdialog"
+           aria-hidden="true"
+           aria-labelledby="error-dialog-title"
+           aria-describedby="error-dialog-description"
+           data-mdc-auto-init="MDCDialog">
+        <div class="mdc-dialog__surface" style="color: white; padding-bottom: 20px">
+            <header class="mdc-dialog__header" style="background-color: red;">
+                <h2 id="error-dialog-title"
+                    class="mdc-dialog__header__title">
+                    Error
+                </h2>
+                <span class="material-icons">
+                  error
+                </span>
+            </header>
+            <section id="error-dialog-description" class="mdc-dialog__body error-text">
+                <span th:text="${error_message}"></span>
+            </section>
+            <footer class="mdc-dialog__footer">
+                <button type="button"
+                        class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept"
+                        style="float: right">
+                    Close
+                </button>
+            </footer>
+        </div>
+        <div class="mdc-dialog__backdrop"></div>
+    </aside>
+    <script>
+        kt.onReady(() => {
+            const dialog = document.getElementById("error-dialog").MDCDialog;
+            dialog.show();
+        });
+    </script>
+</th:block>
+</body>
+</html>

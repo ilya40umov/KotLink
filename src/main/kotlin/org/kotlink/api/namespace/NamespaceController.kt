@@ -1,5 +1,7 @@
 package org.kotlink.api.namespace
 
+import org.kotlink.core.namespace.Namespace
+import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -35,7 +37,7 @@ class NamespaceController(private val namespaceRepo: NamespaceRepo) {
         if (namespaceRepo.findByKeyword(namespace.keyword) != null) {
             return ResponseEntity(HttpStatus.CONFLICT)
         }
-        val assignedId = namespaceRepo.insert(namespace.copy(id = null))
+        val assignedId = namespaceRepo.insert(namespace).id
         return ResponseEntity(HttpHeaders().also {
             it.location = ucBuilder.path("/api/namespace/{id}").buildAndExpand(assignedId).toUri()
         }, HttpStatus.CREATED)

@@ -5,7 +5,7 @@ services:
     build:
       context: postgresql
     ports:
-      - 55432:5432
+      - 45432:5432
     tmpfs:
       - /tmp
       - /var/run/postgresql

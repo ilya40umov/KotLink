@@ -1,7 +1,8 @@
-package org.kotlink.api.namespace
+package org.kotlink.core.namespace
 
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
+import org.amshove.kluent.shouldEndWith
 import org.amshove.kluent.shouldEqual
 import org.junit.After
 import org.junit.Before
@@ -42,7 +43,7 @@ class NamespaceRepoImplTest {
 
     @Test
     fun `'findById' should return namespace if ID is present in database`() {
-        val existingId = repo.findAll().find { it.keyword == testKeyword }!!.id!!
+        val existingId = repo.findAll().find { it.keyword == testKeyword }!!.id
 
         repo.findById(existingId).also {
             it?.keyword shouldEqual testKeyword
@@ -71,16 +72,26 @@ class NamespaceRepoImplTest {
     }
 
     @Test
-    fun `'insert' should return ID of created namespace`() {
+    fun `'insert' should return the namespace with the assigned ID`() {
         repo.insert(Namespace(keyword = UUID.randomUUID().toString())).also {
-            it shouldBeGreaterThan 0
-            repo.findById(it)?.id shouldEqual it
+            it.id shouldBeGreaterThan 0
+            repo.findById(it.id)?.id shouldEqual it.id
+        }
+    }
+
+    @Test
+    fun `'update' should update the provided namespace`() {
+        val existingNamespace = repo.insert(Namespace(keyword = UUID.randomUUID().toString()))
+
+        repo.update(existingNamespace.copy(keyword = existingNamespace.keyword + ".abc")).also {
+            it.id shouldEqual existingNamespace.id
+            repo.findById(it.id)?.keyword!! shouldEndWith ".abc"
         }
     }
 
     @Test
     fun `'deleteById' should return True if ID existed in database`() {
-        val existingId = repo.insert(Namespace(keyword = UUID.randomUUID().toString()))
+        val existingId = repo.insert(Namespace(keyword = UUID.randomUUID().toString())).id
 
         repo.deleteById(existingId).also {
             it shouldEqual true

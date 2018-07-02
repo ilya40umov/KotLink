@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/ui/alias")
-class AliasCrudController {
+class AliasUiController {
 
     @GetMapping
     @SelectView(UiView.LIST_ALIASES)

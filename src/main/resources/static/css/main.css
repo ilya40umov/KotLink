@@ -1,5 +1,5 @@
 /*
- * General Layout
+ * General layout
  */
 
 :root {
@@ -62,7 +62,7 @@ body {
 }
 
 /*
- * Search Page
+ * Search page
  */
 
 .search-input {
@@ -90,4 +90,25 @@ body {
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
+}
+
+/*
+ * Edit namespace/alias page
+ */
+
+.edit-record-card {
+    width: 75%;
+    margin: auto;
+    padding: 2em;
+}
+
+.input-with-validation-wrapper {
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.submit-button-wrapper {
+    width:100%;
+    margin:16px;
 }

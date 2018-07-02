@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.kotlink.ABC_NAMESPACE
 import org.kotlink.ABC_NAMESPACE_ID
 import org.kotlink.DEFAULT_NAMESPACE
+import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -70,7 +71,7 @@ class NamespaceControllerTest {
 
     @Test
     fun `'create' should return 201 and location header if namespace is created successfully`() {
-        whenever(namespaceRepo.insert(any())).thenReturn(ABC_NAMESPACE.id)
+        whenever(namespaceRepo.insert(any())).thenReturn(ABC_NAMESPACE)
 
         mvc.perform(
             post("/api/namespace")

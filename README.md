@@ -11,22 +11,25 @@ It works by letting people install a tiny browser extension
 (which is not even necessary in case of Vivaldi browser)
 that activates when the person first types `go` in the status bar and then presses whitespace. 
 While activated, the extension is providing autocomplete based on the database of aliases,
-and after the user has hit enter, it will redirect the user to an actual URL that matches the provided alias.
+and after the user has hit *Enter*, it will redirect the user to an actual URL that matches the provided alias.
 For example, if someone has already created an alias for `staging newrelic` 
 that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
-by typing `go` *whitespace* `staging newrelic` *enter*, the user will be redirected to the aforementioned link.
+by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirected to the aforementioned link.
 
 ### Project Scope
 
 * Backend for storing and resolving aliases (In-Progress)
-* Frontend for managing aliases (Not started yet)
+* Frontend for managing aliases (In-Progress)
 * Chrome Plugin (Not started yet)
 * FireFox Plugin (Not started yet)
 
 ### TODOs
-* CRUD UI for namespaces
-* CRUD REST endpoint for aliases
+* description field for namespaces
 * CRUD UI for aliases
+* allow edit namespace via REST API
+* add validation logic to namespace service
+* CRUD REST endpoint for aliases
+* implement caching of aliases
 * Security (oath for all endpoints / secrets for autocomplete)
 * vivaldi instructions
 * chrome plugin
@@ -49,4 +52,5 @@ TBA
 * Start dependencies with `kt_env_up`
 * Build application (also runs tests) with `./gradlew build`
 * Run application in Terminal with `./gradlew bootRun` or in Intellij
+* Run the CI pipeline with `kt_env_ci`
 * Stop dependencies with `kt_env_down`

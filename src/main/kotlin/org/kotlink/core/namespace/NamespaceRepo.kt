@@ -1,4 +1,4 @@
-package org.kotlink.api.namespace
+package org.kotlink.core.namespace
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
@@ -6,7 +6,9 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
 import org.kotlink.shared.exposed.NoKeyGeneratedException
+import org.kotlink.shared.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,7 +20,9 @@ interface NamespaceRepo {
 
     fun findByKeyword(keyword: String): Namespace?
 
-    fun insert(namespace: Namespace): Long
+    fun insert(namespace: Namespace): Namespace
+
+    fun update(namespace: Namespace): Namespace
 
     fun deleteById(id: Long): Boolean
 }
@@ -41,11 +45,20 @@ class NamespaceRepoImpl : NamespaceRepo {
             .map { it.asNamespace() }
             .firstOrNull()
 
-    override fun insert(namespace: Namespace): Long {
+    override fun insert(namespace: Namespace): Namespace {
         val namespaceId = Namespaces.insert {
             it[keyword] = namespace.keyword
-        }.generatedKey
-        return namespaceId?.toLong() ?: throw NoKeyGeneratedException()
+        }.generatedKey ?: throw NoKeyGeneratedException()
+        return findById(namespaceId.toLong())
+            ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
+    }
+
+    override fun update(namespace: Namespace): Namespace {
+        Namespaces.update({ Namespaces.id.eq(namespace.id) }) {
+            it[keyword] = namespace.keyword
+        }
+        return findById(namespace.id)
+            ?: throw RecordNotFoundException("Update namespace #${namespace.id} not found")
     }
 
     override fun deleteById(id: Long) =

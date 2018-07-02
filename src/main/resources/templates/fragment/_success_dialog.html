@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+<th:block layout:fragment="success_dialog" th:if="${success_message}">
+    <aside id="success-dialog"
+           class="mdc-dialog"
+           role="alertdialog"
+           aria-hidden="true"
+           aria-labelledby="success-dialog-title"
+           aria-describedby="success-dialog-description"
+           data-mdc-auto-init="MDCDialog">
+        <div class="mdc-dialog__surface">
+            <header class="mdc-dialog__header" style="color: white; background-color: green; padding-bottom: 20px">
+                <h2 id="success-dialog-title"
+                    class="mdc-dialog__header__title">
+                    Notification
+                </h2>
+                <span class="material-icons">
+                  settings
+                </span>
+            </header>
+            <section id="success-dialog-description" class="mdc-dialog__body">
+                <span th:text="${success_message}"></span>
+            </section>
+            <footer class="mdc-dialog__footer">
+                <button type="button"
+                        class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept"
+                        style="float: right">
+                    Close
+                </button>
+            </footer>
+        </div>
+        <div class="mdc-dialog__backdrop"></div>
+    </aside>
+    <script>
+        kt.onReady(() => {
+            const dialog = document.getElementById("success-dialog").MDCDialog;
+            dialog.show();
+        });
+    </script>
+</th:block>
+</body>
+</html>

@@ -35,11 +35,13 @@
     <ul th:each="alias: ${aliases}"
         id="found-aliases"
         class="mdc-list mdc-list--avatar-list search-result-list--icon-placeholders">
-        <li class="mdc-list-item">
+        <li class="mdc-list-item" tabindex="0">
                 <span class="mdc-list-item__graphic" role="presentation">
                     <i class="material-icons" aria-hidden="true">insert_drive_file</i>
                 </span>
-            <a href="/" th:text="${alias.fullLink}" th:attr="href=${alias.redirectUrl}">alias</a>
+            <a href="/"
+               th:text="${alias.fullLink}"
+               th:attr="href=${alias.redirectUrl}">alias</a>
         </li>
     </ul>
 </main>

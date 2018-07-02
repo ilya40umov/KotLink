@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<!--/* @thymesVar id="edit" type="java.lang.Boolean" */-->
+<form layout:fragment="namespace-form">
+    <input type="hidden" name="_method" value="PUT" th:if="${edit}">
+
+    <div class="input-with-validation-wrapper" th:if="${__*{id}__ > 0}">
+        <div id="id-field"
+             class="mdc-text-field"
+             data-mdc-auto-init="MDCTextField"
+             th:name="id"
+             th:errorclass="mdc-text-field--invalid"
+             style="width: 100%">
+            <input id="id-input"
+                   type="text"
+                   class="mdc-text-field__input"
+                   th:field="*{id}"
+                   readonly>
+            <label class="mdc-floating-label"
+                   for="id-input">
+                ID
+            </label>
+            <div class="mdc-line-ripple"></div>
+        </div>
+        <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+           aria-hidden="true"
+           th:errors="*{id}"></p>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <div id="keyword-field"
+             class="mdc-text-field"
+             data-mdc-auto-init="MDCTextField"
+             th:name="keyword"
+             th:errorclass="mdc-text-field--invalid"
+             style="width: 100%">
+            <input type="text" id="keyword-input" class="mdc-text-field__input"
+                   th:field="*{keyword}">
+            <label class="mdc-floating-label"
+                   for="keyword-input">
+                Keyword
+            </label>
+            <div class="mdc-line-ripple"></div>
+        </div>
+        <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+           aria-hidden="true"
+           th:errors="*{keyword}"></p>
+    </div>
+
+    <div class="submit-button-wrapper">
+        <button id="save-namespace-button"
+                class="mdc-button"
+                type="submit"
+                style="float: right;">
+            Save
+        </button>
+    </div>
+</form>
+</body>
+</html>

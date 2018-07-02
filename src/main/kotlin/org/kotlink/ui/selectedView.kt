@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse
 
 enum class UiView(val title: String) {
     SEARCH("Search"),
+    NEW_ALIAS("New Alias"),
     LIST_ALIASES("Aliases"),
     LIST_NAMESPACES("Namespaces"),
     HELP("Help")

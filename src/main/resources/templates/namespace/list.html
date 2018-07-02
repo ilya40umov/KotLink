@@ -7,6 +7,16 @@
 </head>
 <body>
 <main layout:fragment="content">
+    <!--/* @thymesVar id="namespaces" type="java.util.List<org.kotlink.core.namespace.Namespace>" */-->
+    <!--/* @thymesVar id="namespace" type="org.kotlink.core.namespace.Namespace" */-->
+    <div class="layout-spacer"></div>
+    <form th:action="@{'/ui/namespace/new'}"
+          method="get">
+        <button class="mdc-button mdc-button--outlined">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+            New Namespace
+        </button>
+    </form>
     <div class="layout-spacer"></div>
     <div class="mdc-card">
         <table class="mdl-data-table">
@@ -26,16 +36,25 @@
                     <span th:unless="${namespace.keyword.isEmpty()}" th:text="${namespace.keyword}"></span>
                 </td>
                 <td>
-                    <button class="mdc-button mdc-button--raised secondary-text-button">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
-                        Edit
-                    </button>
+                    <form th:action="@{'/ui/namespace/' + ${namespace.id} + '/edit'}"
+                          method="get"
+                          th:if="${!namespace.keyword.isEmpty()}">
+                        <button class="mdc-button mdc-button--raised secondary-text-button">
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+                            Edit
+                        </button>
+                    </form>
                 </td>
                 <td>
-                    <button class="mdc-button mdc-button--raised danger-text-button">
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
-                        Delete
-                    </button>
+                    <form th:action="@{'/ui/namespace/' + ${namespace.id}}"
+                          method="post"
+                          th:if="${!namespace.keyword.isEmpty()}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="mdc-button mdc-button--raised danger-text-button">
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
+                            Delete
+                        </button>
+                    </form>
                 </td>
             </tr>
             </tbody>

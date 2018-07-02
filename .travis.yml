@@ -16,14 +16,11 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-before_script:
-  - ./environment/bin/kt_env_up
-
 script:
-  - ./gradlew clean check jacocoTestReport
+  - ./environment/bin/kt_env_ci
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 after_script:
-  - ./environment/bin/kt_env_down
+  - ./environment/lib/env_down ci

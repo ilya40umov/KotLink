@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+./environment/lib/env_up ci
+./gradlew clean check jacocoTestReport
+./environment/lib/env_down ci

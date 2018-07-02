@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title>KotLink - New Namespace</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!--/* @thymesVar id="namespace" type="org.kotlink.ui.namespace.NamespaceUiValue" */-->
+    <div class="layout-spacer"></div>
+    <div class="mdc-card edit-record-card">
+        <section>
+            <span class="mdc-typography--headline6">New Namespace</span>
+            <form layout:insert="~{namespace/_form :: namespace-form}"
+                  th:with="edit=false"
+                  th:action="@{/ui/namespace/new}"
+                  method="post"
+                  th:object="${namespace}">
+            </form>
+        </section>
+    </div>
+</div>
+</body>
+</html>
