@@ -93,7 +93,7 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
         }
         return try {
             namespaceService.update(namespace.apply { id = namespaceId }.toNamespace())
-            attributes.addSuccessMessage("Namespace #${namespace.id} has been successfully updated.")
+            attributes.addSuccessMessage("Namespace '${namespace.keyword}' has been successfully updated.")
             "redirect:/ui/namespace"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while updating an existing namespace: $namespace" }

@@ -6,8 +6,9 @@ CREATE SEQUENCE namespace_id_seq
   CACHE 1;
 
 CREATE TABLE namespace (
-  id        BIGINT                    NOT NULL PRIMARY KEY DEFAULT nextval('namespace_id_seq'::regclass),
-  keyword   CHARACTER VARYING(128)    NOT NULL CONSTRAINT ns_kwd_unique UNIQUE
+  id          BIGINT                    NOT NULL PRIMARY KEY DEFAULT nextval('namespace_id_seq'::regclass),
+  keyword     CHARACTER VARYING(128)    NOT NULL CONSTRAINT ns_kwd_unique UNIQUE,
+  description CHARACTER VARYING(512)    NOT NULL DEFAULT ''
 );
 
 -- the "default" namespace for aliases

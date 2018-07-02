@@ -48,6 +48,7 @@ class NamespaceRepoImpl : NamespaceRepo {
     override fun insert(namespace: Namespace): Namespace {
         val namespaceId = Namespaces.insert {
             it[keyword] = namespace.keyword
+            it[description] = namespace.description
         }.generatedKey ?: throw NoKeyGeneratedException()
         return findById(namespaceId.toLong())
             ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
@@ -56,6 +57,7 @@ class NamespaceRepoImpl : NamespaceRepo {
     override fun update(namespace: Namespace): Namespace {
         Namespaces.update({ Namespaces.id.eq(namespace.id) }) {
             it[keyword] = namespace.keyword
+            it[description] = namespace.description
         }
         return findById(namespace.id)
             ?: throw RecordNotFoundException("Update namespace #${namespace.id} not found")
@@ -68,9 +70,11 @@ class NamespaceRepoImpl : NamespaceRepo {
 private object Namespaces : Table("namespace") {
     val id = long("id").autoIncrement("namespace_id_seq").primaryKey()
     val keyword = varchar("keyword", length = 128)
+    val description = varchar("description", length = 512)
 }
 
 private fun ResultRow.asNamespace() = Namespace(
     id = this[Namespaces.id],
-    keyword = this[Namespaces.keyword]
+    keyword = this[Namespaces.keyword],
+    description = this[Namespaces.description]
 )

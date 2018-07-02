@@ -47,7 +47,7 @@
                 <div th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).NEW_ALIAS) ? ' mdc-list-item--selected' : '' }"
                      style="width: 100%">
                     <form th:action="@{'/ui/alias/new'}" method="get" style="margin-left: 20px;">
-                        <button class="mdc-button mdc-button--raised auxiliary-text-button"
+                        <button class="mdc-button mdc-button--raised"
                                 style="width: 12em;"
                                 tabindex="-1">
                             <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>

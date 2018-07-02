@@ -49,6 +49,26 @@
            th:errors="*{keyword}"></p>
     </div>
 
+    <div class="input-with-validation-wrapper">
+        <div id="description-field"
+             class="mdc-text-field"
+             data-mdc-auto-init="MDCTextField"
+             th:name="description"
+             th:errorclass="mdc-text-field--invalid"
+             style="width: 100%">
+            <input type="text" id="description-input" class="mdc-text-field__input"
+                   th:field="*{description}">
+            <label class="mdc-floating-label"
+                   for="description-input">
+                Description
+            </label>
+            <div class="mdc-line-ripple"></div>
+        </div>
+        <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+           aria-hidden="true"
+           th:errors="*{description}"></p>
+    </div>
+
     <div class="submit-button-wrapper">
         <button id="save-namespace-button"
                 class="mdc-button"
