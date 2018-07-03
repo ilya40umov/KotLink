@@ -2,7 +2,7 @@ package org.kotlink.core.alias
 
 class AliasServiceTest {
 
-
+// TODO implement tests for AliasService
 
 //    @Test
 //    fun `'searchAliasesMatchingInput' split keywords in user input and return found aliases`() {

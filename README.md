@@ -24,12 +24,10 @@ by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirec
 * FireFox Plugin (Not started yet)
 
 ### TODOs
-* CRUD UI for aliases
-* allow edit namespace via REST API
-* add validation logic to namespace service (e.g. default namespace should always be present)
-* CRUD REST endpoint for aliases
-* implement caching of aliases
 * Security (oath for all endpoints / secrets for autocomplete)
+* add validation logic to namespace service (e.g. default namespace should always be present)
+* write tests for service layer
+* implement caching of aliases
 * vivaldi instructions
 * chrome plugin
 * firefox plugin
@@ -44,11 +42,10 @@ TBA
 * direnv
 * docker
 * docker-compose
-* Intellij IDEA
+* Intellij IDEA (recommended)
 
 #### How To Develop Locally
 * Start dependencies with `kt_env_up`
-* Build application (also runs tests) with `./gradlew build`
-* Run application in Terminal with `./gradlew bootRun` or in Intellij
-* Run the CI pipeline with `kt_env_ci`
+* Run application in Terminal with `./gradlew bootRun` (or in Intellij IDEA)
 * Stop dependencies with `kt_env_down`
+* Run the CI pipeline with `kt_env_ci`
