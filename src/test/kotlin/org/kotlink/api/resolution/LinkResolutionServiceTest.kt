@@ -39,13 +39,15 @@ class LinkResolutionServiceTest {
         whenever(aliasService.findByFullLinkPrefix("in"))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        val suggestions = kotLinkService.suggestAliasesByLinkPrefix("in")
+        val suggestions = kotLinkService
+            .suggestAliasesByLinkPrefix("in", "http://localhost:8080/api/link/redirect")
 
         suggestions shouldEqual OpenSearchSuggestions(
             prefix = "in",
             links = listOf(INBOX_ALIAS.fullLink),
             descriptions = listOf(INBOX_ALIAS.fullLink),
-            redirectUrls = listOf(INBOX_ALIAS.redirectUrl)
+            redirectUrls = listOf("http://localhost:8080/api/link/redirect?link=${INBOX_ALIAS.fullLink}"
+                .replace(" ", "%20"))
         )
     }
 

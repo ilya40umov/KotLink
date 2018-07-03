@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import org.kotlink.core.alias.Alias
+import org.springframework.web.util.UriComponentsBuilder
 
 /**
  * Suggestions in a format defined by:
@@ -17,11 +18,16 @@ data class OpenSearchSuggestions(
     val descriptions: List<String>,
     val redirectUrls: List<String>
 ) {
-    constructor(prefix: String, aliases: List<Alias>) : this(
+    constructor(prefix: String, redirectUri: String, aliases: List<Alias>) : this(
         prefix = prefix,
         links = aliases.map { it.fullLink },
         descriptions = aliases.map { it.fullLink },
-        redirectUrls = aliases.map { it.redirectUrl }
+        redirectUrls = aliases.map {
+            UriComponentsBuilder
+                .fromUriString(redirectUri)
+                .replaceQueryParam("link", it.fullLink)
+                .toUriString()
+        }
     )
 }
 

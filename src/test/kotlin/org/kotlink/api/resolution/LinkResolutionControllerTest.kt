@@ -44,8 +44,18 @@ class LinkResolutionControllerTest {
 
     @Test
     fun `'suggestAliases' should return suggestions in opensearch format if mode is opensearch`() {
-        whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
-            .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
+        whenever(
+            linkResolutionService.suggestAliasesByLinkPrefix(
+                userProvidedLinkPrefix = "in",
+                redirectUri = "http://localhost/api/link/redirect"
+            )
+        ).thenReturn(
+            OpenSearchSuggestions(
+                prefix = "in",
+                redirectUri = "http://localhost/api/link/redirect",
+                aliases = listOf(INBOX_ALIAS, INIT_ALIAS)
+            )
+        )
 
         mvc.perform(get("/api/link/suggest?link=in&mode=opensearch"))
             .andExpect(status().isOk)
@@ -57,13 +67,25 @@ class LinkResolutionControllerTest {
             .andExpect(jsonPath("$[2]").isArray)
             .andExpect(jsonPath("$[2][0]").value(INBOX_ALIAS.fullLink))
             .andExpect(jsonPath("$[3]").isArray)
-            .andExpect(jsonPath("$[3][0]").value(INBOX_ALIAS.redirectUrl))
+            .andExpect(jsonPath("$[3][0]")
+                .value("http://localhost/api/link/redirect?link=${INBOX_ALIAS.fullLink}"
+                    .replace(" ", "%20")))
     }
 
     @Test
     fun `'suggestAliases' should return suggestions in simple format if mode is not present`() {
-        whenever(linkResolutionService.suggestAliasesByLinkPrefix("in"))
-            .thenReturn(OpenSearchSuggestions(prefix = "in", aliases = listOf(INBOX_ALIAS, INIT_ALIAS)))
+        whenever(
+            linkResolutionService.suggestAliasesByLinkPrefix(
+                userProvidedLinkPrefix = "in",
+                redirectUri = "http://localhost/api/link/redirect"
+            )
+        ).thenReturn(
+            OpenSearchSuggestions(
+                prefix = "in",
+                redirectUri = "http://localhost:8080",
+                aliases = listOf(INBOX_ALIAS, INIT_ALIAS)
+            )
+        )
 
         mvc.perform(get("/api/link/suggest?link=in&mode=simple"))
             .andExpect(status().isOk)
@@ -71,5 +93,4 @@ class LinkResolutionControllerTest {
             .andExpect(jsonPath("$[0]").value(INBOX_ALIAS.fullLink))
             .andExpect(jsonPath("$[1]").value(INIT_ALIAS.fullLink))
     }
-
 }

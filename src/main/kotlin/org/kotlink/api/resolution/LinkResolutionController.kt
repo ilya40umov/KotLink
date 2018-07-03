@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import org.springframework.web.servlet.view.RedirectView
 
 @Controller
@@ -24,7 +25,12 @@ class LinkResolutionController(private val linkResolutionService: LinkResolution
     fun suggestAliases(
         @RequestParam("link") linkPrefix: String,
         @RequestParam("mode", required = false, defaultValue = "simple") mode: String): Any {
-        val suggestions = linkResolutionService.suggestAliasesByLinkPrefix(linkPrefix)
+        val redirectUri = ServletUriComponentsBuilder
+            .fromCurrentRequestUri()
+            .replacePath("/api/link/redirect")
+            .replaceQuery(null)
+            .toUriString()
+        val suggestions = linkResolutionService.suggestAliasesByLinkPrefix(linkPrefix, redirectUri)
         logger.info { "Suggested for $linkPrefix - ${suggestions.links}" }
         return when (mode) {
             "opensearch" -> suggestions

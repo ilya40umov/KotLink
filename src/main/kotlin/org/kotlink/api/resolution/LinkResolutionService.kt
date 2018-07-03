@@ -12,8 +12,12 @@ class LinkResolutionService(private val aliasService: AliasService) {
         aliasService.findByFullLink(userProvidedLink)
             .let { it?.redirectUrl }
 
-    fun suggestAliasesByLinkPrefix(userProvidedLinkPrefix: String): OpenSearchSuggestions {
+    fun suggestAliasesByLinkPrefix(userProvidedLinkPrefix: String, redirectUri: String): OpenSearchSuggestions {
         val aliases = aliasService.findByFullLinkPrefix(userProvidedLinkPrefix)
-        return OpenSearchSuggestions(userProvidedLinkPrefix, aliases)
+        return OpenSearchSuggestions(
+            prefix = userProvidedLinkPrefix,
+            redirectUri = redirectUri,
+            aliases = aliases
+        )
     }
 }
