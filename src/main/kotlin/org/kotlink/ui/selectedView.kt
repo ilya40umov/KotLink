@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 enum class UiView(val title: String) {
-    SEARCH("Search"),
-    NEW_ALIAS("New Alias"),
-    LIST_ALIASES("Aliases"),
-    LIST_NAMESPACES("Namespaces"),
-    HELP("Help")
+    SEARCH("KotLink - Search"),
+    NEW_ALIAS("KotLink - New Alias"),
+    LIST_ALIASES("KotLink - Aliases"),
+    LIST_NAMESPACES("KotLink - Namespaces"),
+    HELP("KotLink - Help")
 }
 
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)

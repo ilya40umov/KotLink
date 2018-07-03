@@ -1,9 +1,11 @@
 package org.kotlink.core.namespace
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class NamespaceService(val namespaceRepo: NamespaceRepo) {
+@Transactional
+class NamespaceService(private val namespaceRepo: NamespaceRepo) {
 
     fun findAll(): List<Namespace> = namespaceRepo.findAll()
 

@@ -12,4 +12,4 @@ CREATE TABLE namespace (
 );
 
 -- the "default" namespace for aliases
-INSERT INTO namespace (keyword) VALUES ('');
+INSERT INTO namespace (keyword, description) VALUES ('', 'Namespace for links without a common prefix');

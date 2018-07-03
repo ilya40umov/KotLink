@@ -10,7 +10,6 @@ import org.jetbrains.exposed.sql.update
 import org.kotlink.shared.exposed.NoKeyGeneratedException
 import org.kotlink.shared.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 
 interface NamespaceRepo {
 
@@ -28,11 +27,11 @@ interface NamespaceRepo {
 }
 
 @Repository
-@Transactional
 class NamespaceRepoImpl : NamespaceRepo {
 
     override fun findAll() =
         Namespaces.selectAll()
+            .orderBy(Namespaces.keyword, isAsc = true)
             .map { it.asNamespace() }
 
     override fun findById(id: Long) =
@@ -60,20 +59,20 @@ class NamespaceRepoImpl : NamespaceRepo {
             it[description] = namespace.description
         }
         return findById(namespace.id)
-            ?: throw RecordNotFoundException("Update namespace #${namespace.id} not found")
+            ?: throw RecordNotFoundException("Updated namespace #${namespace.id} not found")
     }
 
     override fun deleteById(id: Long) =
         Namespaces.deleteWhere { Namespaces.id.eq(id) } > 0
 }
 
-private object Namespaces : Table("namespace") {
+internal object Namespaces : Table("namespace") {
     val id = long("id").autoIncrement("namespace_id_seq").primaryKey()
     val keyword = varchar("keyword", length = 128)
     val description = varchar("description", length = 512)
 }
 
-private fun ResultRow.asNamespace() = Namespace(
+internal fun ResultRow.asNamespace() = Namespace(
     id = this[Namespaces.id],
     keyword = this[Namespaces.keyword],
     description = this[Namespaces.description]

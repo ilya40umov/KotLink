@@ -5,7 +5,7 @@ import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.INBOX_ALIAS
-import org.kotlink.api.resolution.LinkResolutionService
+import org.kotlink.core.alias.AliasService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -22,11 +22,11 @@ class LinkSearchControllerTest {
     private lateinit var mvc: MockMvc
 
     @MockBean
-    private lateinit var linkResolutionService: LinkResolutionService
+    private lateinit var aliasService: AliasService
 
     @Test
     fun `'searchLinks' should return the page with aliases that matched the input`() {
-        whenever(linkResolutionService.searchAliasesMatchingInput("inbox"))
+        whenever(aliasService.searchAliasesMatchingInput("inbox"))
             .thenReturn(listOf(INBOX_ALIAS))
 
         mvc.perform(MockMvcRequestBuilders.get("/ui/search?input=inbox"))

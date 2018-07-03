@@ -9,18 +9,18 @@ import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.INBOX_ALIAS
-import org.kotlink.api.alias.AliasRepo
+import org.kotlink.core.alias.AliasService
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class LinkResolutionServiceTest {
 
-    private val aliasRepository = mock<AliasRepo> {}
-    private val kotLinkService = LinkResolutionService(aliasRepository)
+    private val aliasService = mock<AliasService> {}
+    private val kotLinkService = LinkResolutionService(aliasService)
 
     @Test
     fun `'findRedirectUrlByLink' should return redirect url if link is found`() {
-        whenever(aliasRepository.findByFullLink(eq(INBOX_ALIAS.link))).doReturn(INBOX_ALIAS)
+        whenever(aliasService.findByFullLink(eq(INBOX_ALIAS.link))).doReturn(INBOX_ALIAS)
 
         val redirectUrl = kotLinkService.findRedirectUrlByLink(INBOX_ALIAS.link)
 
@@ -36,7 +36,7 @@ class LinkResolutionServiceTest {
 
     @Test
     fun `'suggestAliasesByLinkPrefix' should return suggestions created from matching aliases`() {
-        whenever(aliasRepository.findByFullLinkPrefix("in"))
+        whenever(aliasService.findByFullLinkPrefix("in"))
             .thenReturn(listOf(INBOX_ALIAS))
 
         val suggestions = kotLinkService.suggestAliasesByLinkPrefix("in")
@@ -49,14 +49,5 @@ class LinkResolutionServiceTest {
         )
     }
 
-    @Test
-    fun `'searchAliasesMatchingInput' split keywords in user input and return found aliases`() {
-        whenever(aliasRepository.findWithAtLeastOneOfKeywords(listOf("inbox", "gmail")))
-            .thenReturn(listOf(INBOX_ALIAS))
-
-        val aliases = kotLinkService.searchAliasesMatchingInput("inbox gmail")
-
-        aliases shouldEqual listOf(INBOX_ALIAS)
-    }
 }
 

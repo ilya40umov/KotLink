@@ -6,8 +6,13 @@
     <title>KotLink - Search</title>
 </head>
 <body>
+<!--/* @thymesVar id="aliases" type="java.util.List<org.kotlink.core.alias.Alias>" */-->
+<!--/* @thymesVar id="alias" type="org.kotlink.core.alias.Alias" */-->
 <main layout:fragment="content">
-    <section>
+
+    <div class="layout-spacer"></div>
+    <div class="mdc-card" style="padding: 15px">
+
         <form th:action="@{'/ui/search'}" method="get">
             <div class="mdc-text-field search-input" data-mdc-auto-init="MDCTextField">
                 <input id="my-text-field"
@@ -15,7 +20,7 @@
                        type="text"
                        class="mdc-text-field__input"
                        autofocus>
-                <label for="my-text-field" class="mdc-floating-label">Input</label>
+                <label for="my-text-field" class="mdc-floating-label">Search Terms</label>
                 <div class="mdc-line-ripple"></div>
             </div>
             <button class="mdc-button mdc-button--raised" style="margin-left: 10px">
@@ -23,27 +28,32 @@
                 Search
             </button>
         </form>
-    </section>
 
-    <h2 class="mdc-typography--headline6">
-        Found
-        <span th:if="${aliases.isEmpty()}">no</span>
-        <span th:if="${!(aliases.isEmpty())}" th:text="${aliases.size()}">x</span>
-        matching aliases for search <span th:text="'&quot;' + ${input} + '&quot;'">"input"</span>
-    </h2>
+        <div class="mdc-typography--caption"
+             style="color: #808080;">
+            Found
+            <span th:if="${aliases.isEmpty()}">no</span>
+            <span th:if="${!(aliases.isEmpty())}" th:text="${aliases.size()}">x</span>
+            matching aliases for search <span th:text="'&quot;' + ${input} + '&quot;'">"input"</span>
+        </div>
 
-    <ul th:each="alias: ${aliases}"
-        id="found-aliases"
-        class="mdc-list mdc-list--avatar-list search-result-list--icon-placeholders">
-        <li class="mdc-list-item" tabindex="0">
-                <span class="mdc-list-item__graphic" role="presentation">
-                    <i class="material-icons" aria-hidden="true">insert_drive_file</i>
-                </span>
-            <a href="/"
-               th:text="${alias.fullLink}"
-               th:attr="href=${alias.redirectUrl}">alias</a>
-        </li>
-    </ul>
+        <div class="layout-spacer"></div>
+
+        <div th:each="alias: ${aliases}"
+             id="found-aliases">
+            <a th:text="${(alias.namespace.keyword.isEmpty() ? '(default)' : alias.namespace.keyword) + ' | ' + alias.link}"
+               th:href="${alias.redirectUrl}"
+               style="text-decoration: none;">alias</a>
+            <div th:text="${alias.redirectUrl}"
+                 class="mdc-typography--caption"
+                 style="color: #006621"></div>
+            <div th:text="${alias.description}"
+                 th:if="${!alias.description.isEmpty()}"
+                 class="mdc-typography--caption">
+            </div>
+            <div class="layout-spacer"></div>
+        </div>
+    </div>
 </main>
 </body>
 </html>

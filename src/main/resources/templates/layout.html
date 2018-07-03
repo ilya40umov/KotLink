@@ -7,7 +7,7 @@
     <title>KotLink</title>
 
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/material-components-web@0.35.1/dist/material-components-web.css">
+          href="https://cdn.jsdelivr.net/npm/material-components-web@0.37.0/dist/material-components-web.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -57,26 +57,30 @@
                 </div>
                 <a th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).SEARCH) ? ' mdc-list-item--selected' : '' }"
                    href="#"
-                   th:href="@{/ui/search}">
+                   th:href="@{/ui/search}"
+                   tabindex="-1">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">search</i>Search
                 </a>
                 <a class="mdc-list-item"
                    th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).LIST_ALIASES) ? ' mdc-list-item--selected' : '' }"
                    href="#"
-                   th:href="@{/ui/alias}">
+                   th:href="@{/ui/alias}"
+                   tabindex="-1">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">swap_calls</i>Aliases
                 </a>
                 <a class="mdc-list-item"
                    th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).LIST_NAMESPACES) ? ' mdc-list-item--selected' : '' }"
                    href="#"
-                   th:href="@{/ui/namespace}">
+                   th:href="@{/ui/namespace}"
+                   tabindex="-1">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>Namespaces
                 </a>
                 <hr class="mdc-list-divider">
                 <a class="mdc-list-item"
                    th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).HELP) ? ' mdc-list-item--selected' : '' }"
                    href="#"
-                   th:href="@{/ui/help}">
+                   th:href="@{/ui/help}"
+                   tabindex="-1">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">help</i>Help
                 </a>
             </nav>
@@ -89,7 +93,7 @@
     <th:block layout:insert="~{fragment/_success_dialog :: success_dialog}"/>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/material-components-web@0.35.1/dist/material-components-web.js"
+<script src="https://cdn.jsdelivr.net/npm/material-components-web@0.37.0/dist/material-components-web.js"
         async></script>
 <script src="../static/js/main.js" th:src="@{/js/main.js}" async></script>
 </body>

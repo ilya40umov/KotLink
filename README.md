@@ -24,17 +24,15 @@ by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirec
 * FireFox Plugin (Not started yet)
 
 ### TODOs
-* description field for namespaces
 * CRUD UI for aliases
 * allow edit namespace via REST API
-* add validation logic to namespace service
+* add validation logic to namespace service (e.g. default namespace should always be present)
 * CRUD REST endpoint for aliases
 * implement caching of aliases
 * Security (oath for all endpoints / secrets for autocomplete)
 * vivaldi instructions
 * chrome plugin
 * firefox plugin
-* try Detekt (static code analysis)
 
 ### Deployment Instructions
 TBA

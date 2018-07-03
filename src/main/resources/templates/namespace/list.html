@@ -55,7 +55,8 @@
                           method="post"
                           th:if="${!namespace.keyword.isEmpty()}">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button class="mdc-button mdc-button--raised danger-text-button">
+                        <button class="mdc-button mdc-button--raised danger-text-button"
+                                onclick="return confirm('Are you sure that you want to delete this namespace?')">
                             <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
                             Delete
                         </button>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title>KotLink - New Alias</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!--/* @thymesVar id="alias" type="org.kotlink.ui.alias.AliasUiValue" */-->
+    <div class="layout-spacer"></div>
+    <div class="mdc-card edit-record-card">
+        <section>
+            <span class="mdc-typography--headline6">New Alias</span>
+            <form layout:insert="~{alias/_form :: alias-form}"
+                  th:with="edit=false"
+                  th:action="@{/ui/alias/new}"
+                  method="post"
+                  th:object="${alias}">
+            </form>
+        </section>
+    </div>
+</div>
+</body>
+</html>

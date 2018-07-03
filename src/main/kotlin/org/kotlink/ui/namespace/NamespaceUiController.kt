@@ -1,7 +1,6 @@
 package org.kotlink.ui.namespace
 
 import mu.KLogging
-import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.ui.SelectView
 import org.kotlink.ui.UiView
@@ -34,7 +33,7 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
 
     @GetMapping("/new")
     fun newNamespace(model: Model): String {
-        model.addAttribute("namespace", Namespace(keyword = ""))
+        model.addAttribute("namespace", NamespaceUiValue())
         return "namespace/new"
     }
 

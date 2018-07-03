@@ -1,6 +1,6 @@
 package org.kotlink
 
-import org.kotlink.api.alias.Alias
+import org.kotlink.core.alias.Alias
 import org.kotlink.core.namespace.Namespace
 
 val DEFAULT_NAMESPACE = Namespace(id = 1, keyword = "")

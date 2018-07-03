@@ -56,6 +56,11 @@ body {
     width: 100%;
 }
 
+.mdl-data-table th,
+.mdl-data-table td {
+    text-align: left;
+}
+
 .layout-spacer {
     display: block;
     margin-top: 0.5em;

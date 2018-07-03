@@ -7,8 +7,59 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <!-- TODO implement -->
+    <!--/* @thymesVar id="aliases" type="java.util.List<org.kotlink.core.alias.Alias>" */-->
+    <!--/* @thymesVar id="alias" type="org.kotlink.core.alias.Alias" */-->
     <div class="layout-spacer"></div>
+    <div class="mdc-card">
+        <table class="mdl-data-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Namespace</th>
+                <th>Link</th>
+                <th>Redirect URL</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="alias: ${aliases}" th:title="${alias.description}">
+                <td th:text="${alias.id}">123</td>
+                <td>
+                    <span th:if="${alias.namespace.keyword.isEmpty()}" style="font-style: italic">(default)</span>
+                    <span th:unless="${alias.namespace.keyword.isEmpty()}" th:text="${alias.namespace.keyword}"></span>
+                </td>
+                <td>
+                    <span th:text="${alias.link}"></span>
+                </td>
+                <td>
+                    <a th:text="${@viewUtils.truncateRedirectUrl(alias.redirectUrl)}"
+                       th:href="${alias.redirectUrl}"></a>
+                </td>
+                <td>
+                    <form th:action="@{'/ui/alias/' + ${alias.id} + '/edit'}"
+                          method="get">
+                        <button class="mdc-button mdc-button--raised secondary-text-button">
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{'/ui/alias/' + ${alias.id}}"
+                          method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="mdc-button mdc-button--raised danger-text-button"
+                                onclick="return confirm('Are you sure that you want to delete this alias?')">
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 </body>
 </html>

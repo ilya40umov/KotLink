@@ -22,7 +22,7 @@ class WebMvcConfig : WebMvcConfigurer {
     }
 
     override fun addViewControllers(registry: ViewControllerRegistry) {
-        registry.addRedirectViewController("/", "/ui/alias")
+        registry.addRedirectViewController("/", "/ui/search")
             .setKeepQueryParams(false)
             .setStatusCode(HttpStatus.TEMPORARY_REDIRECT)
     }
