@@ -1,5 +1,4 @@
 # KotLink
-![Project Logo](https://raw.githubusercontent.com/ilya40umov/KotLink/master/browser-extension/icons/icon-128.png)
 [![Build Status](https://travis-ci.org/ilya40umov/KotLink.png?branch=master)](https://travis-ci.org/ilya40umov/KotLink)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a55315857b44bb78aab3a87da4f61ec)](https://www.codacy.com/app/ilya40umov/KotLink?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ilya40umov/KotLink&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
@@ -9,28 +8,32 @@ KotLink is a solution for creating and sharing memorable URL aliases,
 which takes its inspiration from Google's internal Go-Links system.
 
 It works by letting people install a tiny browser extension 
-(which is not even necessary in case of Vivaldi browser)
-that activates when the person first types `go` in the status bar and then presses *Whitespace*. 
+(which is not even necessary in case of Vivaldi)
+that activates when the person first types `go` in the address bar and then presses *space*. 
 While activated, the extension is providing autocomplete based on the database of aliases,
-and after the user has hit *Enter*, it will redirect the user to the actual URL that matches the provided alias.
+and after the user has hit *enter*, it will redirect the user to the actual URL that matches the provided alias.
+
 For example, if someone has already created an alias for `staging newrelic` 
 that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
-by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirected to the aforementioned link.
+by typing `go` *space* `staging newrelic` *enter*, the user will be redirected to the aforementioned link.
 
-### Deploy KotLink Server
+Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server
+(see the instructions on how to do it under **Deploy KotLink Server**).
 
-KotLink server is the backend for storing and resolving aliases, 
-as well as the frontend for creating/editing them.
-
-*The installation instructions are coming soon*
-
-### Get KotLink Working In Your Browser
+### Get KotLink In Your Browser
 
 [FireFox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
 
 *Chrome Extension is coming soon*
 
 *Vivaldi set up instructions are coming soon*
+
+### Deploy KotLink Server
+
+KotLink server provides the backend for storing and resolving aliases, 
+as well as UI for creating/editing them.
+
+*The installation instructions are coming soon*
 
 ### Engineering Guide
 

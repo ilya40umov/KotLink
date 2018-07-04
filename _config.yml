@@ -1,1 +1,6 @@
-theme: jekyll-theme-tactile
+theme: jekyll-theme-minimal
+title: KotLink.org
+description: An implementation of Go-Links, written in Kotlin
+show_downloads: true
+google_analytics:
+logo: https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/logo-128.png
