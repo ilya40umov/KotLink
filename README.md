@@ -9,13 +9,15 @@ which takes its inspiration from Google's internal Go-Links system.
 
 It works by letting people install a tiny browser extension 
 (which is not even necessary in case of Vivaldi)
-that activates when the person first types **go** in the address bar and then presses `space`. 
+that activates when the person first types **go** in the address bar and then presses **space**. 
 While activated, the extension is providing autocomplete based on the database of aliases,
 and after the user has hit `enter`, it will redirect the user to the actual URL that matches the provided alias.
 
-For example, if someone has already created an alias for `staging newrelic` 
-that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
-by typing **go** `space` **staging newrelic** `enter`, the user will be redirected to the aforementioned link.
+![Suggestions In Address Bar](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/suggest.png)
+
+For example, if someone has already created an alias for `vim shortcuts` 
+that maps to `https://medium.com/@huntie/10-essential-vim-plugins-for-2018-39957190b7a9`,
+by typing **go** `space` **vim shortcuts** `enter`, the user will be redirected to the aforementioned link.
 
 Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server
 (see the instructions below).
@@ -39,7 +41,7 @@ as well as UI for creating/editing them.
 
 ### Engineering Guide
 
-#### Recommended Software
+#### Required Software
 * jdk 8+
 * direnv
 * docker
@@ -50,16 +52,14 @@ as well as UI for creating/editing them.
 * Start dependencies with `kt_env_up`
 * Run application in Terminal with `./gradlew bootRun` (or in Intellij IDEA)
 * Go to `http://localhost:8080` in your browser and create your namespaces / links
-* Stop dependencies with `kt_env_down` (this command will remove all the data from the database)
+* Stop dependencies with `kt_env_down` (this command will also remove all data from postgres)
 * Run the CI pipeline with `kt_env_ci` (can be run in parallel with application)
 
 ### TODOs
-* implement generating per-user secrets for `/api/link/suggest` and `/api/link/redirect`
-* improve DB-related error handling
 * document instructions on how to set up Vivaldi
+* implement generation of per-user secrets for `/api/link/suggest`
+* improve DB-related error handling
 * add validation logic to namespace/alias service (e.g. default namespace should always be present)
-* develop chrome plugin
-* develop firefox plugin
 * implement caching for the `/api/link/suggest` endpoint
 
 * (Tech Debt) write tests for service layer
