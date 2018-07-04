@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession
 @EnableWebSecurity
 @EnableOAuth2Sso
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-class UiSecurityConfig : WebSecurityConfigurerAdapter() {
+class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
     val allowedAddresses = mutableListOf<String>()
 
@@ -39,9 +39,7 @@ class UiSecurityConfig : WebSecurityConfigurerAdapter() {
                 "/webjars/**",
                 "/error**",
                 "/js/**",
-                "/css/**",
-                "/api/link/redirect",
-                "/api/link/suggest"
+                "/css/**"
             )
             .permitAll()
             .and()

@@ -18,11 +18,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 @Profile("!repotest")
 @Configuration
 @EnableWebSecurity
-class ApiSecurityConfig : WebSecurityConfigurerAdapter() {
+class SecretAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
-            .antMatcher("/api/**")
+            // XXX we limit the scope of secret-based authentication to a limit set of endpoints
+            // the rest of the API will be covered under OAuth
+            .requestMatchers()
+            .antMatchers("/api/link/suggest")
+            .and()
             .addFilterBefore(
                 SecretAuthFilter(
                     authPathRequestMatcher = AntPathRequestMatcher("/api/**"),
