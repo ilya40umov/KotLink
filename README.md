@@ -4,6 +4,8 @@
 [![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+![Project Logo](https://raw.githubusercontent.com/ilya40umov/KotLink/master/browser-extension/icons/icon-128.png)
+
 KotLink is a solution for creating and sharing memorable URL aliases, 
 which takes its inspiration from Google's internal Go-Links system.
 
@@ -16,30 +18,20 @@ For example, if someone has already created an alias for `staging newrelic`
 that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
 by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirected to the aforementioned link.
 
-### Project Scope
+### Deploy KotLink Server
 
-* Backend for storing and resolving aliases (In-Progress)
-* Frontend for managing aliases (In-Progress)
-* Chrome Plugin (Not started yet)
-* FireFox Plugin (Not started yet)
+KotLink server is the backend for storing and resolving aliases, 
+as well as the frontend for creating/editing them.
 
-### TODOs
-* implement generating per-user secrets for `/api/link/suggest` and `/api/link/redirect`
-* improve DB-related error handling
-* document instructions on how to set up Vivaldi
-* add validation logic to namespace/alias service (e.g. default namespace should always be present)
-* develop chrome plugin
-* develop firefox plugin
-* implement caching for the `/api/link/suggest` endpoint
+*The installation instructions are coming soon*
 
-* (Tech Debt) write tests for service layer
-* (Tech Debt) address Codacy issues
+### Get KotLink Working In Your Browser
 
-* add notion of owners for namespaces / links to restrict who can modify / delete what
-* implement REST API to allow development of alternative UIs
+[FireFox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
 
-### Deployment Instructions
-TBA
+*Chrome Extension is coming soon*
+
+*Vivaldi set up instructions are coming soon*
 
 ### Engineering Guide
 
@@ -56,3 +48,18 @@ TBA
 * Go to `http://localhost:8080` in your browser and create your namespaces / links
 * Stop dependencies with `kt_env_down` (this command will remove all the data from the database)
 * Run the CI pipeline with `kt_env_ci` (can be run in parallel with application)
+
+### TODOs
+* implement generating per-user secrets for `/api/link/suggest` and `/api/link/redirect`
+* improve DB-related error handling
+* document instructions on how to set up Vivaldi
+* add validation logic to namespace/alias service (e.g. default namespace should always be present)
+* develop chrome plugin
+* develop firefox plugin
+* implement caching for the `/api/link/suggest` endpoint
+
+* (Tech Debt) write tests for service layer
+* (Tech Debt) address Codacy issues
+
+* add notion of owners for namespaces / links to restrict who can modify / delete what
+* implement REST API to allow development of alternative UIs
