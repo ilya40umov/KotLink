@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @RunWith(SpringRunner::class)
-@WebMvcTest(LinkSearchController::class)
+@WebMvcTest(LinkSearchController::class, secure = false)
 class LinkSearchControllerTest {
 
     @Autowired

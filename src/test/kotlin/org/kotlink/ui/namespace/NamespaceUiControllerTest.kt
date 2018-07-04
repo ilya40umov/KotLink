@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @RunWith(SpringRunner::class)
-@WebMvcTest(NamespaceUiController::class)
+@WebMvcTest(NamespaceUiController::class, secure = false)
 class NamespaceUiControllerTest {
 
     @Autowired

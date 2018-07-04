@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirec
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @RunWith(SpringRunner::class)
-@WebMvcTest(LinkResolutionController::class)
+@WebMvcTest(LinkResolutionController::class, secure = false)
 class LinkResolutionControllerTest {
 
     @Autowired

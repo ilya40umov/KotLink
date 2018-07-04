@@ -9,9 +9,9 @@ which takes its inspiration from Google's internal Go-Links system.
 
 It works by letting people install a tiny browser extension 
 (which is not even necessary in case of Vivaldi browser)
-that activates when the person first types `go` in the status bar and then presses whitespace. 
+that activates when the person first types `go` in the status bar and then presses *Whitespace*. 
 While activated, the extension is providing autocomplete based on the database of aliases,
-and after the user has hit *Enter*, it will redirect the user to an actual URL that matches the provided alias.
+and after the user has hit *Enter*, it will redirect the user to the actual URL that matches the provided alias.
 For example, if someone has already created an alias for `staging newrelic` 
 that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
 by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirected to the aforementioned link.
@@ -24,13 +24,19 @@ by typing `go` *Whitespace* `staging newrelic` *Enter*, the user will be redirec
 * FireFox Plugin (Not started yet)
 
 ### TODOs
-* Security (oath for all endpoints / secrets for autocomplete)
-* add validation logic to namespace service (e.g. default namespace should always be present)
-* write tests for service layer
-* implement caching of aliases
-* vivaldi instructions
-* chrome plugin
-* firefox plugin
+* implement generating per-user secrets for `/api/link/suggest` and `/api/link/redirect`
+* improve DB-related error handling
+* document instructions on how to set up Vivaldi
+* add validation logic to namespace/alias service (e.g. default namespace should always be present)
+* develop chrome plugin
+* develop firefox plugin
+* implement caching for the `/api/link/suggest` endpoint
+
+* (Tech Debt) write tests for service layer
+* (Tech Debt) address Codacy issues
+
+* add notion of owners for namespaces / links to restrict who can modify / delete what
+* implement REST API to allow development of alternative UIs
 
 ### Deployment Instructions
 TBA
@@ -47,5 +53,6 @@ TBA
 #### How To Develop Locally
 * Start dependencies with `kt_env_up`
 * Run application in Terminal with `./gradlew bootRun` (or in Intellij IDEA)
-* Stop dependencies with `kt_env_down`
-* Run the CI pipeline with `kt_env_ci`
+* Go to `http://localhost:8080` in your browser and create your namespaces / links
+* Stop dependencies with `kt_env_down` (this command will remove all the data from the database)
+* Run the CI pipeline with `kt_env_ci` (can be run in parallel with application)

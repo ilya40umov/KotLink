@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @RunWith(SpringRunner::class)
-@WebMvcTest(AliasUiController::class)
+@WebMvcTest(AliasUiController::class, secure = false)
 @Import(UiTestConfig::class)
 class AliasUiControllerTest {
 

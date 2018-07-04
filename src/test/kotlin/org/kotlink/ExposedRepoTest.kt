@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.test.autoconfigure.OverrideAutoConfiguration
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureJdbc
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.BootstrapWith
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,4 +15,5 @@ import org.springframework.transaction.annotation.Transactional
 @ImportAutoConfiguration
 @Transactional
 @AutoConfigureJdbc
+@ActiveProfiles("local,repotest")
 annotation class ExposedRepoTest

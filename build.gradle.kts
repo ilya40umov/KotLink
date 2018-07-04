@@ -72,11 +72,11 @@ tasks {
 }
 
 dependencies {
-    val kotlinLoggingVersion by extra { "1.4.9" }
-    val postgresDriverVersion by extra { "42.2.2" }
-    val flywayVersion by extra { "5.0.7" }
+
     val exposedVersion by extra { "0.10.2" }
-    val thymeleafLayoutDialectVersion by extra { "2.3.0" }
+
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    compile("org.jetbrains.kotlin:kotlin-reflect")
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
@@ -86,25 +86,23 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-webflux")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
-    compile("org.postgresql:postgresql:$postgresDriverVersion")
-    compile("org.flywaydb:flyway-core:$flywayVersion")
+    compile("io.github.microutils:kotlin-logging:1.4.9")
+    compile("org.postgresql:postgresql:42.2.2")
+    compile("org.flywaydb:flyway-core:5.0.7")
     compile("org.jetbrains.exposed:exposed:$exposedVersion")
     compile("org.jetbrains.exposed:spring-transaction:$exposedVersion")
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:$thymeleafLayoutDialectVersion")
-
-    val kluentVersion by extra { "1.36" }
-    val kJsonAssertVersion by extra { "0.1.0" }
-    val mockitoKotlinVersion by extra { "2.0.0-alpha01" }
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("io.projectreactor:reactor-test")
-    testCompile("org.amshove.kluent:kluent:$kluentVersion")
-    testCompile("com.gregwoodfill.assert:kotlin-json-assert:$kJsonAssertVersion")
-    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion")
+    testCompile("org.amshove.kluent:kluent:1.36")
+    testCompile("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
+    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-alpha01")
 }
