@@ -9,13 +9,13 @@ which takes its inspiration from Google's internal Go-Links system.
 
 It works by letting people install a tiny browser extension 
 (which is not even necessary in case of Vivaldi)
-that activates when the person first types `go` in the address bar and then presses *space*. 
+that activates when the person first types **go** in the address bar and then presses `space`. 
 While activated, the extension is providing autocomplete based on the database of aliases,
-and after the user has hit *enter*, it will redirect the user to the actual URL that matches the provided alias.
+and after the user has hit `enter`, it will redirect the user to the actual URL that matches the provided alias.
 
 For example, if someone has already created an alias for `staging newrelic` 
 that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
-by typing `go` *space* `staging newrelic` *enter*, the user will be redirected to the aforementioned link.
+by typing **go** `space` **staging newrelic** `enter`, the user will be redirected to the aforementioned link.
 
 Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server
 (see the instructions below).
@@ -24,7 +24,7 @@ Please, also note that to use the browser extension, you first need to set up a 
 
 Install [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
 
-*Chrome Extension is coming soon*
+Install [Chrome Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 
 *Vivaldi set up instructions are coming soon*
 
@@ -32,6 +32,8 @@ Install [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotli
 
 KotLink server provides the backend for storing and resolving aliases, 
 as well as UI for creating/editing them.
+
+![List Aliases in UI](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/list-aliases.png)
 
 *The installation instructions are coming soon*
 
