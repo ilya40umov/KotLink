@@ -18,11 +18,11 @@ that maps to `https://rpm.newrelic.com/accounts/YYY/applications/ZZZ`,
 by typing `go` *space* `staging newrelic` *enter*, the user will be redirected to the aforementioned link.
 
 Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server
-(see the instructions on how to do it under **Deploy KotLink Server**).
+(see the instructions below).
 
 ### Get KotLink In Your Browser
 
-[FireFox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
+Install [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
 
 *Chrome Extension is coming soon*
 

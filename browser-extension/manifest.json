@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "KotLink Browser Extension",
-  "description": "To activate: type 'go' followed by a space, then enter your shortcut.",
+  "description": "To activate: type 'go' followed by a space, then enter the alias to resolve.",
   "homepage_url": "http://kotlink.org",
   "version": "1.0.0",
   "background": {

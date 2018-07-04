@@ -34,9 +34,9 @@ function saveOptions(e) {
 function restoreOptions() {
     loadExtensionStorage(result => {
         document.querySelector("#server-url").value =
-            result.kotlinkServerUrl || "PUT-YOUR-SERVER-URL-HERE";
+            result.kotlinkServerUrl || "";
         document.querySelector("#extension-secret").value =
-            result.kotlinkExtensionSecret || "PUT-YOUR-SERVER-URL-HERE";
+            result.kotlinkExtensionSecret || "";
     });
 }
 
