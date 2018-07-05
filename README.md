@@ -7,11 +7,19 @@
 KotLink is a solution for creating and sharing memorable URL aliases, 
 which takes its inspiration from Google's internal Go-Links system.
 
-It works by letting people install a tiny browser extension 
+### Why?
+
+* Get rid of bookmarks for URLs frequently used within your team / organization
+* Speak the same language as your colleges (e.g. Hey, can you check out what is happening on `go staging grafana`?)
+* Search your "intranet" quickly for a resource that you need to access
+
+### Overview
+
+KotLink works by letting people install a tiny browser extension 
 (which is not even necessary in case of Vivaldi)
 that activates when the person first types **go** in the address bar and then presses **space**. 
 While activated, the extension is providing autocomplete based on the database of aliases,
-and after the user has hit `enter`, it will redirect the user to the actual URL that matches the provided alias.
+and after the user has hit **enter**, it will redirect the user to the actual URL that matches the provided alias.
 
 ![Suggestions In Address Bar](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/suggest.png)
 
