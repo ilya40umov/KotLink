@@ -1,17 +1,17 @@
 # KotLink
-[![Build Status](https://travis-ci.org/ilya40umov/KotLink.png?branch=master)](https://travis-ci.org/ilya40umov/KotLink)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a55315857b44bb78aab3a87da4f61ec)](https://www.codacy.com/app/ilya40umov/KotLink?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ilya40umov/KotLink&amp;utm_campaign=Badge_Grade)
-[![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://travis-ci.org/ilya40umov/KotLink.png?branch=master)](https://travis-ci.org/ilya40umov/KotLink)
+[![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a55315857b44bb78aab3a87da4f61ec)](https://www.codacy.com/app/ilya40umov/KotLink?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ilya40umov/KotLink&amp;utm_campaign=Badge_Grade)
 
 KotLink is a solution for creating and sharing memorable URL aliases, 
 which takes its inspiration from Google's internal Go-Links system.
 
 ### Why?
 
-* Get rid of bookmarks for URLs frequently used within your team / organization
-* Speak the same language as your colleges (e.g. Hey, can you check out what is happening on `go staging grafana`?)
-* Search your "intranet" quickly for a resource that you need to access
+* Get rid of bookmarks for URLs frequently used within your team
+* Speak the same language as your colleges (e.g. Hey, can you check out what is happening with `staging grafana`?)
+* Search your "intranet" quickly for a resource that you don't know the URL for
 
 ### Overview
 
@@ -36,7 +36,15 @@ Install [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotli
 
 Install [Chrome Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 
-*Vivaldi set up instructions are coming soon*
+To use KotLink with Vivaldi:
+1. Go to Settings / Privacy and enable "Search Suggestions in Address Field".
+1. Go to Settings / Search and make sure "Allow Search Suggestions" is checked for "In Address Field".
+1. Also in Settings / Search, add a new search engine where:
+..*. *Name* is `KotLink` 
+..*. *Nickname* is `go`
+..*. *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
+..*. *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
+..*. click Save
 
 ### Deploy KotLink Server
 
