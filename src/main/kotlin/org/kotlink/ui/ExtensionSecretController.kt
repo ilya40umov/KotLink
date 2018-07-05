@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/ui/help")
-class HelpController {
+@RequestMapping("/ui/extension_secret")
+class ExtensionSecretController {
 
     @GetMapping
-    @SelectView(UiView.HELP)
+    @SelectView(UiView.EXTENSION_SECRET)
     fun listNamespaces(model: Model): String {
-        return "help"
+        return "secret/extension_secret"
     }
 }

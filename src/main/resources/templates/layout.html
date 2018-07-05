@@ -25,7 +25,6 @@
         <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
             <img src="/logo.png">
             <div class="mdc-toolbar__title catalog-title"
-                 style="width: 210px;"
                  th:text="${(selectedView != null) ? selectedView.title : 'KotLink UI'}">
                 Title
             </div>
@@ -101,11 +100,11 @@
                 </a>
                 <hr class="mdc-list-divider">
                 <a class="mdc-list-item"
-                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).HELP) ? ' mdc-list-item--selected' : '' }"
+                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).EXTENSION_SECRET) ? ' mdc-list-item--selected' : '' }"
                    href="#"
-                   th:href="@{/ui/help}"
+                   th:href="@{/ui/extension_secret}"
                    tabindex="-1">
-                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">help</i>Help
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">security</i>Extension Secret
                 </a>
             </nav>
         </div>

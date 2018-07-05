@@ -71,8 +71,7 @@ as well as UI for creating/editing them.
 * Run the CI pipeline with `kt_env_ci` (can be run in parallel with application)
 
 ### TODOs
-* document instructions on how to set up Vivaldi
-* implement generation of per-user secrets for `/api/link/suggest`
+* implement generation of per-user extension secrets
 * improve DB-related error handling
 * add validation logic to namespace/alias service (e.g. default namespace should always be present)
 * implement caching for the `/api/link/suggest` endpoint
@@ -80,5 +79,6 @@ as well as UI for creating/editing them.
 * (Tech Debt) write tests for service layer
 * (Tech Debt) address Codacy issues
 
+### Next Phase
 * add notion of owners for namespaces / links to restrict who can modify / delete what
 * implement REST API to allow development of alternative UIs
