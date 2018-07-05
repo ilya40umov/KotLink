@@ -29,12 +29,35 @@
                  th:text="${(selectedView != null) ? selectedView.title : 'KotLink UI'}">
                 Title
             </div>
-            <div class="mdc-card__action-buttons" style="margin-top: auto; margin-bottom: auto">
-
+        </section>
+        <section class="mdc-toolbar__section mdc-toolbar__section--align-end">
+            <span class="mdc-toolbar__title mdc-typography--overline"
+                  style="line-height: 0"
+                  th:text="${@currentUser.email}">Guest</span>
+            <div class="mdc-menu-anchor">
+                <button id="user-menu-button"
+                        class="mdc-toolbar__icon"
+                        title="User Menu"
+                        tabindex="-1">
+                    <i class="material-icons">
+                        account_circle
+                    </i>
+                </button>
+                <div id="user-menu" class="mdc-menu" tabindex="-1" data-mdc-auto-init="MDCMenu">
+                    <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
+                        <li class="mdc-list-item"
+                            role="menuitem"
+                            tabindex="-1"
+                            onclick="document.getElementById('signout-button').click()">
+                            Logout
+                            <form method="post" style="visibility: hidden" th:action="@{/ui/sign_out}">
+                                <button id="signout-button" type="submit"></button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="mdc-card__action-buttons" style="padding-left: 1em; margin-top: auto; margin-bottom: auto">
 
-            </div>
         </section>
     </div>
 </header>

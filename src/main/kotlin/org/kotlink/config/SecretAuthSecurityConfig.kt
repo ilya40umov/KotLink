@@ -1,4 +1,4 @@
-package org.kotlink.shared.config
+package org.kotlink.config
 
 import org.kotlink.api.security.SecretAuthFilter
 import org.kotlink.api.security.SecretValidator

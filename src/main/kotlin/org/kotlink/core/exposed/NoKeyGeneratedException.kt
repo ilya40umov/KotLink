@@ -1,3 +1,3 @@
-package org.kotlink.shared.exposed
+package org.kotlink.core.exposed
 
 class NoKeyGeneratedException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)

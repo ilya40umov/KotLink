@@ -1,3 +1,3 @@
-package org.kotlink.shared.exposed
+package org.kotlink.core.exposed
 
 class RecordNotFoundException(message: String) : RuntimeException(message)

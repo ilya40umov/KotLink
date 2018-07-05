@@ -7,8 +7,8 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import org.kotlink.shared.exposed.NoKeyGeneratedException
-import org.kotlink.shared.exposed.RecordNotFoundException
+import org.kotlink.core.exposed.NoKeyGeneratedException
+import org.kotlink.core.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
 
 interface NamespaceRepo {

@@ -1,4 +1,4 @@
-package org.kotlink.shared.config
+package org.kotlink.config
 
 import org.kotlink.ui.SelectViewInterceptor
 import org.springframework.context.annotation.Configuration
@@ -15,7 +15,13 @@ class WebMvcConfig : WebMvcConfigurer {
     }
 
     override fun addViewControllers(registry: ViewControllerRegistry) {
-        registry.addRedirectViewController("/", "/ui/search")
+        registry
+            .addRedirectViewController("/", "/ui/search")
+            .setKeepQueryParams(false)
+            .setStatusCode(HttpStatus.TEMPORARY_REDIRECT)
+
+        registry
+            .addRedirectViewController("/ui/sign_out_success", "/ui/search")
             .setKeepQueryParams(false)
             .setStatusCode(HttpStatus.TEMPORARY_REDIRECT)
     }

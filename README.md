@@ -7,7 +7,7 @@
 KotLink is a solution for creating and sharing memorable URL aliases, 
 which takes its inspiration from Google's internal Go-Links system.
 
-### Why?
+### Why use KotLink?
 
 * Get rid of bookmarks for URLs frequently used within your team
 * Speak the same language as your colleges (e.g. Hey, can you check out what is happening with `staging grafana`?)
@@ -24,7 +24,7 @@ and after the user has hit **enter**, it will redirect the user to the actual UR
 ![Suggestions In Address Bar](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/suggest.png)
 
 For example, if someone has already created an alias for `vim shortcuts` 
-that maps to `https://medium.com/@huntie/10-essential-vim-plugins-for-2018-39957190b7a9`,
+that maps to `https://vim.rtorr.com`,
 by typing **go** `space` **vim shortcuts** `enter`, the user will be redirected to the aforementioned link.
 
 Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server

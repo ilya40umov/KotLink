@@ -1,4 +1,4 @@
-package org.kotlink.shared.config
+package org.kotlink.config
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor

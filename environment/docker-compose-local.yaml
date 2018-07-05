@@ -22,3 +22,9 @@ services:
 volumes:
   postgresql:
     driver: local
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.177.17.0/24
