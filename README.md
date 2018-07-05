@@ -40,11 +40,10 @@ To use KotLink with Vivaldi:
 1. Go to Settings / Privacy and enable "Search Suggestions in Address Field".
 1. Go to Settings / Search and make sure "Allow Search Suggestions" is checked for "In Address Field".
 1. Also in Settings / Search, add a new search engine where:
-..*. *Name* is `KotLink` 
-..*. *Nickname* is `go`
-..*. *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
-..*. *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
-..*. click Save
+  - *Name* is `KotLink` 
+  - *Nickname* is `go`
+  - *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
+  - *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
 
 ### Deploy KotLink Server
 
