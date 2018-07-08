@@ -55,4 +55,4 @@ as well as UI for creating/editing them.
 
 ### Engineering Guide
 If you would like to contribute to the project, or just try it out on your local machine, 
-take a look at the [Engineering Guide](ENG-GUIDE.md).
+take a look at the [Engineering Guide](engineering-guide.md).
