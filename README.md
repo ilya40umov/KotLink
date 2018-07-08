@@ -16,7 +16,6 @@ which takes its inspiration from Google's internal Go-Links system.
 ### Overview
 
 KotLink works by letting people install a tiny browser extension 
-(which is not even necessary in case of Vivaldi)
 that activates when the person first types **go** in the address bar and then presses **space**. 
 While activated, the extension is providing autocomplete based on the database of aliases,
 and after the user has hit **enter**, it will redirect the user to the actual URL that matches the provided alias.
@@ -36,7 +35,7 @@ Install [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotli
 
 Install [Chrome Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 
-To use KotLink with Vivaldi:
+To use KotLink with Vivaldi perform the following steps:
 1. Go to Settings / Privacy and enable "Search Suggestions in Address Field".
 1. Go to Settings / Search and make sure "Allow Search Suggestions" is checked for "In Address Field".
 1. Also in Settings / Search, add a new search engine where:
@@ -55,30 +54,5 @@ as well as UI for creating/editing them.
 *The installation instructions are coming soon*
 
 ### Engineering Guide
-
-#### Required Software
-* jdk 8+
-* direnv
-* docker
-* docker-compose
-* Intellij IDEA (recommended)
-
-#### How To Develop Locally
-* Start dependencies with `kt_env_up`
-* Run application in Terminal with `./gradlew bootRun` (or in Intellij IDEA)
-* Go to `http://localhost:8080` in your browser and create your namespaces / links
-* Stop dependencies with `kt_env_down` (this command will also remove all data from postgres)
-* Run the CI pipeline with `kt_env_ci` (can be run in parallel with application)
-
-### TODOs
-* implement generation of per-user extension secrets
-* improve DB-related error handling
-* add validation logic to namespace/alias service (e.g. default namespace should always be present)
-* implement caching for the `/api/link/suggest` endpoint
-
-* (Tech Debt) write tests for service layer
-* (Tech Debt) address Codacy issues
-
-### Next Phase
-* add notion of owners for namespaces / links to restrict who can modify / delete what
-* implement REST API to allow development of alternative UIs
+If you would like to contribute to the project, or just try it out on your local machine, 
+take a look at the [Engineering Guide](ENG-GUIDE.md).
