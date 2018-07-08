@@ -5,6 +5,10 @@ spring:
     driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
+  cache:
+    cache-names: aliases
+    caffeine.spec: maximumSize=3000,expireAfterWrite=300s
+
 
 security:
   oauth2:

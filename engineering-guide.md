@@ -18,10 +18,11 @@ to load the extension (or you can install it from the store)
 * You can run the CI pipeline with `kotlink_ci` (can be run in parallel with the app)
 
 ### TODOs
-* implement generation of per-user extension secrets
-* add validation logic to namespace/alias service (e.g. default namespace should always be present)
-* implement caching for the `/api/link/suggest` endpoint
-* package the backend as a docker image and write deployment instructions
 
 * (Tech Debt) write tests for service layer
-* (Tech Debt) address Codacy issues
+* add validation logic to namespace/alias service (e.g. default namespace should always be present)
+
+* implement generation of per-user extension secrets
+
+* package the backend as a docker image and write deployment instructions
+* add instructions on security (oauth and extension secrets)

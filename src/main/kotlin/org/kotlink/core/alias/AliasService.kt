@@ -1,11 +1,16 @@
 package org.kotlink.core.alias
 
+import org.kotlink.core.alias.AliasService.Companion.ALIAS_CACHE_NAME
 import org.kotlink.core.namespace.NamespaceRepo
+import org.springframework.cache.annotation.CacheConfig
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
+@CacheConfig(cacheNames = [ALIAS_CACHE_NAME])
 class AliasService(
     private val aliasRepo: AliasRepo,
     private val namespaceRepo: NamespaceRepo
@@ -29,6 +34,7 @@ class AliasService(
             }
     }
 
+    @Cacheable
     fun findByFullLinkPrefix(fullLinkPrefix: String): List<Alias> {
         val matchesInDefaultNamespace =
             aliasRepo.findByNamespaceAndLinkPrefix(namespace = "", linkPrefix = fullLinkPrefix)
@@ -41,6 +47,7 @@ class AliasService(
         }
     }
 
+    @Cacheable
     fun searchAliasesMatchingInput(userProvidedInput: String): List<Alias> {
         val terms = userProvidedInput
             .replace("[^A-Za-z0-9\\s+]".toRegex(), "")
@@ -63,9 +70,16 @@ class AliasService(
         }.toSet().toList()
     }
 
+    @CacheEvict(allEntries = true)
     fun create(alias: Alias): Alias = aliasRepo.insert(alias)
 
+    @CacheEvict(allEntries = true)
     fun update(alias: Alias): Alias = aliasRepo.update(alias)
 
+    @CacheEvict(allEntries = true)
     fun deleteById(id: Long): Boolean = aliasRepo.deleteById(id)
+
+    companion object {
+        const val ALIAS_CACHE_NAME = "aliases"
+    }
 }
