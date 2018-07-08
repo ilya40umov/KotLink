@@ -1,14 +1,17 @@
 package org.kotlink.core.namespace
 
+import mu.KLogging
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEndWith
 import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldThrow
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.ExposedRepoTest
+import org.kotlink.core.exposed.DatabaseException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit4.SpringRunner
 import java.util.UUID
@@ -29,8 +32,12 @@ class NamespaceRepoImplTest {
 
     @After
     fun tearDown() {
-        repo.findByKeyword(testKeyword)?.id?.also {
-            repo.deleteById(it)
+        try {
+            repo.findByKeyword(testKeyword)?.id?.also {
+                repo.deleteById(it)
+            }
+        } catch (e: DatabaseException) {
+            logger.warn { "Caught on tearDown: ${e.message}" }
         }
     }
 
@@ -80,6 +87,12 @@ class NamespaceRepoImplTest {
     }
 
     @Test
+    fun `'insert' should throw DatabaseException if namespace with such keyword already exists`() {
+        val funx = {repo.insert(Namespace(keyword = testKeyword))}
+        funx shouldThrow DatabaseException::class
+    }
+
+    @Test
     fun `'update' should update the provided namespace`() {
         val existingNamespace = repo.insert(Namespace(keyword = UUID.randomUUID().toString()))
 
@@ -104,4 +117,6 @@ class NamespaceRepoImplTest {
             it shouldEqual false
         }
     }
+
+    companion object : KLogging()
 }

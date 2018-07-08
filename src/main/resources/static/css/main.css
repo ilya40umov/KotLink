@@ -58,6 +58,7 @@ body {
 
 .mdl-data-table th,
 .mdl-data-table td {
+    padding: 12px 8px 12px 8px;
     text-align: left;
 }
 
