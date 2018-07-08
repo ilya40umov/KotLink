@@ -32,6 +32,7 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
     }
 
     @GetMapping("/new")
+    @SelectView(UiView.NEW_NAMESPACE)
     fun newNamespace(model: Model): String {
         model.addAttribute("namespace", NamespaceUiValue())
         return "namespace/new"
@@ -63,6 +64,7 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
     }
 
     @GetMapping("/{namespaceId}/edit")
+    @SelectView(UiView.EDIT_NAMESPACE)
     fun updateNamespace(
         @PathVariable namespaceId: Long,
         model: Model,

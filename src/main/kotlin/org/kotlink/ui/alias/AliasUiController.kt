@@ -36,6 +36,7 @@ class AliasUiController(
     }
 
     @GetMapping("/new")
+    @SelectView(UiView.NEW_ALIAS)
     fun newAlias(model: Model): String {
         model.addAttribute("alias", AliasUiValue())
         model.addAttribute("namespaces", namespaceService.findAll())
@@ -74,6 +75,7 @@ class AliasUiController(
     }
 
     @GetMapping("/{aliasId}/edit")
+    @SelectView(UiView.EDIT_ALIAS)
     fun updateAlias(
         @PathVariable aliasId: Long,
         model: Model,

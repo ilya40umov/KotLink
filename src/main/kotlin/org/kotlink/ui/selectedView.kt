@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletResponse
 
 enum class UiView(val title: String) {
     SEARCH("KotLink - Search"),
-    NEW_ALIAS("KotLink - New Alias"),
     LIST_ALIASES("KotLink - Aliases"),
+    NEW_ALIAS("KotLink - New Alias"),
+    EDIT_ALIAS("KotLink - Edit Alias"),
     LIST_NAMESPACES("KotLink - Namespaces"),
+    NEW_NAMESPACE("KotLink - New Namespace"),
+    EDIT_NAMESPACE("KotLink - Edit Namespace"),
     EXTENSION_SECRET("KotLink - Extension Secret")
 }
 
