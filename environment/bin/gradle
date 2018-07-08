@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-/$KT_HOME/gradlew "$@"
+/$KOTLINK_HOME/gradlew "$@"

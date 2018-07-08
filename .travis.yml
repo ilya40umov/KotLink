@@ -6,7 +6,7 @@ services:
   - docker
 
 env:
-  - KT_ENV=ci
+  - KOTLINK_ENV=ci
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -17,7 +17,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./environment/bin/kt_env_ci
+  - ./environment/bin/kotlink_ci
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

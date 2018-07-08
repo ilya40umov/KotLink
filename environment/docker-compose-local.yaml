@@ -10,8 +10,8 @@ services:
       - postgresql:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=kotlink
-      - POSTGRES_USER=ktuser
-      - POSTGRES_PASSWORD=ktpass
+      - POSTGRES_USER=kotlinkuser
+      - POSTGRES_PASSWORD=kotlinkpass
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 15s

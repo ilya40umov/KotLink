@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:55432/kotlink
-    username: ktuser
-    password: ktpass
+    username: kotlinkuser
+    password: kotlinkpass
   thymeleaf:
     cache: false
 

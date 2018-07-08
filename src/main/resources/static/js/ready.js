@@ -7,9 +7,9 @@
  * resources have finished loading, the given handler function will be invoked synchronously (in the same call stack).
  * Handlers are invoked in FIFO order.
  */
-window.kt = {};
+window.kotlink = {};
 
-kt.onReady = (() => {
+kotlink.onReady = (() => {
     const POLL_INTERVAL_MS = 100;
     const POLL_MAX_WAIT_MS = 60 * 1000;
 
@@ -25,7 +25,7 @@ kt.onReady = (() => {
             return;
         }
         testDom = document.createElement("div");
-        testDom.classList.add("kt-ready-detect");
+        testDom.classList.add("kotlink-ready-detect");
         document.body.appendChild(testDom);
     }
 
@@ -101,6 +101,6 @@ kt.onReady = (() => {
 })();
 
 // make sure auto init is called because anything else
-kt.onReady(() => {
+kotlink.onReady(() => {
     mdc.autoInit();
 });
