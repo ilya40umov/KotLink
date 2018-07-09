@@ -14,10 +14,10 @@ import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import org.kotlink.core.namespace.Namespaces
-import org.kotlink.core.namespace.asNamespace
 import org.kotlink.core.exposed.NoKeyGeneratedException
 import org.kotlink.core.exposed.RecordNotFoundException
+import org.kotlink.core.namespace.Namespaces
+import org.kotlink.core.namespace.asNamespace
 import org.springframework.stereotype.Repository
 
 interface AliasRepo {
@@ -25,6 +25,9 @@ interface AliasRepo {
     fun findAll(): List<Alias>
 
     fun findById(id: Long): Alias?
+
+    fun findByIdOrThrow(id: Long): Alias =
+        findById(id) ?: throw RecordNotFoundException("Alias #$id not found")
 
     fun findByNamespace(namespace: String): List<Alias>
 
@@ -119,7 +122,7 @@ class AliasRepoImpl : AliasRepo {
             it[link] = alias.link
             it[redirectUrl] = alias.redirectUrl
             it[description] = alias.description
-        }.generatedKey ?: throw NoKeyGeneratedException()
+        }.generatedKey ?: throw NoKeyGeneratedException("No primary key generated for alias '${alias.fullLink}'")
         return findById(aliasId.toLong())
             ?: throw RecordNotFoundException("Created alias #${alias.id} not found")
     }

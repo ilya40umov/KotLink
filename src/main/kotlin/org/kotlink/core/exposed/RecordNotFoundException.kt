@@ -1,3 +1,5 @@
 package org.kotlink.core.exposed
 
-class RecordNotFoundException(message: String) : RuntimeException(message)
+import org.kotlink.core.KotLinkException
+
+class RecordNotFoundException(message: String) : KotLinkException(message)

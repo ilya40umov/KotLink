@@ -147,7 +147,7 @@ class NamespaceUiControllerTest {
     @Test
     fun `'deleteNamespace' should redirect to the list view if namespace is successfully deleted`() {
         whenever(namespaceService.deleteById(any()))
-            .thenReturn(true)
+            .thenReturn(ABC_NAMESPACE)
 
         mvc.perform(delete("/ui/namespace/1"))
             .andExpect(MockMvcResultMatchers.status().isFound)

@@ -1,6 +1,7 @@
 package org.kotlink.ui.namespace
 
 import mu.KLogging
+import org.kotlink.core.namespace.KeywordTakenException
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.ui.SelectView
 import org.kotlink.ui.UiView
@@ -54,11 +55,14 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
             val createdNamespace = namespaceService.create(namespace.toNamespace())
             attributes.addSuccessMessage("Namespace '${createdNamespace.keyword}' has been successfully created.")
             "redirect:/ui/namespace"
+        } catch (e: KeywordTakenException) {
+            bindResult.rejectValue("keyword", "", "keyword is taken")
+            model.addAttribute("namespace", namespace)
+            "namespace/new"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while creating a new namespace: $namespace" }
             model.addAttribute("namespace", namespace)
-            model.addErrorMessage(
-                "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}")
+            model.addErrorMessage(e)
             "namespace/new"
         }
     }
@@ -96,11 +100,14 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
             namespaceService.update(namespace.apply { id = namespaceId }.toNamespace())
             attributes.addSuccessMessage("Namespace '${namespace.keyword}' has been successfully updated.")
             "redirect:/ui/namespace"
+        } catch (e: KeywordTakenException) {
+            bindResult.rejectValue("keyword", "", "keyword is taken")
+            model.addAttribute("namespace", namespace)
+            "namespace/edit"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while updating an existing namespace: $namespace" }
             model.addAttribute("namespace", namespace)
-            model.addErrorMessage(
-                "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}")
+            model.addErrorMessage(e)
             "namespace/edit"
         }
     }
@@ -117,8 +124,7 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
             "redirect:/ui/namespace"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while deleting a namespace: #$namespaceId" }
-            attributes.addErrorMessage(
-                "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}")
+            attributes.addErrorMessage(e)
             "redirect:/ui/namespace"
         }
     }

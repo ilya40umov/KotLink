@@ -1,8 +1,6 @@
 package org.kotlink.core.alias
 
-import org.kotlink.core.alias.AliasService.Companion.ALIAS_CACHE_NAME
 import org.kotlink.core.namespace.NamespaceRepo
-import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
@@ -10,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-@CacheConfig(cacheNames = [ALIAS_CACHE_NAME])
 class AliasService(
     private val aliasRepo: AliasRepo,
     private val namespaceRepo: NamespaceRepo
@@ -20,6 +17,7 @@ class AliasService(
 
     fun findById(id: Long): Alias? = aliasRepo.findById(id)
 
+    @Cacheable(cacheNames = [ALIAS_BY_FULL_LINK_CACHE], unless = "#result == null")
     fun findByFullLink(fullLink: String): Alias? {
         return aliasRepo.findByNamespaceAndLink(namespace = "", link = fullLink)
             .let { alias ->
@@ -34,7 +32,7 @@ class AliasService(
             }
     }
 
-    @Cacheable
+    @Cacheable(cacheNames = [ALIAS_BY_FULL_LINK_PREFIX_CACHE])
     fun findByFullLinkPrefix(fullLinkPrefix: String): List<Alias> {
         val matchesInDefaultNamespace =
             aliasRepo.findByNamespaceAndLinkPrefix(namespace = "", linkPrefix = fullLinkPrefix)
@@ -47,7 +45,7 @@ class AliasService(
         }
     }
 
-    @Cacheable
+    @Cacheable(cacheNames = [ALIAS_SEARCH_CACHE])
     fun searchAliasesMatchingInput(userProvidedInput: String): List<Alias> {
         val terms = userProvidedInput
             .replace("[^A-Za-z0-9\\s+]".toRegex(), "")
@@ -71,16 +69,36 @@ class AliasService(
         }.toSet().toList()
     }
 
-    @CacheEvict(allEntries = true)
-    fun create(alias: Alias): Alias = aliasRepo.insert(alias)
+    @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLinkPrefix", "aliasSearch"])
+    fun create(alias: Alias): Alias {
+        verifyFullLinkNotTaken(alias.fullLink)
+        return aliasRepo.insert(alias)
+    }
 
-    @CacheEvict(allEntries = true)
-    fun update(alias: Alias): Alias = aliasRepo.update(alias)
+    @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLinkPrefix", "aliasSearch"])
+    fun update(alias: Alias): Alias {
+        val foundAlias = aliasRepo.findByIdOrThrow(alias.id)
+        if (alias.fullLink != foundAlias.fullLink) {
+            verifyFullLinkNotTaken(alias.fullLink)
+        }
+        return aliasRepo.update(alias)
+    }
 
-    @CacheEvict(allEntries = true)
-    fun deleteById(id: Long): Boolean = aliasRepo.deleteById(id)
+    @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLink", "aliasByFullLinkPrefix", "aliasSearch"])
+    fun deleteById(id: Long): Boolean {
+        aliasRepo.findByIdOrThrow(id)
+        return aliasRepo.deleteById(id)
+    }
+
+    private fun verifyFullLinkNotTaken(fullLink: String) {
+        if (findByFullLink(fullLink) != null) {
+            throw FullLinkExistsException("Link '$fullLink' is already taken")
+        }
+    }
 
     companion object {
-        const val ALIAS_CACHE_NAME = "aliases"
+        const val ALIAS_BY_FULL_LINK_CACHE = "aliasByFullLink"
+        const val ALIAS_BY_FULL_LINK_PREFIX_CACHE = "aliasByFullLinkPrefix"
+        const val ALIAS_SEARCH_CACHE = "aliasSearch"
     }
 }

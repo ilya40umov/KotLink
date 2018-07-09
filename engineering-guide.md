@@ -19,8 +19,7 @@ to load the extension (or you can install it from the store)
 
 ### TODOs
 
-* (Tech Debt) write tests for service layer
-* add validation logic to namespace/alias service (e.g. default namespace should always be present)
-
+* finish writing tests for AliasService
+* refine how security is configured
 * package the backend as a docker image and write deployment instructions
 * add instructions on security (oauth and extension secrets)

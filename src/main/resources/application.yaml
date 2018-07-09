@@ -6,8 +6,8 @@ spring:
   flyway:
     enabled: true
   cache:
-    cache-names: aliases
-    caffeine.spec: maximumSize=3000,expireAfterWrite=300s
+    cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch
+    caffeine.spec: maximumSize=2000,expireAfterWrite=300s
 
 
 security:

@@ -2,6 +2,7 @@ package org.kotlink.ui.alias
 
 import mu.KLogging
 import org.kotlink.core.alias.AliasService
+import org.kotlink.core.alias.FullLinkExistsException
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.ui.SelectView
 import org.kotlink.ui.UiView
@@ -38,8 +39,7 @@ class AliasUiController(
     @GetMapping("/new")
     @SelectView(UiView.NEW_ALIAS)
     fun newAlias(model: Model): String {
-        model.addAttribute("alias", AliasUiValue())
-        model.addAttribute("namespaces", namespaceService.findAll())
+        model.addFormAttributes(AliasUiValue())
         return "alias/new"
     }
 
@@ -56,20 +56,21 @@ class AliasUiController(
                 bindResult.rejectValue("namespaceId", "", "namespace not found")
             }
             logger.warn { "User input $alias has failed validation ${bindResult.allErrors}" }
-            model.addAttribute("alias", alias)
-            model.addAttribute("namespaces", namespaceService.findAll())
+            model.addFormAttributes(alias)
             return "alias/new"
         }
         return try {
             val createdAlias = aliasService.create(alias.toAlias(namespace))
             attributes.addSuccessMessage("Alias '${createdAlias.fullLink}' has been successfully created.")
             "redirect:/ui/alias"
+        } catch (e: FullLinkExistsException) {
+            bindResult.rejectValue("link", "", "alias is taken")
+            model.addFormAttributes(alias)
+            "alias/new"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while creating a new alias: $alias" }
-            model.addAttribute("alias", alias)
-            model.addAttribute("namespaces", namespaceService.findAll())
-            model.addErrorMessage(
-                "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}")
+            model.addFormAttributes(alias)
+            model.addErrorMessage(e)
             "alias/new"
         }
     }
@@ -86,8 +87,7 @@ class AliasUiController(
             attributes.addErrorMessage("Alias #$aliasId was not found.")
             return "redirect:/ui/alias"
         }
-        model.addAttribute("alias", AliasUiValue(alias))
-        model.addAttribute("namespaces", namespaceService.findAll())
+        model.addFormAttributes(AliasUiValue(alias))
         return "alias/edit"
     }
 
@@ -104,8 +104,7 @@ class AliasUiController(
             if (namespace == null) {
                 bindResult.rejectValue("namespaceId", "", "namespace not found")
             }
-            model.addAttribute("alias", alias)
-            model.addAttribute("namespaces", namespaceService.findAll())
+            model.addFormAttributes(alias)
             logger.warn { "User input $alias has failed validation ${bindResult.allErrors}" }
             return "alias/edit"
         }
@@ -113,12 +112,14 @@ class AliasUiController(
             val updatedAlias = aliasService.update(alias.toAlias(namespace))
             attributes.addSuccessMessage("Alias '${updatedAlias.fullLink}' has been successfully updated.")
             "redirect:/ui/alias"
+        } catch (e: FullLinkExistsException) {
+            bindResult.rejectValue("link", "", "alias is taken")
+            model.addFormAttributes(alias)
+            "alias/edit"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while updating an existing alias: $alias" }
-            model.addAttribute("alias", alias)
-            model.addAttribute("namespaces", namespaceService.findAll())
-            model.addErrorMessage(
-                "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}")
+            model.addFormAttributes(alias)
+            model.addErrorMessage(e)
             "alias/edit"
         }
     }
@@ -135,10 +136,14 @@ class AliasUiController(
             "redirect:/ui/alias"
         } catch (e: Exception) {
             logger.error(e) { "Error occurred while deleting an alias: #$aliasId" }
-            attributes.addErrorMessage(
-                "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}")
+            attributes.addErrorMessage(e)
             "redirect:/ui/alias"
         }
+    }
+
+    private fun Model.addFormAttributes(alias: AliasUiValue): Model = this.apply {
+        addAttribute("alias", alias)
+        addAttribute("namespaces", namespaceService.findAll())
     }
 
     companion object : KLogging()

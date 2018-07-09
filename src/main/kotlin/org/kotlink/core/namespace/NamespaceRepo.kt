@@ -17,6 +17,9 @@ interface NamespaceRepo {
 
     fun findById(id: Long): Namespace?
 
+    fun findByIdOrThrow(id: Long): Namespace =
+        findById(id) ?: throw RecordNotFoundException("Namespace #$id not found")
+
     fun findByKeyword(keyword: String): Namespace?
 
     fun insert(namespace: Namespace): Namespace
@@ -48,7 +51,7 @@ class NamespaceRepoImpl : NamespaceRepo {
         val namespaceId = Namespaces.insert {
             it[keyword] = namespace.keyword
             it[description] = namespace.description
-        }.generatedKey ?: throw NoKeyGeneratedException()
+        }.generatedKey ?: throw NoKeyGeneratedException("No primary key generated for namespace '${namespace.keyword}'")
         return findById(namespaceId.toLong())
             ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
     }

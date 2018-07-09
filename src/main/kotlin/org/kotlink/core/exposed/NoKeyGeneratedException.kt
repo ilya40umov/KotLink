@@ -1,3 +1,5 @@
 package org.kotlink.core.exposed
 
-class NoKeyGeneratedException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)
+import org.kotlink.core.KotLinkException
+
+class NoKeyGeneratedException(message: String) : KotLinkException(message)

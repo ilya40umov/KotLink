@@ -1,8 +1,26 @@
 package org.kotlink.core.alias
 
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnitRunner
+
+@RunWith(MockitoJUnitRunner::class)
 class AliasServiceTest {
 
-// TODO implement tests for AliasService
+    @Test
+    fun `'findByFullLink' `() {
+        // TODO()
+    }
+
+    @Test
+    fun `'findByFullLinkPrefix' `() {
+        // TODO()
+    }
+
+    @Test
+    fun `'searchAliasesMatchingInput' `() {
+        // TODO()
+    }
 
 //    @Test
 //    fun `'searchAliasesMatchingInput' split keywords in user input and return found aliases`() {
@@ -13,4 +31,19 @@ class AliasServiceTest {
 //
 //        aliases shouldEqual listOf(INBOX_ALIAS)
 //    }
+
+    @Test
+    fun `'create' `() {
+        // TODO()
+    }
+
+    @Test
+    fun `'update' `() {
+        // TODO()
+    }
+
+    @Test
+    fun `'deleteById' `() {
+        // TODO()
+    }
 }
