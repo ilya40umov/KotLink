@@ -52,7 +52,7 @@ tasks {
     }
     tasks.withType<Test> {
         doFirst {
-            environment("SPRING_PROFILES_ACTIVE", "ci")
+            systemProperty("spring.datasource.url", "jdbc:postgresql://localhost:45432/kotlink")
         }
         testLogging.apply {
             events("passed", "skipped", "failed")

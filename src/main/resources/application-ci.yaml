@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:45432/kotlink
-    username: kotlinkuser
-    password: kotlinkpass
