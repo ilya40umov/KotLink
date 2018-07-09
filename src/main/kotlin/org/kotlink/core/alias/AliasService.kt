@@ -64,6 +64,7 @@ class AliasService(
                     aliasRepo.findWithAtLeastOneOfTerms(terms)
             namespace != null ->
                 aliasRepo.findByNamespaceAndWithAtLeastOneOfTerms(namespace.keyword, terms.subList(1, terms.size)) +
+                    aliasRepo.findByNamespace(namespace.keyword) +
                     aliasRepo.findWithAtLeastOneOfTerms(terms)
             else ->
                 aliasRepo.findWithAtLeastOneOfTerms(terms)

@@ -1,6 +1,8 @@
 package org.kotlink.ui
 
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import org.kotlink.TEST_SECRET
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.context.annotation.RequestScope
@@ -14,5 +16,7 @@ class UiTestConfig {
 
     @Bean
     @RequestScope
-    fun currentUser() = mock<CurrentUser>()
+    fun currentUser(): CurrentUser = mock {
+        on { getEmail() } doReturn TEST_SECRET.userEmail
+    }
 }

@@ -20,7 +20,7 @@ import java.util.UUID
 @ExposedRepoTest
 class NamespaceRepoImplTest {
 
-    val testKeyword = UUID.randomUUID().toString()
+    private val testKeyword = UUID.randomUUID().toString()
 
     @Autowired
     private lateinit var repo: NamespaceRepo

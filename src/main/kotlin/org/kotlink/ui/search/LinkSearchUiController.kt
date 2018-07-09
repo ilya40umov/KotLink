@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
 @RequestMapping("/ui")
-class LinkSearchController(private val aliasService: AliasService) {
+class LinkSearchUiController(private val aliasService: AliasService) {
 
     @GetMapping("/search")
     @SelectView(UiView.SEARCH)

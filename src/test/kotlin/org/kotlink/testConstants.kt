@@ -2,6 +2,7 @@ package org.kotlink
 
 import org.kotlink.core.alias.Alias
 import org.kotlink.core.namespace.Namespace
+import org.kotlink.core.secret.ApiSecret
 
 val DEFAULT_NAMESPACE = Namespace(id = 1, keyword = "")
 
@@ -21,4 +22,9 @@ val INIT_ALIAS = Alias(
     namespace = DEFAULT_NAMESPACE,
     link = "init",
     redirectUrl = "https://en.wikipedia.org/wiki/Systemd"
+)
+
+val TEST_SECRET = ApiSecret(
+    secret = "extension_secret_123",
+    userEmail = "test123@gmail.com"
 )
