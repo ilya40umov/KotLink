@@ -106,7 +106,7 @@ class NamespaceServiceTest {
     }
 
     @Test
-    fun `'deleteById' should return deleted namespace if provided namespace was found`() {
+    fun `'deleteById' should return deleted namespace if provided namespace was deleted with success`() {
         whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
             .thenReturn(ABC_NAMESPACE)
         whenever(aliasRepo.findByNamespace(ABC_NAMESPACE.keyword))

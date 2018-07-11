@@ -175,7 +175,7 @@ class AliasUiControllerTest {
     @Test
     fun `'deleteAlias' should redirect to the list view if alias is successfully deleted`() {
         whenever(aliasService.deleteById(any()))
-            .thenReturn(true)
+            .thenReturn(INBOX_ALIAS)
 
         mvc.perform(MockMvcRequestBuilders.delete("/ui/alias/1"))
             .andExpect(MockMvcResultMatchers.status().isFound)

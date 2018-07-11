@@ -85,9 +85,10 @@ class AliasService(
     }
 
     @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLink", "aliasByFullLinkPrefix", "aliasSearch"])
-    fun deleteById(id: Long): Boolean {
-        aliasRepo.findByIdOrThrow(id)
-        return aliasRepo.deleteById(id)
+    fun deleteById(id: Long): Alias {
+        val foundAlias = aliasRepo.findByIdOrThrow(id)
+        aliasRepo.deleteById(id)
+        return foundAlias
     }
 
     private fun verifyFullLinkNotTaken(fullLink: String) {
