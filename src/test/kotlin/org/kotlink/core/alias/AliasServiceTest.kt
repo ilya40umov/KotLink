@@ -3,12 +3,16 @@ package org.kotlink.core.alias
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import org.amshove.kluent.shouldContain
+import org.amshove.kluent.shouldContainAll
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.core.exposed.RecordNotFoundException
+import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -47,24 +51,52 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'findByFullLinkPrefix' `() {
-        // TODO()
+    fun `'findByFullLinkPrefix' should return aliases from both default and the matching namespace if prefix has at least 2 words`() {
+        whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "google inb"))
+            .thenReturn(listOf(INBOX_ALIAS))
+        whenever(aliasRepo.findByNamespaceAndLinkPrefix("google", "inb"))
+            .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "google"), link = "inbound")))
+
+        service.findByFullLinkPrefix("google inb").also {
+            it.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbound")
+        }
     }
 
     @Test
-    fun `'searchAliasesMatchingInput' `() {
-        // TODO()
+    fun `'findByFullLinkPrefix' should return aliases from default and namespaces matching prefix if prefix has only single word`() {
+        whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "inb"))
+            .thenReturn(listOf(INBOX_ALIAS))
+        whenever(aliasRepo.findByNamespacePrefix("inb"))
+            .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "inbound"), link = "whatever")))
+
+        service.findByFullLinkPrefix("inb").also {
+            it.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "inbound whatever")
+        }
     }
 
-//    @Test
-//    fun `'searchAliasesMatchingInput' split keywords in user input and return found aliases`() {
-//        whenever(aliasService.findWithAtLeastOneOfKeywords(listOf("inbox", "gmail")))
-//            .thenReturn(listOf(INBOX_ALIAS))
-//
-//        val aliases = kotLinkService.searchAliasesMatchingInput("inbox gmail")
-//
-//        aliases shouldEqual listOf(INBOX_ALIAS)
-//    }
+    @Test
+    fun `'searchAliasesMatchingInput should split user input and return aliases matching one of keywords if first term is not a namespace' `() {
+        whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("inbox", "gmail")))
+            .thenReturn(listOf(INBOX_ALIAS))
+
+        service.searchAliasesMatchingInput("inbox gmail").also {
+            it.map { it.fullLink } shouldContain INBOX_ALIAS.fullLink
+        }
+    }
+
+    @Test
+    fun `'searchAliasesMatchingInput should return aliases in namespace and if the only term is a namespace' `() {
+        whenever(namespaceRepo.findByKeyword("google"))
+            .thenReturn(DEFAULT_NAMESPACE.copy(keyword = "google"))
+        whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
+            .thenReturn(listOf(INBOX_ALIAS))
+        whenever(aliasRepo.findByNamespace("google"))
+            .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "google"), link = "tree")))
+
+        service.searchAliasesMatchingInput("google").also {
+            it.map { it.fullLink } shouldContainAll listOf(INBOX_ALIAS.fullLink, "google tree")
+        }
+    }
 
     @Test
     fun `'create' should throw exception if the new full link is already taken`() {
