@@ -4,8 +4,8 @@ function loadExtensionStorage(handleResult) {
             .then(handleResult);
     } else {
         chrome.storage.sync.get({
-            kotlinkServerUrl: '',
-            kotlinkExtensionSecret: ''
+            kotlinkServerUrl: "",
+            kotlinkExtensionSecret: ""
         }, handleResult)
     }
 }
@@ -21,9 +21,27 @@ function getServerUrl(extensionStorage) {
     return url;
 }
 
+function createSuggestionsFromResponse(response) {
+    return new Promise((resolve) => {
+        response.json().then(jsonArray => {
+            if (!jsonArray) {
+                return resolve([]);
+            }
+            let suggestions = [];
+            for (let i in jsonArray) {
+                if (jsonArray.hasOwnProperty(i)) {
+                    let suggestion = `${jsonArray[i]} `;
+                    suggestions.push({content: suggestion, description: suggestion});
+                }
+            }
+            return resolve(suggestions);
+        });
+    });
+}
+
 omnibox.onInputChanged.addListener((userInput, addSuggestions) => {
     if (userInput && userInput.length !== 0 && userInput.trim()) {
-        loadExtensionStorage(extensionStorage => {
+        loadExtensionStorage((extensionStorage) => {
             if (extensionStorage.kotlinkServerUrl && extensionStorage.kotlinkExtensionSecret) {
                 let headers = new Headers({
                     "Accept": "application/json",
@@ -41,35 +59,20 @@ omnibox.onInputChanged.addListener((userInput, addSuggestions) => {
 });
 
 omnibox.onInputEntered.addListener(function (userInput, disposition) {
-    loadExtensionStorage(extensionStorage => {
+    loadExtensionStorage((extensionStorage) => {
         if (extensionStorage.kotlinkServerUrl) {
-            let url = getServerUrl(extensionStorage) + 'api/link/redirect?link=' + userInput;
+            let url = `${getServerUrl(extensionStorage)}api/link/redirect?link=${userInput}`;
             switch (disposition) {
                 case "currentTab":
-                    tabs.update({url: url});
+                    tabs.update({url});
                     break;
                 case "newForegroundTab":
-                    tabs.create({url: url});
+                    tabs.create({url});
                     break;
                 case "newBackgroundTab":
-                    tabs.create({url: url, active: false});
+                    tabs.create({url, active: false});
                     break;
             }
         }
     });
 });
-
-function createSuggestionsFromResponse(response) {
-    return new Promise(resolve => {
-        response.json().then(jsonArray => {
-            if (!jsonArray) {
-                return resolve([]);
-            }
-            let suggestions = [];
-            for (let i in jsonArray) {
-                suggestions.push({content: jsonArray[i] + " ", description: jsonArray[i] + " "})
-            }
-            return resolve(suggestions);
-        });
-    });
-}

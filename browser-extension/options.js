@@ -1,3 +1,5 @@
+/* global browser, chrome */
+
 function loadExtensionStorage(handleResult) {
     if (typeof browser !== "undefined") {
         browser.storage.local.get(["kotlinkServerUrl", "kotlinkExtensionSecret"])
@@ -32,7 +34,7 @@ function saveOptions(e) {
 }
 
 function restoreOptions() {
-    loadExtensionStorage(result => {
+    loadExtensionStorage((result) => {
         document.querySelector("#server-url").value =
             result.kotlinkServerUrl || "";
         document.querySelector("#extension-secret").value =

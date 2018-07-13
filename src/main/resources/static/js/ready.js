@@ -1,3 +1,4 @@
+/* global kotlink, mdc */
 /*
  * Borrowed from https://material-components-web.appspot.com/ready.js
  */
@@ -7,7 +8,9 @@
  * resources have finished loading, the given handler function will be invoked synchronously (in the same call stack).
  * Handlers are invoked in FIFO order.
  */
-window.kotlink = {};
+if (typeof(kotlink) === "undefined") {
+    window.kotlink = {};
+}
 
 kotlink.onReady = (() => {
     const POLL_INTERVAL_MS = 100;
@@ -53,7 +56,7 @@ kotlink.onReady = (() => {
     }
 
     function invokeHandlers() {
-        handlers.forEach(function(handler) {
+        handlers.forEach(function (handler) {
             handler();
         });
         handlers.length = 0;
@@ -71,7 +74,6 @@ kotlink.onReady = (() => {
         if (elapsedTimeMs > POLL_MAX_WAIT_MS) {
             clearInterval(pollTimer);
             removeDetectionDom();
-            console.log("Timed out waiting for JS and CSS to load after " + POLL_MAX_WAIT_MS + " ms");
         }
     }
 
@@ -81,12 +83,12 @@ kotlink.onReady = (() => {
         }
         startTimeMs = Date.now();
         pollTimer = setInterval(tick, POLL_INTERVAL_MS);
-        window.addEventListener("load", function() {
+        window.addEventListener("load", function () {
             tick();
         });
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         isDomLoaded = true;
     });
 
