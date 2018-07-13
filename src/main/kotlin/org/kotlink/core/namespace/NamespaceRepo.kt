@@ -71,8 +71,8 @@ class NamespaceRepoImpl : NamespaceRepo {
 
 internal object Namespaces : Table("namespace") {
     val id = long("id").autoIncrement("namespace_id_seq").primaryKey()
-    val keyword = varchar("keyword", length = 128)
-    val description = varchar("description", length = 512)
+    val keyword = varchar("keyword", length = Namespace.MAX_KEYWORD_LENGTH)
+    val description = varchar("description", length = Namespace.MAX_DESCRIPTION_LENGTH)
 }
 
 internal fun ResultRow.asNamespace() = Namespace(

@@ -10,10 +10,17 @@ import javax.validation.constraints.Pattern
 data class Namespace(
     val id: Long = 0,
 
-    @field:Length(min = 1, max = 128)
-    @field:Pattern(regexp = "[a-z0-9]+")
+    @field:Length(min = MIN_KEYWORD_LENGTH, max = MAX_KEYWORD_LENGTH)
+    @field:Pattern(regexp = KEYWORD_REGEXP)
     val keyword: String,
 
-    @field:Length(max = 512)
+    @field:Length(max = MAX_DESCRIPTION_LENGTH)
     val description: String = ""
-)
+) {
+    companion object {
+        const val KEYWORD_REGEXP = "[a-z0-9]+"
+        const val MIN_KEYWORD_LENGTH = 1
+        const val MAX_KEYWORD_LENGTH = 128
+        const val MAX_DESCRIPTION_LENGTH = 512
+    }
+}

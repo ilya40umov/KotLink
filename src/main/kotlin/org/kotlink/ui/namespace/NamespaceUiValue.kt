@@ -14,11 +14,11 @@ class NamespaceUiValue() {
 
     var id: Long = 0
 
-    @get:Pattern(regexp = "[a-z0-9]+")
-    @get:Length(min = 1, max = 128)
+    @get:Pattern(regexp = Namespace.KEYWORD_REGEXP)
+    @get:Length(min = Namespace.MIN_KEYWORD_LENGTH, max = Namespace.MAX_KEYWORD_LENGTH)
     var keyword: String = ""
 
-    @get:Length(max = 512)
+    @get:Length(max = Namespace.MAX_DESCRIPTION_LENGTH)
     var description: String = ""
 
     fun toNamespace() = Namespace(
