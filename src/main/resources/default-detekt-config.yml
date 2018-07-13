@@ -1,13 +1,6 @@
 autoCorrect: true
 failFast: false
 
-ui-controller-pattern: # Configure exclusions for UI controllers
-  active: true
-  patterns:
-    - '.*UiController.kt'
-  exclude-rules:
-    - 'TooGenericExceptionCaught'
-
 test-pattern: # Configure exclusions for test sources
   active: true
   patterns: # Test file regexes

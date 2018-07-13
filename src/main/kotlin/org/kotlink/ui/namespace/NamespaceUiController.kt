@@ -22,6 +22,7 @@ import javax.validation.Valid
 
 @Controller
 @RequestMapping("/ui/namespace")
+@Suppress("TooGenericExceptionCaught")
 class NamespaceUiController(private val namespaceService: NamespaceService) {
 
     @GetMapping

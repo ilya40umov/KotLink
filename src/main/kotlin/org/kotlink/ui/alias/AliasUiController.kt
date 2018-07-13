@@ -23,6 +23,7 @@ import javax.validation.Valid
 
 @Controller
 @RequestMapping("/ui/alias")
+@Suppress("TooGenericExceptionCaught")
 class AliasUiController(
     private val aliasService: AliasService,
     private val namespaceService: NamespaceService

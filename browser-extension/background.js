@@ -1,3 +1,5 @@
+/* global browser, chrome */
+
 function loadExtensionStorage(handleResult) {
     if (typeof browser !== "undefined") {
         browser.storage.local.get(["kotlinkServerUrl", "kotlinkExtensionSecret"])
@@ -6,7 +8,7 @@ function loadExtensionStorage(handleResult) {
         chrome.storage.sync.get({
             kotlinkServerUrl: "",
             kotlinkExtensionSecret: ""
-        }, handleResult)
+        }, handleResult);
     }
 }
 
@@ -23,12 +25,12 @@ function getServerUrl(extensionStorage) {
 
 function createSuggestionsFromResponse(response) {
     return new Promise((resolve) => {
-        response.json().then(jsonArray => {
+        response.json().then((jsonArray) => {
             if (!jsonArray) {
                 return resolve([]);
             }
             let suggestions = [];
-            for (let i in jsonArray) {
+            for (const i in jsonArray) {
                 if (jsonArray.hasOwnProperty(i)) {
                     let suggestion = `${jsonArray[i]} `;
                     suggestions.push({content: suggestion, description: suggestion});

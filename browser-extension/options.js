@@ -6,9 +6,9 @@ function loadExtensionStorage(handleResult) {
             .then(handleResult);
     } else {
         chrome.storage.sync.get({
-            kotlinkServerUrl: '',
-            kotlinkExtensionSecret: ''
-        }, handleResult)
+            kotlinkServerUrl: "",
+            kotlinkExtensionSecret: ""
+        }, handleResult);
     }
 }
 
@@ -16,7 +16,7 @@ function saveExtensionStorage(extensionStorage, handleResult) {
     if (typeof browser !== "undefined") {
         browser.storage.local.set(extensionStorage).then(handleResult);
     } else {
-        chrome.storage.sync.set(extensionStorage, handleResult)
+        chrome.storage.sync.set(extensionStorage, handleResult);
     }
 }
 
