@@ -39,8 +39,8 @@ apply {
 }
 
 configure<JavaPluginConvention> {
-    setSourceCompatibility(1.8)
-    setTargetCompatibility(1.8)
+    setSourceCompatibility(JavaVersion.VERSION_1_8)
+    setTargetCompatibility(JavaVersion.VERSION_1_8)
 }
 
 tasks {

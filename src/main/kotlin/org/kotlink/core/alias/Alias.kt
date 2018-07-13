@@ -13,17 +13,24 @@ data class Alias(
     val namespace: Namespace,
 
     @field:NotBlank
-    @field:Pattern(regexp = "[a-z0-9\\s]+")
-    @field:Length(max = 128)
+    @field:Pattern(regexp = LINK_REGEXP)
+    @field:Length(max = MAX_LINK_LENGTH)
     val link: String,
 
     @field:NotBlank
     @field:URL
-    @field:Length(max = 2048)
+    @field:Length(max = MAX_REDIRECT_URL_LENGTH)
     val redirectUrl: String,
 
-    @field:Length(max = 512)
+    @field:Length(max = MAX_DESCRIPTION_LENGTH)
     val description: String = ""
 ) {
     val fullLink = if (namespace.keyword.isNotEmpty()) "${namespace.keyword} $link" else link
+
+    companion object {
+        const val LINK_REGEXP = "[a-z0-9\\s]+"
+        const val MAX_LINK_LENGTH = 128
+        const val MAX_REDIRECT_URL_LENGTH = 2048
+        const val MAX_DESCRIPTION_LENGTH = 512
+    }
 }

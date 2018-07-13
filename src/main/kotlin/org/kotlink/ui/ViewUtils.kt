@@ -8,7 +8,11 @@ import org.springframework.web.context.annotation.RequestScope
 class ViewUtils {
 
     fun truncateRedirectUrl(redirectUrl: String) = when {
-        redirectUrl.length > 60 -> redirectUrl.substring(0, 60) + "..."
+        redirectUrl.length > DISPLAYED_URL_LENGTH -> redirectUrl.substring(0, DISPLAYED_URL_LENGTH) + "..."
         else -> redirectUrl
+    }
+
+    companion object {
+        private const val DISPLAYED_URL_LENGTH = 60
     }
 }

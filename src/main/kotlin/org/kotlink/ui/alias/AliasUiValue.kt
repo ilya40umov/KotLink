@@ -22,16 +22,16 @@ class AliasUiValue() {
     var namespaceId: Long = 0
 
     @get:NotBlank
-    @get:Pattern(regexp = "[a-z0-9\\s]+")
-    @get:Length(max = 128)
+    @get:Pattern(regexp = Alias.LINK_REGEXP)
+    @get:Length(max = Alias.MAX_LINK_LENGTH)
     var link: String = ""
 
     @get:NotBlank
     @get:URL
-    @get:Length(max = 2048)
+    @get:Length(max = Alias.MAX_REDIRECT_URL_LENGTH)
     var redirectUrl: String = ""
 
-    @get:Length(max = 512)
+    @get:Length(max = Alias.MAX_DESCRIPTION_LENGTH)
     var description: String = ""
 
     fun toAlias(namespace: Namespace) = Alias(

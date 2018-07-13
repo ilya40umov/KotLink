@@ -85,13 +85,13 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'searchAliasesMatchingInput should return aliases in namespace and if the only term is a namespace' `() {
+    fun `'searchAliasesMatchingInput should return all aliases in namespace and aso matching one of keywords if the only term is a namespace' `() {
         whenever(namespaceRepo.findByKeyword("google"))
             .thenReturn(DEFAULT_NAMESPACE.copy(keyword = "google"))
-        whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
-            .thenReturn(listOf(INBOX_ALIAS))
         whenever(aliasRepo.findByNamespace("google"))
             .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "google"), link = "tree")))
+        whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
+            .thenReturn(listOf(INBOX_ALIAS))
 
         service.searchAliasesMatchingInput("google").also {
             it.map { it.fullLink } shouldContainAll listOf(INBOX_ALIAS.fullLink, "google tree")

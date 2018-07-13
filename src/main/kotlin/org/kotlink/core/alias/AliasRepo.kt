@@ -144,9 +144,9 @@ class AliasRepoImpl : AliasRepo {
 private object Aliases : Table("alias") {
     val id = long("id").autoIncrement("alias_id_seq").primaryKey()
     val namespaceId = long("namespace_id") references Namespaces.id
-    val link = varchar("link", length = 128)
-    val redirectUrl = varchar("redirect_url", length = 2048)
-    val description = varchar("description", length = 512)
+    val link = varchar("link", length = Alias.MAX_LINK_LENGTH)
+    val redirectUrl = varchar("redirect_url", length = Alias.MAX_REDIRECT_URL_LENGTH)
+    val description = varchar("description", length = Alias.MAX_DESCRIPTION_LENGTH)
 }
 
 private fun ResultRow.asAlias() = Alias(
