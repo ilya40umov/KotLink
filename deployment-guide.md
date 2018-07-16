@@ -2,4 +2,7 @@
 
 Coming soon 
 
-TODO: add instructions on how to install on a regular Linux system as well as on AWS
+TODOs:
+* how to install on a Linux machine?
+* how to install on AWS?
+* all configuration options (including DB URL/credentials, OAuth and security)

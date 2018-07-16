@@ -24,35 +24,25 @@ and after the user has hit **enter**, it will redirect the user to the actual UR
 
 For example, if someone has already created an alias for `vim shortcuts` 
 that maps to `https://vim.rtorr.com`,
-by typing *go␣vim␣shortcuts↵*, the user will be redirected to the aforementioned link.
+by typing *go␣vim␣shortcuts↵*, the user will be redirected to the actual link.
 
-Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server,
+Please beware that to make use of the browser extension, 
+you will first need to set up a dedicated KotLink server,
 as it's going to store all of the links / namespaces for your team.
 
-### Get KotLink In Your Browser
+### Supported Browsers
 
-Install [Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
+* Chrome / Chromium via [Browser Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
+* Firefox via [Browser Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
+* Vivaldi via [manually registering KotLink as a search engine](extension-guide.md#vivaldi)
 
-Install [Chrome Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
+### KotLink Server
 
-To use KotLink with Vivaldi perform the following steps:
-1. Go to Settings / Privacy and enable "Search Suggestions in Address Field".
-1. Go to Settings / Search and make sure "Allow Search Suggestions" is checked for "In Address Field".
-1. Also in Settings / Search, add a new search engine where:
-  - *Name* is `KotLink` 
-  - *Nickname* is `go`
-  - *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
-  - *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
-
-### Run KotLink Server Locally
-
-KotLink server provides the backend for storing and resolving aliases, 
-as well as UI for creating/editing them.
-
-![List Aliases in UI](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/list-aliases.png)
+KotLink server requires PostgreSQL and contains all the logic around storing / resolving URL aliases, 
+as well as UI for creating / editing them.
 
 For evaluation purposes, you can run KotLink server on your machine with the following commands 
-(you may have to add `sudo` before all calls to `docker` depending on your local set-up): 
+(you may have to add `sudo` before all calls to `docker` depending on your system): 
 ```
 docker network create kotlink-network
 
@@ -66,10 +56,17 @@ docker run --rm --name kotlink-server --network kotlink-network -p 8080:8080 \
 ```
 
 Now if you open `http://localhost:8080/` you will be redirected to KotLink UI, 
-which, after you have authorized with Google OAuth, will allow you to add namespaces and aliases.
-At this point you can install Chrome / Firefox extension, open extension settings, 
-where you will set `http://localhost:8080` as the server URL. 
-Your personal extension secret can be found at `http://localhost:8080/ui/extension_secret`).
+which, after you have signed in with your Google account, will allow you to add namespaces and aliases.
+
+![List Aliases in UI](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/list-aliases.png)
+
+At this point, you can finally install the browser extension, 
+open its *Options* (*Preferences* in Firefox), and configure it to access your local KotLink server:
+* set *KotLink Server URL* to `http://localhost:8080` 
+* set *Extension Secret* to your personal extension secret, 
+which can be found at `http://localhost:8080/ui/extension_secret`).
+
+![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/extension-options.png)
 
 Please, note that to allow accessing KotLink UI under your custom domain name / IP address,
 you will need to obtain OAuth 2.0 client credentials from [Google API Console](https://console.developers.google.com)
@@ -78,9 +75,9 @@ and provide them to your KotLink server via environment variables
 Through environment variables, you will also be able to restrict who can access your KotLink server.
 
 When you are done evaluating, you can run the following command to **remove** KotLink network/database instance:
-`docker rm -f kotlink-postgres && docker network rm kotlink-network`
+```docker rm -f kotlink-postgres && docker network rm kotlink-network```
 
-For the detailed instructions on how to set up your own KotLink server on your Linux server or on AWS, 
+For the detailed instructions on how to permanently set up your own KotLink server, 
 take a look at the [Deployment Guide](deployment-guide.md).
 
 ### Engineering Guide
