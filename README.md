@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/ilya40umov/KotLink.png?branch=master)](https://travis-ci.org/ilya40umov/KotLink)
 [![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a55315857b44bb78aab3a87da4f61ec)](https://www.codacy.com/app/ilya40umov/KotLink?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ilya40umov/KotLink&amp;utm_campaign=Badge_Grade)
+[![Docker Hub](https://img.shields.io/docker/pulls/ilya40umov/kotlink.svg)](https://hub.docker.com/r/ilya40umov/kotlink/)
 
 KotLink is a solution for creating and sharing memorable URL aliases, 
 which takes its inspiration from Google's internal Go-Links system.
