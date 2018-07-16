@@ -93,7 +93,7 @@ dependencies {
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("io.github.microutils:kotlin-logging:1.4.9")
-    compile("org.postgresql:postgresql:42.2.2")
+    compile("org.postgresql:postgresql:42.2.4")
     compile("org.flywaydb:flyway-core:5.0.7")
     compile("org.jetbrains.exposed:exposed:$exposedVersion")
     compile("org.jetbrains.exposed:spring-transaction:$exposedVersion")

@@ -1,2 +1,2 @@
-FROM postgres:9.6
+FROM postgres:10.4
 MAINTAINER Illia Sorokoumov <illia.sorokoumov@gmail.com>

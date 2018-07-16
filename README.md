@@ -16,9 +16,11 @@ which takes its inspiration from Google's internal Go-Links system.
 ### Overview
 
 KotLink works by letting people install a tiny browser extension 
-that activates when the person first types **go** in the address bar and then presses **space**. 
+that activates when the person first types *go* in the address bar and then presses *space*. 
 While activated, the extension is providing autocomplete based on the database of aliases,
-and after the user has hit **enter**, it will redirect the user to the actual URL that matches the provided alias.
+and after the user has hit *enter*, 
+it will redirect the user to the actual URL that matches the provided alias 
+(or to the search page, if such an alias does not exist).
 
 ![Suggestions In Address Bar](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/suggest.png)
 
@@ -46,12 +48,16 @@ For evaluation purposes, you can run KotLink server on your machine with the fol
 ```
 docker network create kotlink-network
 
-docker run --name kotlink-postgres --network kotlink-network \
-  -e POSTGRES_USER=kotlinkuser -e POSTGRES_PASSWORD=kotlinkpass -e POSTGRES_DB=kotlink \
-  -d postgres:9.6
+docker run --name kotlink-postgres \
+  --network kotlink-network \
+  -e POSTGRES_USER=kotlinkuser \
+  -e POSTGRES_PASSWORD=kotlinkpass \
+  -e POSTGRES_DB=kotlink \
+  -d postgres:10.4
 
-docker run --rm --name kotlink-server --network kotlink-network -p 8080:8080 \
-  -e SPRING_DATASOURCE_URL=jdbc:postgresql://kotlink-postgres:5432/kotlink\
+docker run --rm --name kotlink-server \
+  --network kotlink-network -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:postgresql://kotlink-postgres:5432/kotlink \
   ilya40umov/kotlink
 ```
 
@@ -74,7 +80,8 @@ and provide them to your KotLink server via environment variables
 (see more on this in [Deployment Guide](deployment-guide.md)). 
 Through environment variables, you will also be able to restrict who can access your KotLink server.
 
-When you are done evaluating, you can run the following command to **remove** KotLink network/database instance:
+When you are done evaluating, you can run the following command to clean up containers from your machine:
+
 ```docker rm -f kotlink-postgres && docker network rm kotlink-network```
 
 For the detailed instructions on how to permanently set up your own KotLink server, 
