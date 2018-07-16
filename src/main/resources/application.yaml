@@ -27,10 +27,6 @@ security:
 
 kotlink:
   security:
-    ui:
-      allowed-addresses:
-        # this should contain the list of emails addresses
-        - non.existent.person@gmail.com
-      allowed-org-suffixes:
-        # this should contain a list of allowed email prefixes (e.g. "@company.com")
-        - .com
+    oauth:
+      allowed-email-regex: .*
+      allowed-emails: []

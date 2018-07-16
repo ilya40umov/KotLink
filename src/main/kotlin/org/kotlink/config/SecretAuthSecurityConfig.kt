@@ -22,7 +22,7 @@ class SecretAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
-            // XXX we limit the scope of secret-based authentication to a limit set of endpoints
+            // XXX we limit the scope of secret-based authentication to a minimal set of endpoints
             // the rest of the API will be covered under OAuth
             .requestMatchers()
             .antMatchers("/api/link/suggest")

@@ -1,8 +1,19 @@
 # KotLink - Deployment Guide
 
+### Supported Environment Variables
+
+* `SPRING_DATASOURCE_URL`
+* `SPRING_DATASOURCE_USERNAME`
+* `SPRING_DATASOURCE_PASSWORD`
+* `SECURITY_OAUTH2_CLIENT_CLIENT_ID`
+* `SECURITY_OAUTH2_CLIENT_CLIENT_SECRET`
+* `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS`
+* `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAIL_REGEX`
+
+### Linux: Deployment Instructions
+
 Coming soon 
 
-TODOs:
-* how to install on a Linux machine?
-* how to install on AWS?
-* all configuration options (including DB URL/credentials, OAuth and security)
+### AWS: Deployment Instructions
+
+Coming soon

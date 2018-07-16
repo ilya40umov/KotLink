@@ -19,15 +19,15 @@ import javax.servlet.http.HttpSession
 @Order(2)
 @Profile("!repotest")
 @Configuration
-@ConfigurationProperties("kotlink.security.ui")
+@ConfigurationProperties("kotlink.security.oauth")
 @EnableWebSecurity
 @EnableOAuth2Sso
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
-    val allowedAddresses = mutableListOf<String>()
+    val allowedEmails = mutableSetOf<String>()
 
-    val allowedOrgSuffixes = mutableListOf<String>()
+    lateinit var allowedEmailRegex: String
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
@@ -57,13 +57,17 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Bean
     fun authoritiesExtractor(session: HttpSession): AuthoritiesExtractor {
+        val allowedEmailPattern = allowedEmailRegex.toRegex()
         return AuthoritiesExtractor {
             val email = it["email"].toString()
-            if (!(allowedAddresses.contains(email) || allowedOrgSuffixes.any { email.endsWith(it) })) {
+            if (email.isNotBlank() &&
+                (allowedEmailPattern.matches(email)
+                    || allowedEmails.contains(email))) {
+                AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
+            } else {
                 session.invalidate()
                 throw BadCredentialsException("You don't have access to this KotLink server!")
             }
-            AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
         }
     }
 }
