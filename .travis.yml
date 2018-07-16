@@ -6,8 +6,9 @@ services:
   - docker
 
 env:
-  - KOTLINK_ENV=ci
-  - IMAGE_NAME=ilya40umov/kotlink
+  global:
+    - KOTLINK_ENV=ci
+    - IMAGE_NAME=ilya40umov/kotlink
 
 # For the complete build lifecycle, check the link:
 # https://docs.travis-ci.com/user/customizing-the-build/#The-Build-Lifecycle

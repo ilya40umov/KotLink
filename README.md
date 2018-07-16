@@ -67,7 +67,7 @@ docker run --rm --name kotlink-server --network kotlink-network -p 8080:8080 \
 
 Now if you open `http://localhost:8080/` you will be redirected to KotLink UI, 
 which after you have authorized with Google OAuth will allow you add namespaces / aliases.
-At this point you can install Chrome / Firefox extension and set `http://localhost:8080/`
+At this point you can install Chrome / Firefox extension and set `http://localhost:8080`
 as the server URL (to find out your personal extension secret go to `http://localhost:8080/ui/extension_secret`).
 
 Please, note that to allow accessing KotLink UI under your custom domain name / IP address,
