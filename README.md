@@ -10,7 +10,7 @@ which takes its inspiration from Google's internal Go-Links system.
 ### Why use KotLink?
 
 * Get rid of bookmarks for URLs frequently used within your team
-* Speak the same language as your colleges (e.g. Hey, can you check out what is happening with *staging&blank;grafana*?)
+* Speak the same language as your colleges (e.g. Hey, can you check out what is happening with *staging␣grafana*?)
 * Search your "intranet" quickly for a resource that you don't know the URL for
 
 ### Overview
@@ -24,7 +24,7 @@ and after the user has hit **enter**, it will redirect the user to the actual UR
 
 For example, if someone has already created an alias for `vim shortcuts` 
 that maps to `https://vim.rtorr.com`,
-by typing *go&blank;vim&blank;shortcuts↵*, the user will be redirected to the aforementioned link.
+by typing *go␣vim␣shortcuts↵*, the user will be redirected to the aforementioned link.
 
 Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server,
 as it's going to store all of the links / namespaces for your team.
