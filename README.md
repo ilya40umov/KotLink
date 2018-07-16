@@ -10,7 +10,7 @@ which takes its inspiration from Google's internal Go-Links system.
 ### Why use KotLink?
 
 * Get rid of bookmarks for URLs frequently used within your team
-* Speak the same language as your colleges (e.g. Hey, can you check out what is happening with `staging grafana`?)
+* Speak the same language as your colleges (e.g. Hey, can you check out what is happening with *staging&blank;grafana*?)
 * Search your "intranet" quickly for a resource that you don't know the URL for
 
 ### Overview
@@ -24,10 +24,10 @@ and after the user has hit **enter**, it will redirect the user to the actual UR
 
 For example, if someone has already created an alias for `vim shortcuts` 
 that maps to `https://vim.rtorr.com`,
-by typing **go** `space` **vim shortcuts** `enter`, the user will be redirected to the aforementioned link.
+by typing *go&blank;vim&blank;shortcuts↵*, the user will be redirected to the aforementioned link.
 
-Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server
-(see the instructions below).
+Please, also note that to use the browser extension, you first need to set up a dedicated KotLink server,
+as it's going to store all of the links / namespaces for your team.
 
 ### Get KotLink In Your Browser
 
@@ -44,7 +44,7 @@ To use KotLink with Vivaldi perform the following steps:
   - *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
   - *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
 
-### Deploy KotLink Server
+### Run KotLink Server Locally
 
 KotLink server provides the backend for storing and resolving aliases, 
 as well as UI for creating/editing them.
@@ -66,9 +66,10 @@ docker run --rm --name kotlink-server --network kotlink-network -p 8080:8080 \
 ```
 
 Now if you open `http://localhost:8080/` you will be redirected to KotLink UI, 
-which after you have authorized with Google OAuth will allow you add namespaces / aliases.
-At this point you can install Chrome / Firefox extension and set `http://localhost:8080`
-as the server URL (to find out your personal extension secret go to `http://localhost:8080/ui/extension_secret`).
+which, after you have authorized with Google OAuth, will allow you to add namespaces and aliases.
+At this point you can install Chrome / Firefox extension, open extension settings, 
+where you will set `http://localhost:8080` as the server URL. 
+Your personal extension secret can be found at `http://localhost:8080/ui/extension_secret`).
 
 Please, note that to allow accessing KotLink UI under your custom domain name / IP address,
 you will need to obtain OAuth 2.0 client credentials from [Google API Console](https://console.developers.google.com)
