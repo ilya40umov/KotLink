@@ -49,7 +49,7 @@ omnibox.onInputChanged.addListener((userInput, addSuggestions) => {
                     "Accept": "application/json",
                     "Authorization": `Bearer ${extensionStorage.kotlinkExtensionSecret}`
                 });
-                let init = {method: 'GET', headers};
+                let init = {method: "GET", headers};
                 let url = getServerUrl(extensionStorage) + "api/link/suggest?mode=simple&link=" + userInput;
                 let request = new Request(url, init);
                 fetch(request)

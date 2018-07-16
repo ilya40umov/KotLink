@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 allprojects {
     group = "org.kotlink"
-    version = "0.0.1-SNAPSHOT"
 
     repositories {
         mavenCentral()

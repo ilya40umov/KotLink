@@ -7,20 +7,41 @@ services:
 
 env:
   - KOTLINK_ENV=ci
+  - IMAGE_NAME=ilya40umov/kotlink
+
+# For the complete build lifecycle, check the link:
+# https://docs.travis-ci.com/user/customizing-the-build/#The-Build-Lifecycle
+
+before_script:
+  - docker pull "${IMAGE_NAME}:develop" || true
+
+script:
+  - ./environment/bin/kotlink_ci && docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "$IMAGE_NAME" .
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-script:
-  - ./environment/bin/kotlink_ci
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:develop"
+  - docker push "${IMAGE_NAME}:develop"
+
+before_deploy:
+  - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASS"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${TRAVIS_TAG}"
+
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${TRAVIS_TAG}"
+  on:
+    tags: true
 
 after_script:
   - ./environment/lib/env_down ci

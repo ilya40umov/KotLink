@@ -17,9 +17,8 @@ to load the extension (or you can install it from the store)
 * Stop dependencies with `kotlink_env_down` (this command will also remove all data from Postgres)
 * You can run the CI pipeline with `kotlink_ci` (can be run in parallel with the app)
 
-### TODOs
-
-* finish writing tests for AliasService
-* refine how security is configured
-* package the backend as a docker image and write deployment instructions
-* add instructions on security (oauth and extension secrets)
+### Best Practices
+* Use Intellij IDEA to format the files you touched before committing them
+* Strive for high test coverage, especially for backend code that is way easier to unit-test than UI
+* Run CI locally before pushing
+* Test UI manually as well, as the existing tests don't provide a good guarantee that nothing there is broken

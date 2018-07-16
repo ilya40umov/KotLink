@@ -10,4 +10,4 @@ function destroy_environment() {
 trap destroy_environment EXIT
 
 ./environment/lib/env_up ci
-./gradlew clean check jacocoTestReport
+./gradlew clean build jacocoTestReport
