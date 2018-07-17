@@ -23,7 +23,7 @@ To use KotLink with Vivaldi perform the following steps:
 
 Both browser extensions as well as Vivaldi require some configuration before they can be used.
 
-![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/extension-options.png)
+![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/extension-options.png)
 
 Namely, there are two options that need to be set:
 

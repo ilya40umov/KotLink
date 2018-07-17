@@ -23,7 +23,7 @@ and after the user has hit *enter*,
 it will redirect the user to the actual URL that matches the provided alias 
 (or to the search page, if such an alias does not exist).
 
-![Suggestions In Address Bar](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/suggest.png)
+![Suggestions In Address Bar](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/suggest.png)
 
 For example, if someone has already created an alias for `vim shortcuts` 
 that maps to `https://vim.rtorr.com`,
@@ -37,7 +37,7 @@ as it's going to store all of the links / namespaces for your team.
 
 * Chrome / Chromium via [Browser Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 * Firefox via [Browser Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
-* Vivaldi via [manually registering KotLink as a search engine](extension-guide.md#vivaldi)
+* Vivaldi via [manually registering KotLink as a search engine](docs/extension-guide.md#vivaldi)
 
 ### KotLink Server
 
@@ -65,7 +65,7 @@ docker run --rm --name kotlink-server \
 Now if you open `http://localhost:8080/` you will be redirected to KotLink UI, 
 which, after you have signed in with your Google account, will allow you to add namespaces and aliases.
 
-![List Aliases in UI](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/list-aliases.png)
+![List Aliases in UI](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/list-aliases.png)
 
 At this point, you can finally install the browser extension, 
 open its *Options* (*Preferences* in Firefox), and configure it to access your local KotLink server:
@@ -73,12 +73,12 @@ open its *Options* (*Preferences* in Firefox), and configure it to access your l
 * set *Extension Secret* to your personal extension secret, 
 which can be found at `http://localhost:8080/ui/extension_secret`).
 
-![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/images/extension-options.png)
+![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/extension-options.png)
 
 Please, note that to allow accessing KotLink UI under your custom domain name / IP address,
 you will need to obtain OAuth 2.0 client credentials from [Google API Console](https://console.developers.google.com)
 and provide them to your KotLink server via environment variables 
-(see more on this in [Deployment Guide](deployment-guide.md)). 
+(see more on this in [Deployment Guide](docs/deployment-guide.md)). 
 Through environment variables, you will also be able to restrict who can access your KotLink server.
 
 When you are done evaluating, you can run the following command to clean up containers from your machine:
@@ -86,7 +86,7 @@ When you are done evaluating, you can run the following command to clean up cont
 ```docker rm -f kotlink-postgres && docker network rm kotlink-network```
 
 For the detailed instructions on how to permanently set up your own KotLink server, 
-take a look at the [Deployment Guide](deployment-guide.md).
+take a look at the [Deployment Guide](docs/deployment-guide.md).
 
 ### Engineering Guide
-If you would like to contribute to the project, take a look at the [Engineering Guide](engineering-guide.md).
+If you would like to contribute to the project, take a look at the [Engineering Guide](docs/engineering-guide.md).
