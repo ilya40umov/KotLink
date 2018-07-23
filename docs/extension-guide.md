@@ -19,6 +19,15 @@ To use KotLink with Vivaldi perform the following steps:
   - *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
   - *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
 
+### Safari
+
+Safari is currently only partially supported via [Safari Omnikey](http://marioestrada.github.io/safari-omnikey/) extension.
+
+In order to make it work, first install the extension, then click on the extension icon (looks like a magnifying glass), click *Add Site* 
+and use prefix `go` with the following URL `http://YOUR_SERVER_ADDRESS/api/link/redirect?link={search}`.
+
+Please, note that at the time of writing  *Safari Omnikey* does not support suggestions.
+
 ### Extension Options
 
 Both browser extensions as well as Vivaldi require some configuration before they can be used.
@@ -29,5 +38,4 @@ Namely, there are two options that need to be set:
 
 * *KotLink Server URL* should be pointing to your KotLink server (e.g. `http://localhost:8080` 
 in case if you are running KotLink server locally)
-* *Extension Secret* should be set to your personal extension secret,
-which can be found in UI under *Extension Secret* menu item.
+* *Extension Secret* should be set to your personal extension secret, which can be found in UI under *Extension Secret* menu item.

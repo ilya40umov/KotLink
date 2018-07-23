@@ -38,6 +38,7 @@ as it's going to store all of the links / namespaces for your team.
 * Chrome / Chromium via [Browser Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 * Firefox via [Browser Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
 * Vivaldi via [manually registering KotLink as a search engine](docs/extension-guide.md#vivaldi)
+* Safari (only partially) via [Safari Omnikey extension](docs/extension-guide.md#safari)
 
 ### KotLink Server
 
