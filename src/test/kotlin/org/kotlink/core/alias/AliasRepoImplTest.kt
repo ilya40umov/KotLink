@@ -1,12 +1,10 @@
 package org.kotlink.core.alias
 
-import mu.KLogging
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEndWith
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,7 +12,6 @@ import org.kotlink.ExposedRepoTest
 import org.kotlink.core.exposed.DatabaseException
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
-import org.kotlink.core.namespace.NamespaceRepoImplTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit4.SpringRunner
 import java.util.UUID
@@ -44,18 +41,6 @@ class AliasRepoImplTest {
                 description = "Test alias"
             )
         )
-    }
-
-    @After
-    fun tearDown() {
-        try {
-            repo.findByNamespace(testNamespace.keyword).forEach {
-                repo.deleteById(it.id)
-            }
-            namespaceRepo.deleteById(testNamespace.id)
-        } catch (e: DatabaseException) {
-            NamespaceRepoImplTest.logger.warn { "Caught on tearDown: ${e.message}" }
-        }
     }
 
     @Test
@@ -189,6 +174,4 @@ class AliasRepoImplTest {
             it shouldEqual false
         }
     }
-
-    companion object : KLogging()
 }

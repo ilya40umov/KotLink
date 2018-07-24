@@ -14,7 +14,7 @@ allprojects {
 
 buildscript {
     val kotlinVersion by extra { "1.2.51" }
-    val springBootVersion by extra { "2.0.2.RELEASE" }
+    val springBootVersion by extra { "2.0.3.RELEASE" }
     repositories {
         mavenCentral()
     }
@@ -38,8 +38,8 @@ apply {
 }
 
 configure<JavaPluginConvention> {
-    setSourceCompatibility(JavaVersion.VERSION_1_8)
-    setTargetCompatibility(JavaVersion.VERSION_1_8)
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks {
@@ -72,7 +72,7 @@ tasks {
 
 dependencies {
 
-    val exposedVersion by extra { "0.10.2" }
+    val exposedVersion by extra { "0.10.4" }
 
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
@@ -92,16 +92,16 @@ dependencies {
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("io.github.microutils:kotlin-logging:1.4.9")
+    compile("io.github.microutils:kotlin-logging:1.5.4")
     compile("org.postgresql:postgresql:42.2.4")
-    compile("org.flywaydb:flyway-core:5.0.7")
+    compile("org.flywaydb:flyway-core:5.1.4")
     compile("org.jetbrains.exposed:exposed:$exposedVersion")
     compile("org.jetbrains.exposed:spring-transaction:$exposedVersion")
     compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("io.projectreactor:reactor-test")
-    testCompile("org.amshove.kluent:kluent:1.36")
+    testCompile("org.amshove.kluent:kluent:1.38")
     testCompile("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
-    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-alpha01")
+    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1")
 }

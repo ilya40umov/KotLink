@@ -1,12 +1,10 @@
 package org.kotlink.core.namespace
 
-import mu.KLogging
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEndWith
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,17 +26,6 @@ class NamespaceRepoImplTest {
     @Before
     fun setUp() {
         repo.insert(Namespace(keyword = testKeyword))
-    }
-
-    @After
-    fun tearDown() {
-        try {
-            repo.findByKeyword(testKeyword)?.id?.also {
-                repo.deleteById(it)
-            }
-        } catch (e: DatabaseException) {
-            logger.warn { "Caught on tearDown: ${e.message}" }
-        }
     }
 
     @Test
@@ -88,7 +75,7 @@ class NamespaceRepoImplTest {
 
     @Test
     fun `'insert' should throw DatabaseException if namespace with such keyword already exists`() {
-        val funx = {repo.insert(Namespace(keyword = testKeyword))}
+        val funx = { repo.insert(Namespace(keyword = testKeyword)) }
         funx shouldThrow DatabaseException::class
     }
 
@@ -117,6 +104,4 @@ class NamespaceRepoImplTest {
             it shouldEqual false
         }
     }
-
-    companion object : KLogging()
 }
