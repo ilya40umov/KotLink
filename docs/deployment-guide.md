@@ -22,6 +22,15 @@ Please, note that `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` and `KOTLINK_SECURITY_
 are combined using **OR**, and thus if you want to allow only a set of specific users to access the server,
 you should set the regex to `^$` and emails array to whatever your users' addresses look like.
 
+### Obtain OAuth2 Client ID
+
+1. Go to [Google API Console](https://console.developers.google.com) and navigate to *Credentials*
+1. Click on *Create credentials* button, select *OAuth client ID*, and then *Web application*.
+1. On the next page, enter any name you see fit, and add the following URL `http://YOUR_SERVER_ADDRESS/login` 
+under *Authorized redirect URLs*, where `YOUR_SERVER_ADDRESS` 
+should be replaced with the domain name / the external ip address of your KotLink server.
+E.g. The OAuth2 Client ID for local development has `http://localhost:8080/login` added to *Authorized redirect URLs*.
+
 ### Linux: Deployment Instructions
 
 Coming soon 

@@ -11,8 +11,8 @@ which takes its inspiration from Google's internal Go-Links system.
 ### Why use KotLink?
 
 * Get rid of bookmarks for URLs frequently used within your team
-* Speak the same language as your colleges (e.g. Hey, can you check out what is happening with *staging␣grafana*?)
-* Search your "intranet" quickly for a resource that you don't know the URL for
+* Speak the same language as your colleges (e.g. Matt, can you check out what is up with *staging␣grafana*?)
+* Search in your "intranet" quickly for a resource that you don't know the exact URL for
 
 ### Overview
 
@@ -38,14 +38,16 @@ as it's going to store all of the links / namespaces for your team.
 * Chrome / Chromium via [Browser Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 * Firefox via [Browser Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
 * Vivaldi via [manually registering KotLink as a search engine](docs/extension-guide.md#vivaldi)
-* Safari (only partially) via [Safari Omnikey extension](docs/extension-guide.md#safari)
+* Safari (only partially) via 3rd-party [Safari Omnikey Extension](docs/extension-guide.md#safari)
 
 ### KotLink Server
 
-KotLink server requires PostgreSQL and contains all the logic around storing / resolving URL aliases, 
+KotLink server requires an instance of PostgreSQL as the backend store, 
+and contains all the logic around storing / resolving URL aliases, 
 as well as UI for creating / editing them.
 
-For evaluation purposes, you can run KotLink server on your machine with the following commands 
+For evaluation purposes, you can run KotLink server on your machine with the following commands, 
+given that you have [Docker](https://en.wikipedia.org/wiki/Docker_(software)) installed
 (you may have to add `sudo` before all calls to `docker` depending on your system): 
 ```
 docker network create kotlink-network
@@ -68,11 +70,11 @@ which, after you have signed in with your Google account, will allow you to add 
 
 ![List Aliases in UI](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/list-aliases.png)
 
-At this point, you can finally install the browser extension, 
+At this point, you can finally install the Kotlink browser extension, 
 open its *Options* (*Preferences* in Firefox), and configure it to access your local KotLink server:
 * set *KotLink Server URL* to `http://localhost:8080` 
 * set *Extension Secret* to your personal extension secret, 
-which can be found at `http://localhost:8080/ui/extension_secret`).
+which you will find at `http://localhost:8080/ui/extension_secret`).
 
 ![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/extension-options.png)
 
