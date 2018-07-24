@@ -43,7 +43,7 @@ as it's going to store all of the links / namespaces for your team.
 ### KotLink Server
 
 KotLink server requires an instance of PostgreSQL as the backend store, 
-and contains all the logic around storing / resolving URL aliases, 
+and encapsulates all the logic around storing / resolving URL aliases, 
 as well as UI for creating / editing them.
 
 For evaluation purposes, you can run KotLink server on your machine with the following commands, 

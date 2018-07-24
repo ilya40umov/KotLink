@@ -24,17 +24,17 @@ you should set the regex to `^$` and emails array to whatever your users' addres
 
 ### Obtain OAuth2 Client ID
 
-1. Go to [Google API Console](https://console.developers.google.com) and navigate to *Credentials*
-1. Click on *Create credentials* button, select *OAuth client ID*, and then *Web application*.
+1. Go to *Credentials* in your [Google API Console](https://console.developers.google.com)
+1. Click on *Create credentials* button, choose *OAuth client ID*, and then select *Web application*.
 1. On the next page, enter any name you see fit, and add the following URL `http://YOUR_SERVER_ADDRESS/login` 
 under *Authorized redirect URLs*, where `YOUR_SERVER_ADDRESS` 
 should be replaced with the domain name / the external ip address of your KotLink server.
 E.g. The OAuth2 Client ID for local development has `http://localhost:8080/login` added to *Authorized redirect URLs*.
 
-### Linux: Deployment Instructions
-
-Coming soon 
-
 ### AWS: Deployment Instructions
 
 Coming soon
+
+### Linux: Deployment Instructions
+
+Coming soon 
