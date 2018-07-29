@@ -59,6 +59,8 @@ docker run --name kotlink-postgres \
   -e POSTGRES_DB=kotlink \
   -d postgres:10.4
 
+docker pull ilya40umov/kotlink:latest
+
 docker run --rm --name kotlink-server \
   --network kotlink-network -p 8080:8080 \
   -e SPRING_DATASOURCE_URL=jdbc:postgresql://kotlink-postgres:5432/kotlink \
