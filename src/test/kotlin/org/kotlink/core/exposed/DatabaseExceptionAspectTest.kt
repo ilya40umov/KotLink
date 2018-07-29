@@ -18,13 +18,12 @@ class DatabaseExceptionAspectTest {
 
     @Test
     fun `'normalizeExceptions' should unwrap UndeclaredThrowableException as DatabaseException`() {
-        val originalException = Exception("fake error")
-        doThrow(UndeclaredThrowableException(originalException))
+        doThrow(UndeclaredThrowableException(Exception("fake error")))
             .whenever(joinPoint)
             .proceed();
 
         {
             aspect.normalizeExceptions(joinPoint)
-        } shouldThrow DatabaseException(originalException.message, originalException)
+        } shouldThrow DatabaseException::class
     }
 }
