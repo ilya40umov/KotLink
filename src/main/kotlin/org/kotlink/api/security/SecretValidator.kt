@@ -5,7 +5,7 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
 
-class SecretValidator(private val apiSecretService: ApiSecretService): AuthenticationProvider {
+class SecretValidator(private val apiSecretService: ApiSecretService) : AuthenticationProvider {
 
     override fun authenticate(authentication: Authentication): Authentication {
         val secretAuthToken = authentication as SecretAuthToken
@@ -17,5 +17,4 @@ class SecretValidator(private val apiSecretService: ApiSecretService): Authentic
 
     override fun supports(authentication: Class<*>): Boolean =
         SecretAuthToken::class.java.isAssignableFrom(authentication)
-
 }

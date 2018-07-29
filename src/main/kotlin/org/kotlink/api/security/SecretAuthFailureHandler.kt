@@ -17,4 +17,3 @@ class SecretAuthFailureHandler : AuthenticationFailureHandler {
         response.writer.print("""{"error": "Unauthorized"}""")
     }
 }
-

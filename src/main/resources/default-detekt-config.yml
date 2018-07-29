@@ -19,6 +19,8 @@ test-pattern: # Configure exclusions for test sources
     - 'SpreadOperator'
     - 'TooManyFunctions'
     - 'ForEachOnRange'
+    - 'NoSemicolons'
+    - 'NoItParamInMultilineLambda'
 
 build:
   maxIssues: 10
@@ -212,7 +214,7 @@ formatting:
     active: true
     autoCorrect: true
   ImportOrdering:
-    active: true
+    active: false
     autoCorrect: true
   Indentation:
     active: true

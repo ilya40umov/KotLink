@@ -1,7 +1,7 @@
 package org.kotlink.ui.secret
 
-import org.kotlink.core.secret.ApiSecretService
 import org.kotlink.core.CurrentUser
+import org.kotlink.core.secret.ApiSecretService
 import org.kotlink.ui.SelectView
 import org.kotlink.ui.UiView
 import org.springframework.stereotype.Controller
