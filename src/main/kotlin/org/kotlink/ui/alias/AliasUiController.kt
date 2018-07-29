@@ -1,6 +1,7 @@
 package org.kotlink.ui.alias
 
 import mu.KLogging
+import org.kotlink.core.CurrentUser
 import org.kotlink.core.alias.AliasService
 import org.kotlink.core.alias.FullLinkExistsException
 import org.kotlink.core.namespace.NamespaceService
@@ -26,7 +27,9 @@ import javax.validation.Valid
 @Suppress("TooGenericExceptionCaught")
 class AliasUiController(
     private val aliasService: AliasService,
-    private val namespaceService: NamespaceService
+    private val namespaceService: NamespaceService,
+    private val aliasUiValueConverter: AliasUiValueConverter,
+    private val currentUser: CurrentUser
 ) {
 
     @GetMapping
@@ -40,37 +43,39 @@ class AliasUiController(
     @GetMapping("/new")
     @SelectView(UiView.NEW_ALIAS)
     fun newAlias(model: Model): String {
-        model.addFormAttributes(AliasUiValue())
+        model.addFormAttributes(AliasUiValue()
+            .apply { ownerAccountEmail = currentUser.getEmail() })
         return "alias/new"
     }
 
     @PostMapping("/new")
     fun createAlias(
-        @Valid @ModelAttribute("alias") alias: AliasUiValue,
+        @Valid @ModelAttribute("alias") aliasUiValue: AliasUiValue,
         bindResult: BindingResult,
         model: Model,
         attributes: RedirectAttributes
     ): String {
-        val namespace = namespaceService.findById(alias.namespaceId)
+        val namespace = namespaceService.findById(aliasUiValue.namespaceId)
         if (bindResult.hasErrors() || namespace == null) {
             if (namespace == null) {
                 bindResult.rejectValue("namespaceId", "", "namespace not found")
             }
-            logger.warn { "User input $alias has failed validation ${bindResult.allErrors}" }
-            model.addFormAttributes(alias)
+            logger.warn { "User input $aliasUiValue has failed validation ${bindResult.allErrors}" }
+            model.addFormAttributes(aliasUiValue)
             return "alias/new"
         }
         return try {
-            val createdAlias = aliasService.create(alias.toAlias(namespace))
+            val alias = aliasUiValueConverter.convertValueToModel(aliasUiValue, namespace)
+            val createdAlias = aliasService.create(alias)
             attributes.addSuccessMessage("Alias '${createdAlias.fullLink}' has been successfully created.")
             "redirect:/ui/alias"
         } catch (e: FullLinkExistsException) {
             bindResult.rejectValue("link", "", "alias is taken")
-            model.addFormAttributes(alias)
+            model.addFormAttributes(aliasUiValue)
             "alias/new"
         } catch (e: Exception) {
-            logger.error(e) { "Error occurred while creating a new alias: $alias" }
-            model.addFormAttributes(alias)
+            logger.error(e) { "Error occurred while creating a new alias: $aliasUiValue" }
+            model.addFormAttributes(aliasUiValue)
             model.addErrorMessage(e)
             "alias/new"
         }
@@ -95,31 +100,32 @@ class AliasUiController(
     @PutMapping("/{aliasId}/edit")
     fun saveAlias(
         @PathVariable aliasId: Long,
-        @Valid @ModelAttribute("alias") alias: AliasUiValue,
+        @Valid @ModelAttribute("alias") aliasUiValue: AliasUiValue,
         bindResult: BindingResult,
         model: Model,
         attributes: RedirectAttributes
     ): String {
-        val namespace = namespaceService.findById(alias.namespaceId)
+        val namespace = namespaceService.findById(aliasUiValue.namespaceId)
         if (bindResult.hasErrors() || namespace == null) {
             if (namespace == null) {
                 bindResult.rejectValue("namespaceId", "", "namespace not found")
             }
-            model.addFormAttributes(alias)
-            logger.warn { "User input $alias has failed validation ${bindResult.allErrors}" }
+            model.addFormAttributes(aliasUiValue)
+            logger.warn { "User input $aliasUiValue has failed validation ${bindResult.allErrors}" }
             return "alias/edit"
         }
         return try {
-            val updatedAlias = aliasService.update(alias.toAlias(namespace))
+            val alias = aliasUiValueConverter.convertValueToModel(aliasUiValue, namespace)
+            val updatedAlias = aliasService.update(alias)
             attributes.addSuccessMessage("Alias '${updatedAlias.fullLink}' has been successfully updated.")
             "redirect:/ui/alias"
         } catch (e: FullLinkExistsException) {
             bindResult.rejectValue("link", "", "alias is taken")
-            model.addFormAttributes(alias)
+            model.addFormAttributes(aliasUiValue)
             "alias/edit"
         } catch (e: Exception) {
-            logger.error(e) { "Error occurred while updating an existing alias: $alias" }
-            model.addFormAttributes(alias)
+            logger.error(e) { "Error occurred while updating an existing alias: $aliasUiValue" }
+            model.addFormAttributes(aliasUiValue)
             model.addErrorMessage(e)
             "alias/edit"
         }

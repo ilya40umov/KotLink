@@ -23,13 +23,13 @@
     transition-property: background-color;
 }
 
-.mdl-data-table tbody tr.is-selected {
-    background-color: #e0e0e0;
-}
+/*.mdl-data-table tbody tr.is-selected {*/
+    /*background-color: #e0e0e0;*/
+/*}*/
 
-.mdl-data-table tbody tr:hover {
-    background-color: #eeeeee;
-}
+/*.mdl-data-table tbody tr:hover {*/
+    /*background-color: #eeeeee;*/
+/*}*/
 
 .mdl-data-table td, .mdl-data-table th {
     padding: 0 18px 12px 18px;

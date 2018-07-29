@@ -1,5 +1,7 @@
 package org.kotlink.core.namespace
 
+import org.kotlink.core.CurrentUser
+import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.alias.AliasRepo
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -8,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class NamespaceService(
     private val aliasRepo: AliasRepo,
-    private val namespaceRepo: NamespaceRepo
+    private val namespaceRepo: NamespaceRepo,
+    private val currentUser: CurrentUser
 ) {
 
     fun findAll(): List<Namespace> = namespaceRepo.findAll()
@@ -17,6 +20,9 @@ class NamespaceService(
 
     fun create(namespace: Namespace): Namespace {
         verifyKeywordNotTaken(namespace.keyword)
+        if (currentUser.getAccount().id != namespace.ownerAccount.id) {
+            throw OperationDeniedException("Assigning an owner different from the current user is not allowed!")
+        }
         return namespaceRepo.insert(namespace)
     }
 
@@ -27,6 +33,9 @@ class NamespaceService(
         }
         if (namespace.keyword != foundNamespace.keyword) {
             verifyKeywordNotTaken(namespace.keyword)
+        }
+        if (namespace.ownerAccount.id != foundNamespace.ownerAccount.id) {
+            throw OperationDeniedException("Changing owner of namespace is not allowed!")
         }
         return namespaceRepo.update(namespace)
     }

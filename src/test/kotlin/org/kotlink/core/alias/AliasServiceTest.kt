@@ -11,6 +11,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
+import org.kotlink.TEST_ACCOUNT
+import org.kotlink.core.CurrentUser
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
@@ -21,7 +23,8 @@ class AliasServiceTest {
 
     private val aliasRepo = mock<AliasRepo>()
     private val namespaceRepo = mock<NamespaceRepo>()
-    private val service = AliasService(aliasRepo, namespaceRepo)
+    private val currentUser = mock<CurrentUser>()
+    private val service = AliasService(aliasRepo, namespaceRepo, currentUser)
 
     @Test
     fun `'findByFullLink' should return alias if it can be found in default namespace`() {
@@ -55,7 +58,10 @@ class AliasServiceTest {
         whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "google inb"))
             .thenReturn(listOf(INBOX_ALIAS))
         whenever(aliasRepo.findByNamespaceAndLinkPrefix("google", "inb"))
-            .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "google"), link = "inbound")))
+            .thenReturn(listOf(
+                INBOX_ALIAS.copy(
+                    namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
+                    link = "inbound")))
 
         service.findByFullLinkPrefix("google inb").also {
             it.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbound")
@@ -67,7 +73,9 @@ class AliasServiceTest {
         whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "inb"))
             .thenReturn(listOf(INBOX_ALIAS))
         whenever(aliasRepo.findByNamespacePrefix("inb"))
-            .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "inbound"), link = "whatever")))
+            .thenReturn(listOf(INBOX_ALIAS.copy(
+                namespace = Namespace(keyword = "inbound", ownerAccount = TEST_ACCOUNT),
+                link = "whatever")))
 
         service.findByFullLinkPrefix("inb").also {
             it.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "inbound whatever")
@@ -89,7 +97,9 @@ class AliasServiceTest {
         whenever(namespaceRepo.findByKeyword("google"))
             .thenReturn(DEFAULT_NAMESPACE.copy(keyword = "google"))
         whenever(aliasRepo.findByNamespace("google"))
-            .thenReturn(listOf(INBOX_ALIAS.copy(namespace = Namespace(keyword = "google"), link = "tree")))
+            .thenReturn(listOf(INBOX_ALIAS.copy(
+                namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
+                link = "tree")))
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
             .thenReturn(listOf(INBOX_ALIAS))
 
@@ -110,6 +120,8 @@ class AliasServiceTest {
     fun `'create' should return the created alias if full link is not yet taken`() {
         whenever(aliasRepo.insert(any()))
             .thenReturn(INBOX_ALIAS)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
 
         service.create(INBOX_ALIAS).also {
             it.fullLink shouldEqual INBOX_ALIAS.fullLink

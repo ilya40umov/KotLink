@@ -67,6 +67,13 @@ body {
     margin-top: 0.5em;
 }
 
+.table-row-action-item {
+    --mdc-ripple-fg-size: 28.8px;
+    --mdc-ripple-fg-scale: 1.66667;
+    --mdc-ripple-left: 10px;
+    --mdc-ripple-top: 10px;
+}
+
 /*
  * Search page
  */
@@ -115,6 +122,6 @@ body {
 }
 
 .submit-button-wrapper {
-    width:100%;
-    margin:16px;
+    width: 100%;
+    margin: 16px;
 }

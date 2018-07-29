@@ -22,15 +22,30 @@
         <table class="mdl-data-table">
             <thead>
             <tr>
-                <th width="15%">ID</th>
+                <th width="3%"></th>
+                <th width="5%">ID</th>
                 <th>Keyword</th>
                 <th>Description</th>
-                <th width="10%"></th>
-                <th width="10%"></th>
+                <th>Owner</th>
+                <th width="3%"></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="namespace: ${namespaces}">
+                <td>
+                    <a th:if="${!namespace.keyword.isEmpty()}"
+                       th:href="@{'/ui/namespace/' + ${namespace.id} + '/edit'}"
+                       class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
+                       aria-pressed="false">
+                        edit
+                    </a>
+                    <button th:if="${namespace.keyword.isEmpty()}"
+                            class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
+                            aria-pressed="false"
+                            disabled="">
+                        edit
+                    </button>
+                </td>
                 <td th:text="${namespace.id}">123</td>
                 <td>
                     <span th:if="${namespace.keyword.isEmpty()}" style="font-style: italic">(default)</span>
@@ -41,26 +56,25 @@
                     <span th:unless="${namespace.description.isEmpty()}" th:text="${namespace.description}"></span>
                 </td>
                 <td>
-                    <form th:action="@{'/ui/namespace/' + ${namespace.id} + '/edit'}"
-                          method="get"
-                          th:if="${!namespace.keyword.isEmpty()}">
-                        <button class="mdc-button mdc-button--raised secondary-text-button">
-                            <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
-                            Edit
-                        </button>
-                    </form>
+                    <span th:text="${namespace.ownerAccount.email}"></span>
                 </td>
                 <td>
                     <form th:action="@{'/ui/namespace/' + ${namespace.id}}"
                           method="post"
                           th:if="${!namespace.keyword.isEmpty()}">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button class="mdc-button mdc-button--raised danger-text-button"
-                                onclick="return confirm('Are you sure that you want to delete this namespace?')">
-                            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
-                            Delete
+                        <button class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
+                                onclick="return confirm('Are you sure that you want to delete this namespace?')"
+                                aria-pressed="false">
+                            delete
                         </button>
                     </form>
+                    <button th:if="${namespace.keyword.isEmpty()}"
+                            class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
+                            aria-pressed="false"
+                            disabled="">
+                        delete
+                    </button>
                 </td>
             </tr>
             </tbody>

@@ -14,16 +14,24 @@
         <table class="mdl-data-table">
             <thead>
             <tr>
-                <th>ID</th>
+                <th width="3%"></th>
+                <th width="5%">ID</th>
                 <th>Namespace</th>
                 <th>Link</th>
                 <th>Redirect URL</th>
-                <th width="10%"></th>
-                <th width="10%"></th>
+                <th>Owner</th>
+                <th width="3%"></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="alias: ${aliases}" th:title="${alias.description}">
+                <td>
+                    <a th:href="@{'/ui/alias/' + ${alias.id} + '/edit'}"
+                       class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
+                       aria-pressed="false">
+                        edit
+                    </a>
+                </td>
                 <td th:text="${alias.id}">123</td>
                 <td>
                     <span th:if="${alias.namespace.keyword.isEmpty()}" style="font-style: italic">(default)</span>
@@ -34,25 +42,20 @@
                 </td>
                 <td>
                     <a th:text="${@viewUtils.truncateRedirectUrl(alias.redirectUrl)}"
-                       th:href="${alias.redirectUrl}"></a>
+                       th:href="${alias.redirectUrl}"
+                       target="_blank"></a>
                 </td>
                 <td>
-                    <form th:action="@{'/ui/alias/' + ${alias.id} + '/edit'}"
-                          method="get">
-                        <button class="mdc-button mdc-button--raised secondary-text-button">
-                            <i class="material-icons mdc-button__icon" aria-hidden="true">edit</i>
-                            Edit
-                        </button>
-                    </form>
+                    <span th:text="${alias.ownerAccount.email}"></span>
                 </td>
                 <td>
                     <form th:action="@{'/ui/alias/' + ${alias.id}}"
                           method="post">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button class="mdc-button mdc-button--raised danger-text-button"
-                                onclick="return confirm('Are you sure that you want to delete this alias?')">
-                            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
-                            Delete
+                        <button class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
+                                onclick="return confirm('Are you sure that you want to delete this alias?')"
+                                aria-pressed="false">
+                            delete
                         </button>
                     </form>
                 </td>

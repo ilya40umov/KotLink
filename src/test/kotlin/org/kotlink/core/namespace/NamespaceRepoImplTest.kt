@@ -9,6 +9,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.ExposedRepoTest
+import org.kotlink.core.account.UserAccount
+import org.kotlink.core.account.UserAccountRepo
 import org.kotlink.core.exposed.DatabaseException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit4.SpringRunner
@@ -20,12 +22,18 @@ class NamespaceRepoImplTest {
 
     private val testKeyword = UUID.randomUUID().toString()
 
+    lateinit var testUserAccount: UserAccount
+
     @Autowired
     private lateinit var repo: NamespaceRepo
 
+    @Autowired
+    private lateinit var userAccountRepo: UserAccountRepo
+
     @Before
     fun setUp() {
-        repo.insert(Namespace(keyword = testKeyword))
+        testUserAccount = userAccountRepo.insert(UserAccount(email = "zorro@gmail.com"))
+        repo.insert(Namespace(keyword = testKeyword, ownerAccount = testUserAccount))
     }
 
     @Test
@@ -67,7 +75,12 @@ class NamespaceRepoImplTest {
 
     @Test
     fun `'insert' should return the namespace with the assigned ID`() {
-        repo.insert(Namespace(keyword = UUID.randomUUID().toString())).also {
+        repo.insert(
+            Namespace(
+                keyword = UUID.randomUUID().toString(),
+                ownerAccount = testUserAccount
+            )
+        ).also {
             it.id shouldBeGreaterThan 0
             repo.findById(it.id)?.id shouldEqual it.id
         }
@@ -75,13 +88,19 @@ class NamespaceRepoImplTest {
 
     @Test
     fun `'insert' should throw DatabaseException if namespace with such keyword already exists`() {
-        val funx = { repo.insert(Namespace(keyword = testKeyword)) }
-        funx shouldThrow DatabaseException::class
+        {
+            repo.insert(Namespace(keyword = testKeyword, ownerAccount = testUserAccount))
+        } shouldThrow DatabaseException::class
     }
 
     @Test
     fun `'update' should update the provided namespace`() {
-        val existingNamespace = repo.insert(Namespace(keyword = UUID.randomUUID().toString()))
+        val existingNamespace = repo.insert(
+            Namespace(
+                keyword = UUID.randomUUID().toString(),
+                ownerAccount = testUserAccount
+            )
+        )
 
         repo.update(existingNamespace.copy(keyword = existingNamespace.keyword + ".abc")).also {
             it.id shouldEqual existingNamespace.id
@@ -91,7 +110,12 @@ class NamespaceRepoImplTest {
 
     @Test
     fun `'deleteById' should return True if ID existed in database`() {
-        val existingId = repo.insert(Namespace(keyword = UUID.randomUUID().toString())).id
+        val existingId = repo.insert(
+            Namespace(
+                keyword = UUID.randomUUID().toString(),
+                ownerAccount = testUserAccount
+            )
+        ).id
 
         repo.deleteById(existingId).also {
             it shouldEqual true

@@ -1,12 +1,16 @@
 package org.kotlink.core.namespace
 
+import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
+import org.kotlink.core.account.UserAccounts
+import org.kotlink.core.account.asUserAccount
 import org.kotlink.core.exposed.NoKeyGeneratedException
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
@@ -33,17 +37,20 @@ interface NamespaceRepo {
 class NamespaceRepoImpl : NamespaceRepo {
 
     override fun findAll() =
-        Namespaces.selectAll()
+        Namespaces.withJoins
+            .selectAll()
             .orderBy(Namespaces.keyword, isAsc = true)
             .map { it.asNamespace() }
 
     override fun findById(id: Long) =
-        Namespaces.select { Namespaces.id.eq(id) }
+        Namespaces.withJoins
+            .select { Namespaces.id.eq(id) }
             .map { it.asNamespace() }
             .firstOrNull()
 
     override fun findByKeyword(keyword: String): Namespace? =
-        Namespaces.select { Namespaces.keyword.eq(keyword) }
+        Namespaces.withJoins
+            .select { Namespaces.keyword.eq(keyword) }
             .map { it.asNamespace() }
             .firstOrNull()
 
@@ -51,6 +58,7 @@ class NamespaceRepoImpl : NamespaceRepo {
         val namespaceId = Namespaces.insert {
             it[keyword] = namespace.keyword
             it[description] = namespace.description
+            it[ownerAccountId] = namespace.ownerAccount.id
         }.generatedKey ?: throw NoKeyGeneratedException("No primary key generated for namespace '${namespace.keyword}'")
         return findById(namespaceId.toLong())
             ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
@@ -60,6 +68,7 @@ class NamespaceRepoImpl : NamespaceRepo {
         Namespaces.update({ Namespaces.id.eq(namespace.id) }) {
             it[keyword] = namespace.keyword
             it[description] = namespace.description
+            it[ownerAccountId] = namespace.ownerAccount.id
         }
         return findById(namespace.id)
             ?: throw RecordNotFoundException("Updated namespace #${namespace.id} not found")
@@ -73,10 +82,17 @@ internal object Namespaces : Table("namespace") {
     val id = long("id").autoIncrement("namespace_id_seq").primaryKey()
     val keyword = varchar("keyword", length = Namespace.MAX_KEYWORD_LENGTH)
     val description = varchar("description", length = Namespace.MAX_DESCRIPTION_LENGTH)
+    val ownerAccountId = long("owner_account_id") references UserAccounts.id
+
+    val userAccountsAlias = UserAccounts.alias("ns_owner")
+    val withJoins =
+        Namespaces
+            .join(userAccountsAlias, JoinType.LEFT, Namespaces.ownerAccountId, userAccountsAlias[UserAccounts.id])
 }
 
 internal fun ResultRow.asNamespace() = Namespace(
     id = this[Namespaces.id],
     keyword = this[Namespaces.keyword],
-    description = this[Namespaces.description]
+    description = this[Namespaces.description],
+    ownerAccount = this.asUserAccount(Namespaces.userAccountsAlias)
 )

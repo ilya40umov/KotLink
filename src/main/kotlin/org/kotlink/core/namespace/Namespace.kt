@@ -1,6 +1,7 @@
 package org.kotlink.core.namespace
 
 import org.hibernate.validator.constraints.Length
+import org.kotlink.core.account.UserAccount
 import javax.validation.constraints.Pattern
 
 /**
@@ -15,7 +16,9 @@ data class Namespace(
     val keyword: String,
 
     @field:Length(max = MAX_DESCRIPTION_LENGTH)
-    val description: String = ""
+    val description: String = "",
+
+    val ownerAccount: UserAccount
 ) {
     companion object {
         const val KEYWORD_REGEXP = "[a-z0-9]+"

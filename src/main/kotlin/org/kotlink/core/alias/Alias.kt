@@ -2,6 +2,7 @@ package org.kotlink.core.alias
 
 import org.hibernate.validator.constraints.Length
 import org.hibernate.validator.constraints.URL
+import org.kotlink.core.account.UserAccount
 import org.kotlink.core.namespace.Namespace
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
@@ -23,7 +24,9 @@ data class Alias(
     val redirectUrl: String,
 
     @field:Length(max = MAX_DESCRIPTION_LENGTH)
-    val description: String = ""
+    val description: String = "",
+
+    val ownerAccount: UserAccount
 ) {
     val fullLink = if (namespace.keyword.isNotEmpty()) "${namespace.keyword} $link" else link
 

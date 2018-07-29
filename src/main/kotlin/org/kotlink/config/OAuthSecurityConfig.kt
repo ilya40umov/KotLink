@@ -1,5 +1,7 @@
 package org.kotlink.config
 
+import org.kotlink.core.account.UserAccountService
+import org.kotlink.core.oauth.OAuthAuthoritiesExtractor
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -7,12 +9,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.Order
-import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import javax.servlet.http.HttpSession
 
@@ -56,18 +56,13 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     @Bean
-    fun authoritiesExtractor(session: HttpSession): AuthoritiesExtractor {
-        val allowedEmailPattern = allowedEmailRegex.toRegex()
-        return AuthoritiesExtractor {
-            val email = it["email"].toString()
-            if (email.isNotBlank() &&
-                (allowedEmailPattern.matches(email)
-                    || allowedEmails.contains(email))) {
-                AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
-            } else {
-                session.invalidate()
-                throw BadCredentialsException("You don't have access to this KotLink server!")
-            }
-        }
-    }
+    fun authoritiesExtractor(
+        session: HttpSession,
+        userAccountService: UserAccountService
+    ): AuthoritiesExtractor = OAuthAuthoritiesExtractor(
+        session = session,
+        allowedEmails = allowedEmails,
+        allowedEmailRegex = allowedEmailRegex.toRegex(),
+        userAccountService = userAccountService
+    )
 }

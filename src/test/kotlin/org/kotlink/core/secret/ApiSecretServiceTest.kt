@@ -8,18 +8,22 @@ import org.amshove.kluent.any
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.kotlink.TEST_ACCOUNT
 import org.kotlink.TEST_SECRET
+import org.kotlink.core.account.UserAccountService
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class ApiSecretServiceTest {
 
     private val apiSecretRepo = mock<ApiSecretRepo>()
-    private val service = ApiSecretService(apiSecretRepo)
+    private val userAccountService = mock<UserAccountService>()
+    private val service = ApiSecretService(apiSecretRepo, userAccountService)
 
     @Test
     fun `'findBySecret' should return ApiSecret if the provided secret matches a secret in database`() {
-        whenever(apiSecretRepo.findBySecret(TEST_SECRET.secret)).thenReturn(TEST_SECRET)
+        whenever(apiSecretRepo.findBySecret(TEST_SECRET.secret))
+            .thenReturn(TEST_SECRET)
 
         service.findBySecret(TEST_SECRET.secret).also {
             it shouldEqual TEST_SECRET
@@ -28,7 +32,8 @@ class ApiSecretServiceTest {
 
     @Test
     fun `'findBySecret' should not return ApiSecret if the provided secret does not match a secret in database`() {
-        whenever(apiSecretRepo.findBySecret(TEST_SECRET.secret)).thenReturn(null)
+        whenever(apiSecretRepo.findBySecret(TEST_SECRET.secret))
+            .thenReturn(null)
 
         service.findBySecret(TEST_SECRET.secret).also {
             it shouldEqual null
@@ -37,9 +42,10 @@ class ApiSecretServiceTest {
 
     @Test
     fun `'findOrCreateForEmail' should return an existing ApiSecret if the provided email matches it`() {
-        whenever(apiSecretRepo.findByUserEmail(TEST_SECRET.userEmail)).thenReturn(TEST_SECRET)
+        whenever(apiSecretRepo.findByUserEmail(TEST_SECRET.userAccount.email))
+            .thenReturn(TEST_SECRET)
 
-        service.findOrCreateForEmail(TEST_SECRET.userEmail).also {
+        service.findOrCreateForEmail(TEST_SECRET.userAccount.email).also {
             it shouldEqual TEST_SECRET
             verify(apiSecretRepo, times(0)).insert(any())
         }
@@ -47,10 +53,14 @@ class ApiSecretServiceTest {
 
     @Test
     fun `'findOrCreateForEmail' should create a new ApiSecret if the provided secret does not match anything`() {
-        whenever(apiSecretRepo.findByUserEmail(TEST_SECRET.userEmail)).thenReturn(null)
-        whenever(apiSecretRepo.insert(any())).thenReturn(TEST_SECRET)
+        whenever(apiSecretRepo.findByUserEmail(TEST_SECRET.userAccount.email))
+            .thenReturn(null)
+        whenever(apiSecretRepo.insert(any()))
+            .thenReturn(TEST_SECRET)
+        whenever(userAccountService.findOrCreateAccountForEmail(any()))
+            .thenReturn(TEST_ACCOUNT)
 
-        service.findOrCreateForEmail(TEST_SECRET.userEmail).also {
+        service.findOrCreateForEmail(TEST_SECRET.userAccount.email).also {
             it shouldEqual TEST_SECRET
             verify(apiSecretRepo, times(1)).insert(any())
         }

@@ -36,7 +36,9 @@
              th:name="keyword"
              th:errorclass="mdc-text-field--invalid"
              style="width: 100%">
-            <input type="text" id="keyword-input" class="mdc-text-field__input"
+            <input id="keyword-input"
+                   type="text"
+                   class="mdc-text-field__input"
                    th:field="*{keyword}">
             <label class="mdc-floating-label"
                    for="keyword-input">
@@ -56,7 +58,9 @@
              th:name="description"
              th:errorclass="mdc-text-field--invalid"
              style="width: 100%">
-            <input type="text" id="description-input" class="mdc-text-field__input"
+            <input id="description-input"
+                   type="text"
+                   class="mdc-text-field__input"
                    th:field="*{description}">
             <label class="mdc-floating-label"
                    for="description-input">
@@ -67,6 +71,29 @@
         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
            aria-hidden="true"
            th:errors="*{description}"></p>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <div id="owner-account-email-field"
+             class="mdc-text-field"
+             data-mdc-auto-init="MDCTextField"
+             th:name="ownerAccountEmail"
+             th:errorclass="mdc-text-field--invalid"
+             style="width: 100%">
+            <input id="owner-account-email-input"
+                   type="text"
+                   class="mdc-text-field__input"
+                   readonly
+                   th:field="*{ownerAccountEmail}">
+            <label class="mdc-floating-label"
+                   for="description-input">
+                Owner Email
+            </label>
+            <div class="mdc-line-ripple"></div>
+        </div>
+        <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+           aria-hidden="true"
+           th:errors="*{ownerAccountEmail}"></p>
     </div>
 
     <div class="submit-button-wrapper">

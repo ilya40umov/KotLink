@@ -9,6 +9,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.ExposedRepoTest
+import org.kotlink.core.account.UserAccount
+import org.kotlink.core.account.UserAccountRepo
 import org.kotlink.core.exposed.DatabaseException
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
@@ -20,6 +22,7 @@ import java.util.UUID
 @ExposedRepoTest
 class AliasRepoImplTest {
 
+    lateinit var testUserAccount: UserAccount
     lateinit var testNamespace: Namespace
     lateinit var testAlias: Alias
 
@@ -29,16 +32,22 @@ class AliasRepoImplTest {
     @Autowired
     private lateinit var namespaceRepo: NamespaceRepo
 
+    @Autowired
+    private lateinit var userAccountRepo: UserAccountRepo
+
     @Before
     fun setUp() {
-        testNamespace = namespaceRepo.insert(Namespace(keyword = UUID.randomUUID().toString()))
+        testUserAccount = userAccountRepo.insert(UserAccount(email = "zorro@gmail.com"))
+        testNamespace = namespaceRepo.insert(
+            Namespace(keyword = UUID.randomUUID().toString(), ownerAccount = testUserAccount))
         testAlias = repo.insert(
             Alias(
                 id = 0,
                 namespace = testNamespace,
                 link = UUID.randomUUID().toString(),
                 redirectUrl = UUID.randomUUID().toString(),
-                description = "Test alias"
+                description = "Test alias",
+                ownerAccount = testUserAccount
             )
         )
     }
@@ -133,7 +142,9 @@ class AliasRepoImplTest {
                 namespace = testNamespace,
                 link = UUID.randomUUID().toString(),
                 redirectUrl = "",
-                description = "")
+                description = "",
+                ownerAccount = testUserAccount
+            )
         ).also {
             it.id shouldBeGreaterThan 0
             repo.findById(it.id)?.id shouldEqual it.id

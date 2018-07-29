@@ -8,6 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.ExposedRepoTest
+import org.kotlink.core.account.UserAccount
+import org.kotlink.core.account.UserAccountRepo
 import org.kotlink.core.exposed.DatabaseException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit4.SpringRunner
@@ -18,14 +20,18 @@ import java.util.UUID
 class ApiSecretRepoImplTest {
 
     private val secret = UUID.randomUUID().toString()
-    private val userEmail = "test@gmail.com"
+    lateinit var testUserAccount: UserAccount
 
     @Autowired
     private lateinit var repo: ApiSecretRepo
 
+    @Autowired
+    private lateinit var userAccountRepo: UserAccountRepo
+
     @Before
     fun setUp() {
-        repo.insert(ApiSecret(secret = secret, userEmail = userEmail))
+        testUserAccount = userAccountRepo.insert(UserAccount(email = "zorro@gmail.com"))
+        repo.insert(ApiSecret(secret = secret, userAccount = testUserAccount))
     }
 
     @After
@@ -53,8 +59,8 @@ class ApiSecretRepoImplTest {
 
     @Test
     fun `'findByUserEmail' should return ApiSecret if provided email matches a record in database`() {
-        repo.findByUserEmail(userEmail).also {
-            it?.userEmail shouldEqual userEmail
+        repo.findByUserEmail(testUserAccount.email).also {
+            it?.userAccount shouldEqual testUserAccount
         }
     }
 

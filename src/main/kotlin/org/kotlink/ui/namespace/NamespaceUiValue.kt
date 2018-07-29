@@ -10,6 +10,7 @@ class NamespaceUiValue() {
         id = namespace.id
         keyword = namespace.keyword
         description = namespace.description
+        ownerAccountEmail = namespace.ownerAccount.email
     }
 
     var id: Long = 0
@@ -21,13 +22,10 @@ class NamespaceUiValue() {
     @get:Length(max = Namespace.MAX_DESCRIPTION_LENGTH)
     var description: String = ""
 
-    fun toNamespace() = Namespace(
-        id = id,
-        keyword = keyword,
-        description = description
-    )
+    var ownerAccountEmail: String = ""
 
     override fun toString(): String {
-        return "NamespaceUiValue(id=$id, keyword='$keyword', description='$description')"
+        return "NamespaceUiValue(id=$id, keyword='$keyword', description='$description', " +
+            "ownerAccountEmail='$ownerAccountEmail')"
     }
 }

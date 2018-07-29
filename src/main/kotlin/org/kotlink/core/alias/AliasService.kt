@@ -1,5 +1,7 @@
 package org.kotlink.core.alias
 
+import org.kotlink.core.CurrentUser
+import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -10,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class AliasService(
     private val aliasRepo: AliasRepo,
-    private val namespaceRepo: NamespaceRepo
+    private val namespaceRepo: NamespaceRepo,
+    private val currentUser: CurrentUser
 ) {
 
     fun findAll(): List<Alias> = aliasRepo.findAll()
@@ -69,22 +72,34 @@ class AliasService(
         }.toSet().toList()
     }
 
-    @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLinkPrefix", "aliasSearch"])
+    @CacheEvict(allEntries = true, cacheNames = [ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE])
     fun create(alias: Alias): Alias {
         verifyFullLinkNotTaken(alias.fullLink)
+        if (currentUser.getAccount().id != alias.ownerAccount.id) {
+            throw OperationDeniedException("Assigning an owner different from the current user is not allowed!")
+        }
         return aliasRepo.insert(alias)
     }
 
-    @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLinkPrefix", "aliasSearch"])
+    @CacheEvict(
+        allEntries = true,
+        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
+    )
     fun update(alias: Alias): Alias {
         val foundAlias = aliasRepo.findByIdOrThrow(alias.id)
         if (alias.fullLink != foundAlias.fullLink) {
             verifyFullLinkNotTaken(alias.fullLink)
         }
+        if (alias.ownerAccount.id != foundAlias.ownerAccount.id) {
+            throw OperationDeniedException("Changing owner of an alias is not allowed!")
+        }
         return aliasRepo.update(alias)
     }
 
-    @CacheEvict(allEntries = true, cacheNames = ["aliasByFullLink", "aliasByFullLinkPrefix", "aliasSearch"])
+    @CacheEvict(
+        allEntries = true,
+        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
+    )
     fun deleteById(id: Long): Alias {
         val foundAlias = aliasRepo.findByIdOrThrow(id)
         aliasRepo.deleteById(id)

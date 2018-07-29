@@ -10,6 +10,8 @@ import org.junit.runner.RunWith
 import org.kotlink.ABC_NAMESPACE
 import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
+import org.kotlink.TEST_ACCOUNT
+import org.kotlink.core.CurrentUser
 import org.kotlink.core.alias.AliasRepo
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.mockito.junit.MockitoJUnitRunner
@@ -19,7 +21,8 @@ class NamespaceServiceTest {
 
     private val aliasRepo = mock<AliasRepo>()
     private val namespaceRepo = mock<NamespaceRepo>()
-    private val service = NamespaceService(aliasRepo, namespaceRepo)
+    private val currentUser = mock<CurrentUser>()
+    private val service = NamespaceService(aliasRepo, namespaceRepo, currentUser)
 
     @Test
     fun `'create' should throw exception if keyword is already taken`() {
@@ -35,6 +38,8 @@ class NamespaceServiceTest {
             .thenReturn(null)
         whenever(namespaceRepo.insert(any()))
             .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
 
         service.create(ABC_NAMESPACE).also {
             it.keyword shouldEqual ABC_NAMESPACE.keyword

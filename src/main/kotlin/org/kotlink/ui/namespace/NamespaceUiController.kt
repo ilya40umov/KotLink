@@ -1,6 +1,7 @@
 package org.kotlink.ui.namespace
 
 import mu.KLogging
+import org.kotlink.core.CurrentUser
 import org.kotlink.core.namespace.KeywordTakenException
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.ui.SelectView
@@ -23,7 +24,11 @@ import javax.validation.Valid
 @Controller
 @RequestMapping("/ui/namespace")
 @Suppress("TooGenericExceptionCaught")
-class NamespaceUiController(private val namespaceService: NamespaceService) {
+class NamespaceUiController(
+    private val namespaceService: NamespaceService,
+    private val namespaceUiValueConverter: NamespaceUiValueConverter,
+    private val currentUser: CurrentUser
+) {
 
     @GetMapping
     @SelectView(UiView.LIST_NAMESPACES)
@@ -36,33 +41,36 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
     @GetMapping("/new")
     @SelectView(UiView.NEW_NAMESPACE)
     fun newNamespace(model: Model): String {
-        model.addAttribute("namespace", NamespaceUiValue())
+        model.addAttribute("namespace", NamespaceUiValue().apply {
+            ownerAccountEmail = currentUser.getEmail()
+        })
         return "namespace/new"
     }
 
     @PostMapping("/new")
     fun createNamespace(
-        @Valid @ModelAttribute("namespace") namespace: NamespaceUiValue,
+        @Valid @ModelAttribute("namespace") namespaceUiValue: NamespaceUiValue,
         bindResult: BindingResult,
         model: Model,
         attributes: RedirectAttributes
     ): String {
         if (bindResult.hasErrors()) {
-            logger.warn { "User input $namespace has failed validation ${bindResult.allErrors}" }
-            model.addAttribute("namespace", namespace)
+            logger.warn { "User input $namespaceUiValue has failed validation ${bindResult.allErrors}" }
+            model.addAttribute("namespace", namespaceUiValue)
             return "namespace/new"
         }
         return try {
-            val createdNamespace = namespaceService.create(namespace.toNamespace())
+            val namespace = namespaceUiValueConverter.convertValueToModel(namespaceUiValue)
+            val createdNamespace = namespaceService.create(namespace)
             attributes.addSuccessMessage("Namespace '${createdNamespace.keyword}' has been successfully created.")
             "redirect:/ui/namespace"
         } catch (e: KeywordTakenException) {
             bindResult.rejectValue("keyword", "", "keyword is taken")
-            model.addAttribute("namespace", namespace)
+            model.addAttribute("namespace", namespaceUiValue)
             "namespace/new"
         } catch (e: Exception) {
-            logger.error(e) { "Error occurred while creating a new namespace: $namespace" }
-            model.addAttribute("namespace", namespace)
+            logger.error(e) { "Error occurred while creating a new namespace: $namespaceUiValue" }
+            model.addAttribute("namespace", namespaceUiValue)
             model.addErrorMessage(e)
             "namespace/new"
         }
@@ -87,27 +95,32 @@ class NamespaceUiController(private val namespaceService: NamespaceService) {
     @PutMapping("/{namespaceId}/edit")
     fun saveNamespace(
         @PathVariable namespaceId: Long,
-        @Valid @ModelAttribute("namespace") namespace: NamespaceUiValue,
+        @Valid @ModelAttribute("namespace") namespaceUiValue: NamespaceUiValue,
         bindResult: BindingResult,
         model: Model,
         attributes: RedirectAttributes
     ): String {
         if (bindResult.hasErrors()) {
-            model.addAttribute("namespace", namespace)
-            logger.warn { "User input $namespace has failed validation ${bindResult.allErrors}" }
+            model.addAttribute("namespace", namespaceUiValue)
+            logger.warn { "User input $namespaceUiValue has failed validation ${bindResult.allErrors}" }
             return "namespace/edit"
         }
         return try {
-            namespaceService.update(namespace.apply { id = namespaceId }.toNamespace())
-            attributes.addSuccessMessage("Namespace '${namespace.keyword}' has been successfully updated.")
+            val namespace = namespaceUiValueConverter.convertValueToModel(
+                namespaceUiValue.apply {
+                    id = namespaceId
+                }
+            )
+            namespaceService.update(namespace)
+            attributes.addSuccessMessage("Namespace '${namespaceUiValue.keyword}' has been successfully updated.")
             "redirect:/ui/namespace"
         } catch (e: KeywordTakenException) {
             bindResult.rejectValue("keyword", "", "keyword is taken")
-            model.addAttribute("namespace", namespace)
+            model.addAttribute("namespace", namespaceUiValue)
             "namespace/edit"
         } catch (e: Exception) {
-            logger.error(e) { "Error occurred while updating an existing namespace: $namespace" }
-            model.addAttribute("namespace", namespace)
+            logger.error(e) { "Error occurred while updating an existing namespace: $namespaceUiValue" }
+            model.addAttribute("namespace", namespaceUiValue)
             model.addErrorMessage(e)
             "namespace/edit"
         }

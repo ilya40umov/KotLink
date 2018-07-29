@@ -1,16 +1,22 @@
 package org.kotlink.ui.namespace
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.kotlink.ABC_NAMESPACE
+import org.kotlink.TEST_ACCOUNT
+import org.kotlink.core.CurrentUser
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.ui.UiTestConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
@@ -32,6 +38,17 @@ class NamespaceUiControllerTest {
     @MockBean
     private lateinit var namespaceService: NamespaceService
 
+    @MockBean
+    private lateinit var currentUser: CurrentUser
+
+    @TestConfiguration
+    class Config {
+        @Bean
+        fun uiValueConverter() = NamespaceUiValueConverter(mock {
+            on { findByUserEmail(any()) } doReturn TEST_ACCOUNT
+        })
+    }
+
     @Test
     fun `'listNamespaces' should render a page with all namespaces`() {
         whenever(namespaceService.findAll())
@@ -45,6 +62,8 @@ class NamespaceUiControllerTest {
 
     @Test
     fun `'newNamespace' should show the new namespace form without displaying the ID input`() {
+        whenever(currentUser.getEmail()).thenReturn(TEST_ACCOUNT.email)
+
         mvc.perform(get("/ui/namespace/new"))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content()
