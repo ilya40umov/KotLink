@@ -93,6 +93,11 @@ dependencies {
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("io.github.microutils:kotlin-logging:1.5.4")
+    compile("org.slf4j:slf4j-api:1.7.25")
+    compile("ch.qos.logback:logback-classic:1.2.3")
+    compile("ch.qos.logback:logback-core:1.2.3")
+    compile("ch.qos.logback:logback-access:1.2.3")
+    compile("org.apache.logging.log4j:log4j-to-slf4j:2.11.0")
     compile("org.postgresql:postgresql:42.2.4")
     compile("org.flywaydb:flyway-core:5.1.4")
     compile("org.jetbrains.exposed:exposed:$exposedVersion")

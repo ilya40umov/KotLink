@@ -6,5 +6,4 @@ spring:
 
 logging:
   level:
-    org.springframework.web.servlet: WARN
     Exposed: WARN

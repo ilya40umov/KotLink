@@ -39,7 +39,8 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
                 "/webjars/**",
                 "/error**",
                 "/js/**",
-                "/css/**"
+                "/css/**",
+                "/actuator/health"
             )
             .permitAll()
             .and()

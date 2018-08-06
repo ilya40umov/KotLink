@@ -8,5 +8,8 @@ spring:
 
 logging:
   level:
-    org.springframework.web.servlet: INFO
     Exposed: DEBUG
+
+kotlink:
+  logging:
+    enable-access-log: true
