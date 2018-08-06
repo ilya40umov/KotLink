@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import javax.servlet.http.HttpSession
 
-@Order(2)
+@Order(3)
 @Profile("!repotest")
 @Configuration
 @ConfigurationProperties("kotlink.security.oauth")

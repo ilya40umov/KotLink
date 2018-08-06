@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
-@Order(1)
+@Order(2)
 @Profile("!repotest")
 @Configuration
 @EnableWebSecurity

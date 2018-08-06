@@ -30,5 +30,6 @@ kotlink:
     oauth:
       allowed-email-regex: .*
       allowed-emails: []
+    require-ssl: false
   logging:
     enable-access-log: false
