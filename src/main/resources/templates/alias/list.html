@@ -15,8 +15,6 @@
             <thead>
             <tr>
                 <th width="3%"></th>
-                <th width="5%">ID</th>
-                <th>Namespace</th>
                 <th>Link</th>
                 <th>Redirect URL</th>
                 <th>Owner</th>
@@ -32,17 +30,13 @@
                         edit
                     </a>
                 </td>
-                <td th:text="${alias.id}">123</td>
-                <td>
-                    <span th:if="${alias.namespace.keyword.isEmpty()}" style="font-style: italic">(default)</span>
-                    <span th:unless="${alias.namespace.keyword.isEmpty()}" th:text="${alias.namespace.keyword}"></span>
-                </td>
-                <td>
-                    <span th:text="${alias.link}"></span>
+                <td class="go-link-in-table">
+                    <span th:utext="${@viewUtils.asGoLink(alias)}"></span>
                 </td>
                 <td>
                     <a th:text="${@viewUtils.truncateRedirectUrl(alias.redirectUrl)}"
                        th:href="${alias.redirectUrl}"
+                       style="color: #006621"
                        target="_blank"></a>
                 </td>
                 <td>

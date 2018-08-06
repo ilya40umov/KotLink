@@ -40,7 +40,8 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
                 "/error**",
                 "/js/**",
                 "/css/**",
-                "/actuator/health"
+                "/actuator/health",
+                "/favicon.ico"
             )
             .permitAll()
             .and()

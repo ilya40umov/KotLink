@@ -125,3 +125,11 @@ body {
     width: 100%;
     margin: 16px;
 }
+
+/*
+ * Namespace/alias list
+ */
+.go-link-in-table {
+    font-weight: 500;
+    color: var(--mdc-theme-primary, #3D5AFE);
+}

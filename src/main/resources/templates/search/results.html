@@ -41,9 +41,9 @@
 
         <div th:each="alias: ${aliases}"
              id="found-aliases">
-            <a th:text="${(alias.namespace.keyword.isEmpty() ? '(default)' : alias.namespace.keyword) + ' | ' + alias.link}"
+            <a th:utext="${@viewUtils.asGoLink(alias)}"
                th:href="${alias.redirectUrl}"
-               style="text-decoration: none;">alias</a>
+               style="text-decoration: none; color: -webkit-link">alias</a>
             <div th:text="${alias.redirectUrl}"
                  class="mdc-typography--caption"
                  style="color: #006621"></div>

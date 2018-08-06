@@ -23,7 +23,6 @@
             <thead>
             <tr>
                 <th width="3%"></th>
-                <th width="5%">ID</th>
                 <th>Keyword</th>
                 <th>Description</th>
                 <th>Owner</th>
@@ -46,10 +45,13 @@
                         edit
                     </button>
                 </td>
-                <td th:text="${namespace.id}">123</td>
                 <td>
-                    <span th:if="${namespace.keyword.isEmpty()}" style="font-style: italic">(default)</span>
-                    <span th:unless="${namespace.keyword.isEmpty()}" th:text="${namespace.keyword}"></span>
+                    <span th:if="${namespace.keyword.isEmpty()}"
+                          class="go-link-in-table"
+                          style="font-style: italic">(default)</span>
+                    <span th:unless="${namespace.keyword.isEmpty()}"
+                          class="go-link-in-table"
+                          th:text="${namespace.keyword}"></span>
                 </td>
                 <td>
                     <span th:if="${namespace.description.isEmpty()}">-</span>
