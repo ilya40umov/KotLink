@@ -15,10 +15,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 class SslWebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.requiresChannel()
+        http
+            .requiresChannel()
+            .antMatchers("/actuator/**")
+            .requiresInsecure()
+            .and()
+            .requiresChannel()
             .anyRequest()
             .requiresSecure()
-        http.portMapper()
+            .and()
+            .portMapper()
             .http(8080)
             .mapsTo(443)
     }

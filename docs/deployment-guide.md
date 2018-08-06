@@ -12,13 +12,15 @@
  e.g. `115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com`
 * `SECURITY_OAUTH2_CLIENT_CLIENT_SECRET` - OAuth2 client secret obtained from Google API Console,
  e.g. `SZDICodbaLAkNXjbFKfOFZCO`
-* `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` - (empty by default) - an array of user emails that can access the server, 
- e.g. `user1@gmail.com,user2@gmail.com`
-* `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAIL_REGEX` - (`.*` by default) - a [Java regular expression](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html) 
+* `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` - an array of user emails that can access the server, 
+ e.g. `user1@gmail.com,user2@gmail.com`; set to empty array by default.
+* `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAIL_REGEX` - a [Java regular expression](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html) 
  of user emails that can access the server, e.g. `.*` for everybody, `^$` for nobody,
- and `.*@gmail\.com$` for everything that ends with *gmail.com*
+ and `.*@gmail\.com$` for everything that ends with *gmail.com*; set to `.*` by default.
+* `KOTLINK_SECURITY_REQUIRE_SSL` - tells the server to always enforce HTTPS 
+by redirecting the user back to the SSL-offloading loadbalancer; set to `false` by default.
 
-Please, note that `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` and `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAIL_REGEX` 
+Please, note that `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` and `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAIL_REGEX` checks 
 are combined using **OR**, and thus if you want to allow only a set of specific users to access the server,
 you should set the regex to `^$` and emails array to whatever your users' addresses look like.
 
