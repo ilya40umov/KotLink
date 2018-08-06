@@ -14,9 +14,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.http.HttpSession
 
-@Order(3)
+@Order(2)
 @Profile("!repotest")
 @Configuration
 @ConfigurationProperties("kotlink.security.oauth")
@@ -32,6 +33,13 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
+            .requiresChannel()
+            .requestMatchers(RequestMatcher {
+                it.getHeader("X-Forwarded-Proto") != null
+            })
+            // presence of X-Forwarded-Proto indicates we are behind a load balancer => enforcing HTTPS
+            .requiresSecure()
+            .and()
             .authorizeRequests()
             .antMatchers(
                 "/login**",
