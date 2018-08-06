@@ -30,8 +30,9 @@
                         edit
                     </a>
                 </td>
-                <td class="go-link-in-table">
-                    <span th:utext="${@viewUtils.asGoLink(alias)}"></span>
+                <td>
+                    <span th:utext="${@viewUtils.asGoLink(alias)}"
+                          class="go-link"></span>
                 </td>
                 <td>
                     <a th:text="${@viewUtils.truncateRedirectUrl(alias.redirectUrl)}"

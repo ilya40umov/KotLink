@@ -1,5 +1,6 @@
 package org.kotlink.config
 
+import mu.KLogging
 import org.kotlink.api.security.SecretAuthFilter
 import org.kotlink.api.security.SecretValidator
 import org.kotlink.core.secret.ApiSecretService
@@ -44,8 +45,12 @@ class SecretAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .disable()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+        logger.info { "Secret-based security (for link suggestions) has been configured." }
     }
 
     @Bean
     fun secretValidator(apiSecretService: ApiSecretService) = SecretValidator(apiSecretService)
+
+    companion object : KLogging()
 }

@@ -1,5 +1,6 @@
 package org.kotlink.config
 
+import mu.KLogging
 import org.kotlink.core.account.UserAccountService
 import org.kotlink.core.oauth.OAuthAuthoritiesExtractor
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso
@@ -34,10 +35,8 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http
             .requiresChannel()
-            .requestMatchers(RequestMatcher {
-                it.getHeader("X-Forwarded-Proto") != null
-            })
-            // presence of X-Forwarded-Proto indicates we are behind a load balancer => enforcing HTTPS
+            .requestMatchers(RequestMatcher { it.getHeader("X-Forwarded-Proto") == "http" })
+            // forcing a redirect to https if we are behind a proxy / LB
             .requiresSecure()
             .and()
             .authorizeRequests()
@@ -63,6 +62,8 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .authorizeRequests()
             .anyRequest()
             .authenticated()
+
+        logger.info { "OAuth security has been configured." }
     }
 
     @Bean
@@ -75,4 +76,6 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
         allowedEmailRegex = allowedEmailRegex.toRegex(),
         userAccountService = userAccountService
     )
+
+    companion object : KLogging()
 }

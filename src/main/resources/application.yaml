@@ -3,12 +3,20 @@ spring:
     active: local
   datasource:
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:55432/kotlink
+    username: kotlinkuser
+    password: kotlinkpass
   flyway:
     enabled: true
   cache:
     cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch,apiSecret
     caffeine.spec: maximumSize=2000,expireAfterWrite=300s
 
+server:
+  use-forward-headers: true
+  tomcat:
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
 
 security:
   oauth2:
@@ -24,6 +32,10 @@ security:
     resource:
       user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
       prefer-token-info: false
+
+logging:
+  level:
+    Exposed: WARN
 
 kotlink:
   security:
