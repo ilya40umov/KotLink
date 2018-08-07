@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="../static/css/material-table.css" th:href="@{/css/material-table.css}">
     <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
 
+    <script src="https://cdn.jsdelivr.net/npm/material-components-web@0.37.0/dist/material-components-web.js"></script>
     <script src="../static/js/ready.js" th:src="@{/js/ready.js}"></script>
+    <script src="../static/js/main.js" th:src="@{/js/main.js}" async></script>
 </head>
 <body class="mdc-typography">
 
@@ -116,8 +118,5 @@
     <th:block layout:insert="~{fragment/_success_dialog :: success_dialog}"/>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/material-components-web@0.37.0/dist/material-components-web.js"
-        async></script>
-<script src="../static/js/main.js" th:src="@{/js/main.js}" async></script>
 </body>
 </html>

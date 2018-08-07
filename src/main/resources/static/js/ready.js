@@ -18,6 +18,7 @@ kotlink.onReady = (() => {
 
     let isReadyCached = false;
     let isDomLoaded = false;
+    let isMdcInitialized = false;
     let handlers = [];
     let testDom = null;
     let startTimeMs = null;
@@ -41,9 +42,7 @@ kotlink.onReady = (() => {
         }
         ensureDetectionDom();
         const isDomWithCss = getComputedStyle(testDom).position === "relative";
-        const isMdcJsLoaded = Boolean(window.mdc) ||
-            (isDomLoaded && !document.querySelector("script[src$='material-components-web.js']"));
-        isReadyCached = isDomWithCss && isMdcJsLoaded;
+        isReadyCached = isDomWithCss && isDomLoaded && isMdcInitialized;
         return isReadyCached;
     }
 
@@ -90,6 +89,10 @@ kotlink.onReady = (() => {
 
     document.addEventListener("DOMContentLoaded", function () {
         isDomLoaded = true;
+        document.addEventListener("MDCAutoInit:End", function() {
+            isMdcInitialized = true;
+        });
+        mdc.autoInit();
     });
 
     return function addHandler(handler) {
@@ -104,5 +107,5 @@ kotlink.onReady = (() => {
 
 // make sure auto init is called because anything else
 kotlink.onReady(() => {
-    mdc.autoInit();
+
 });

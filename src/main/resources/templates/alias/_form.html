@@ -89,6 +89,10 @@
         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
            aria-hidden="true"
            th:errors="*{link}"></p>
+        <div id="go-link-preview"
+             class="go-link">
+            go/
+        </div>
     </div>
 
     <div class="input-with-validation-wrapper">
@@ -162,6 +166,28 @@
             Save
         </button>
     </div>
+
+    <script>
+        kotlink.onReady(() => {
+            function refreshGoLinkPreview() {
+                const namespaceSelect = document.getElementById("select-namespace-id");
+                let namespace = namespaceSelect.options[namespaceSelect.selectedIndex].text;
+                if (namespace === "(default)") {
+                    namespace = "";
+                } else {
+                    namespace = `<b>${namespace}</b> `;
+                }
+                let link = document.getElementById("link-input").value.trim();
+                document.getElementById("go-link-preview").innerHTML =
+                    `go/${namespace}${link}`.replace(/ /g, "␣");
+            }
+            refreshGoLinkPreview();
+            document.getElementById("select-namespace-id").addEventListener("change", refreshGoLinkPreview);
+            document.getElementById("link-field").addEventListener("change", refreshGoLinkPreview);
+            document.getElementById("link-field").addEventListener("keyup", refreshGoLinkPreview);
+            document.getElementById("link-field").addEventListener("paste", refreshGoLinkPreview);
+        });
+    </script>
 </form>
 </body>
 </html>
