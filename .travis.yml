@@ -18,16 +18,7 @@ before_script:
   - docker pull "${IMAGE_NAME}:develop" || true
 
 script:
-  - ./environment/bin/kotlink_ci && docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "$IMAGE_NAME" .
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - ./environment/bin/kotlink_ci && docker build --pull --tag "$IMAGE_NAME" .
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
