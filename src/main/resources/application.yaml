@@ -12,12 +12,6 @@ spring:
     cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch,apiSecret
     caffeine.spec: maximumSize=2000,expireAfterWrite=300s
 
-server:
-  use-forward-headers: true
-  tomcat:
-    remote_ip_header: x-forwarded-for
-    protocol_header: x-forwarded-proto
-
 security:
   oauth2:
     client:
