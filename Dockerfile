@@ -7,4 +7,4 @@ EXPOSE 8080
 
 USER www-data:www-data
 
-CMD ["java", "-Dspring.profiles.active=prod", "-jar", "/opt/kotlink/kotlink.jar"]
+CMD ["java", "-server", "-Xmx1024m", "-Xms1024m", "-Dspring.profiles.active=prod", "-jar", "/opt/kotlink/kotlink.jar"]
