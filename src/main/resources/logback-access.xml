@@ -1,7 +1,7 @@
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%fullRequest%n%n%fullResponse</pattern>
+            <pattern>IP: %h%n%fullRequest%n%n%fullResponse</pattern>
         </encoder>
     </appender>
     <appender-ref ref="CONSOLE" />
