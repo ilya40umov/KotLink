@@ -11,7 +11,13 @@ or by provisioning an instance of Postgres from your cloud provider
 * The second requirement is [G Suite](https://gsuite.google.com/) 
 or if one's team is really small they can let everybody use their personal *gmail* accounts to authenticate.
 
-#### Configure database
+### Configuration
+
+All of the settings that will be mentioned below (e.g. `SPRING_DATASOURCE_URL`) 
+should be provided to KotLink app as environment variables. 
+For example with Docker this can be achieved with running the container with multiple `-e` flags.
+
+#### Connect To Database
 
 * `SPRING_DATASOURCE_URL` - JDBC connection URL, 
  e.g. `jdbc:postgresql://localhost:5432/kotlink`
@@ -24,10 +30,11 @@ or if one's team is really small they can let everybody use their personal *gmai
 
 1. Go to *Credentials* in your [Google API Console](https://console.developers.google.com)
 1. Click on *Create credentials* button, choose *OAuth client ID*, and then select *Web application*.
-1. On the next page, enter any name you see fit, and add the following URL `http://YOUR_SERVER_ADDRESS/login` 
-under *Authorized redirect URLs*, where `YOUR_SERVER_ADDRESS` 
+1. On the next page, enter any name you see fit, and add the following URL `http://${YOUR_KOTLINK_SERVER_ADDRESS}/login` 
+under *Authorized redirect URLs*, where `${YOUR_KOTLINK_SERVER_ADDRESS}` 
 should be replaced with the domain name / the external ip address of your KotLink server.
 E.g. The OAuth2 Client ID for local development has `http://localhost:8080/login` added to *Authorized redirect URLs*.
+1. Save the generated client ID and client secret for the next step.
  
 #### Set Up OAuth2
  
@@ -48,10 +55,11 @@ Please, note that `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` and `KOTLINK_SECURITY_
 are combined using **OR**, and thus if you want to allow only a set of specific users to access the server,
 you should set the regex to `^$` (which matches nothing) and emails array to whatever your users' addresses look like.
 
-#### KotLink Behind ELB / Reverse Proxy
+#### Tune Tomcat If Behind ELB / Reverse Proxy
 
-If you will be running KotLink behind ELB or some other reverse proxy, 
-you will most likely want to set the following properties: 
+Most likely you will be running KotLink behind ELB or some other reverse proxy, 
+and in this case you will want to set the following properties 
+to make sure Tomcat is handing *X-Forwarded-* headers correctly: 
 
 * `SERVER_USE_FORWARD_HEADERS` - must be set to `true`
 * `SERVER_TOMCAT_REMOTE_IP_HEADER` - must be set to the remote IP header used by your proxy/LB, most likely `x-forwarded-for`
