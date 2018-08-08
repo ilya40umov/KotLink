@@ -40,6 +40,10 @@ as it's going to store all of the links / namespaces for your team.
 * Vivaldi via [manually registering KotLink as a search engine](docs/extension-guide.md#vivaldi)
 * Safari (only partially) via 3rd-party [Safari Omnikey Extension](docs/extension-guide.md#safari)
 
+Chrome and Firefox extensions will require some 
+[configuration](http://kotlink.org/docs/extension-guide.html#kotlink-extension-options)
+before they can be used.
+
 ### KotLink Server
 
 KotLink server requires an instance of PostgreSQL as the backend store, 

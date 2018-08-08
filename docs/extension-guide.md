@@ -37,11 +37,14 @@ Also, it's worth to mention that unlike regular KotLink extension for Chrome / F
 ### KotLink Extension Options
 
 KotLink extension (for both Chrome and FireFox) requires some configuration before it can be used.
-
-![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/extension-options.png)
-
 Namely, there are two options that need to be set:
 
 * *KotLink Server URL* should be pointing to your KotLink server (e.g. `http://localhost:8080` 
 in case if you are running KotLink server locally)
 * *Extension Secret* should be set to your personal extension secret, which can be found in UI under *Extension Secret* menu item.
+
+![Extension Options](https://raw.githubusercontent.com/ilya40umov/KotLink/master/docs/images/extension-options.png)
+
+To access the extension options (as shown above):
+* In Chrome, click on the icon of the newly installed extension and select *Options* from the menu.
+* In Firefox, open `about:addons` and click on *Preferences* button that is displayed next to "KotLink Browser Extension".
