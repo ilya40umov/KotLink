@@ -74,7 +74,10 @@ class AliasService(
     }
 
     @EditOp
-    @CacheEvict(allEntries = true, cacheNames = [ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE])
+    @CacheEvict(
+        allEntries = true,
+        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
+    )
     fun create(alias: Alias): Alias {
         verifyFullLinkNotTaken(alias.fullLink)
         return aliasRepo.insert(alias)

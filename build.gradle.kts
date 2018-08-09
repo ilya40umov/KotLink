@@ -13,8 +13,8 @@ allprojects {
 }
 
 buildscript {
-    val kotlinVersion by extra { "1.2.51" }
-    val springBootVersion by extra { "2.0.3.RELEASE" }
+    val kotlinVersion by extra { "1.2.60" }
+    val springBootVersion by extra { "2.0.4.RELEASE" }
     repositories {
         mavenCentral()
     }
