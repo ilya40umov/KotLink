@@ -13,6 +13,7 @@ import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.TEST_ACCOUNT
 import org.kotlink.core.CurrentUser
+import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
@@ -63,8 +64,8 @@ class AliasServiceTest {
                     namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
                     link = "inbound")))
 
-        service.findByFullLinkPrefix("google inb").also {
-            it.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbound")
+        service.findByFullLinkPrefix("google inb").also { aliases ->
+            aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbound")
         }
     }
 
@@ -77,8 +78,8 @@ class AliasServiceTest {
                 namespace = Namespace(keyword = "inbound", ownerAccount = TEST_ACCOUNT),
                 link = "whatever")))
 
-        service.findByFullLinkPrefix("inb").also {
-            it.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "inbound whatever")
+        service.findByFullLinkPrefix("inb").also { aliases ->
+            aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "inbound whatever")
         }
     }
 
@@ -87,8 +88,8 @@ class AliasServiceTest {
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("inbox", "gmail")))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        service.searchAliasesMatchingInput("inbox gmail").also {
-            it.map { it.fullLink } shouldContain INBOX_ALIAS.fullLink
+        service.searchAliasesMatchingInput("inbox gmail").also { aliases ->
+            aliases.map { it.fullLink } shouldContain INBOX_ALIAS.fullLink
         }
     }
 
@@ -103,8 +104,8 @@ class AliasServiceTest {
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        service.searchAliasesMatchingInput("google").also {
-            it.map { it.fullLink } shouldContainAll listOf(INBOX_ALIAS.fullLink, "google tree")
+        service.searchAliasesMatchingInput("google").also { aliases ->
+            aliases.map { it.fullLink } shouldContainAll listOf(INBOX_ALIAS.fullLink, "google tree")
         }
     }
 
@@ -120,8 +121,6 @@ class AliasServiceTest {
     fun `'create' should return the created alias if full link is not yet taken`() {
         whenever(aliasRepo.insert(any()))
             .thenReturn(INBOX_ALIAS)
-        whenever(currentUser.getAccount())
-            .thenReturn(TEST_ACCOUNT)
 
         service.create(INBOX_ALIAS).also {
             it.fullLink shouldEqual INBOX_ALIAS.fullLink
@@ -147,11 +146,23 @@ class AliasServiceTest {
     }
 
     @Test
+    fun `'update' should throw exception if the current user is not allowed to edit it`() {
+        whenever(aliasRepo.findByIdOrThrow(INBOX_ALIAS.id))
+            .thenReturn(INBOX_ALIAS)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT.copy(id = 987));
+
+        { service.update(INBOX_ALIAS.copy(link = "inbox test")) } shouldThrow OperationDeniedException::class
+    }
+
+    @Test
     fun `'update' should return updated alias if provided alias is valid`() {
         whenever(aliasRepo.findByIdOrThrow(INBOX_ALIAS.id))
             .thenReturn(INBOX_ALIAS)
         whenever(aliasRepo.update(any()))
             .thenReturn(INBOX_ALIAS)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
 
         service.update(INBOX_ALIAS).also {
             it.fullLink shouldEqual INBOX_ALIAS.fullLink
@@ -167,9 +178,21 @@ class AliasServiceTest {
     }
 
     @Test
+    fun `'deleteById' should throw exception if the current user is not allowed to edit it`() {
+        whenever(aliasRepo.findByIdOrThrow(INBOX_ALIAS.id))
+            .thenReturn(INBOX_ALIAS)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT.copy(id = 987));
+
+        { service.deleteById(INBOX_ALIAS.id) } shouldThrow OperationDeniedException::class
+    }
+
+    @Test
     fun `'deleteById' should return deleted alias if provided alias was deleted with success`() {
         whenever(aliasRepo.findByIdOrThrow(INBOX_ALIAS.id))
             .thenReturn(INBOX_ALIAS)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
 
         service.deleteById(INBOX_ALIAS.id).also {
             it.fullLink shouldEqual INBOX_ALIAS.fullLink

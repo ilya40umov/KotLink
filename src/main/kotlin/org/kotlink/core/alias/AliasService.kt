@@ -2,6 +2,7 @@ package org.kotlink.core.alias
 
 import org.kotlink.core.CurrentUser
 import org.kotlink.core.OperationDeniedException
+import org.kotlink.core.ipblock.EditOp
 import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -72,15 +73,14 @@ class AliasService(
         }.toSet().toList()
     }
 
+    @EditOp
     @CacheEvict(allEntries = true, cacheNames = [ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE])
     fun create(alias: Alias): Alias {
         verifyFullLinkNotTaken(alias.fullLink)
-        if (currentUser.getAccount().id != alias.ownerAccount.id) {
-            throw OperationDeniedException("Assigning an owner different from the current user is not allowed!")
-        }
         return aliasRepo.insert(alias)
     }
 
+    @EditOp
     @CacheEvict(
         allEntries = true,
         cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
@@ -90,18 +90,30 @@ class AliasService(
         if (alias.fullLink != foundAlias.fullLink) {
             verifyFullLinkNotTaken(alias.fullLink)
         }
-        if (alias.ownerAccount.id != foundAlias.ownerAccount.id) {
-            throw OperationDeniedException("Changing owner of an alias is not allowed!")
+        if (currentUser.getAccount().id !in setOf(
+                foundAlias.ownerAccount.id,
+                foundAlias.namespace.ownerAccount.id)) {
+            throw OperationDeniedException(
+                "Only the link owner (${foundAlias.ownerAccount.email}) " +
+                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link")
         }
         return aliasRepo.update(alias)
     }
 
+    @EditOp
     @CacheEvict(
         allEntries = true,
         cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
     )
     fun deleteById(id: Long): Alias {
         val foundAlias = aliasRepo.findByIdOrThrow(id)
+        if (currentUser.getAccount().id !in setOf(
+                foundAlias.ownerAccount.id,
+                foundAlias.namespace.ownerAccount.id)) {
+            throw OperationDeniedException(
+                "Only the link owner (${foundAlias.ownerAccount.email}) " +
+                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link")
+        }
         aliasRepo.deleteById(id)
         return foundAlias
     }

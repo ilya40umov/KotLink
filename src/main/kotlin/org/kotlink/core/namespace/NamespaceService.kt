@@ -3,6 +3,7 @@ package org.kotlink.core.namespace
 import org.kotlink.core.CurrentUser
 import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.alias.AliasRepo
+import org.kotlink.core.ipblock.EditOp
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,32 +19,37 @@ class NamespaceService(
 
     fun findById(id: Long): Namespace? = namespaceRepo.findById(id)
 
+    @EditOp
     fun create(namespace: Namespace): Namespace {
         verifyKeywordNotTaken(namespace.keyword)
-        if (currentUser.getAccount().id != namespace.ownerAccount.id) {
-            throw OperationDeniedException("Assigning an owner different from the current user is not allowed!")
-        }
         return namespaceRepo.insert(namespace)
     }
 
+    @EditOp
     fun update(namespace: Namespace): Namespace {
         val foundNamespace = namespaceRepo.findByIdOrThrow(namespace.id)
         if (foundNamespace.keyword.isEmpty()) {
             throw UntouchableNamespaceException("Default namespace can't be edited")
         }
+        if (foundNamespace.ownerAccount.id != currentUser.getAccount().id) {
+            throw OperationDeniedException(
+                "Only the owner (${foundNamespace.ownerAccount.email}) can modify this namespace")
+        }
         if (namespace.keyword != foundNamespace.keyword) {
             verifyKeywordNotTaken(namespace.keyword)
-        }
-        if (namespace.ownerAccount.id != foundNamespace.ownerAccount.id) {
-            throw OperationDeniedException("Changing owner of namespace is not allowed!")
         }
         return namespaceRepo.update(namespace)
     }
 
+    @EditOp
     fun deleteById(id: Long): Namespace {
         val foundNamespace = namespaceRepo.findByIdOrThrow(id)
         if (foundNamespace.keyword.isEmpty()) {
             throw UntouchableNamespaceException("Default namespace can't be removed")
+        }
+        if (foundNamespace.ownerAccount.id != currentUser.getAccount().id) {
+            throw OperationDeniedException(
+                "Only the owner (${foundNamespace.ownerAccount.email}) can delete this namespace")
         }
         aliasRepo.findByNamespace(foundNamespace.keyword).also {
             if (it.isNotEmpty()) {

@@ -12,6 +12,7 @@ import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.TEST_ACCOUNT
 import org.kotlink.core.CurrentUser
+import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.alias.AliasRepo
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.mockito.junit.MockitoJUnitRunner
@@ -38,8 +39,6 @@ class NamespaceServiceTest {
             .thenReturn(null)
         whenever(namespaceRepo.insert(any()))
             .thenReturn(ABC_NAMESPACE)
-        whenever(currentUser.getAccount())
-            .thenReturn(TEST_ACCOUNT)
 
         service.create(ABC_NAMESPACE).also {
             it.keyword shouldEqual ABC_NAMESPACE.keyword
@@ -63,9 +62,21 @@ class NamespaceServiceTest {
     }
 
     @Test
+    fun `'update' should throw exception if current user is not the owner`() {
+        whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
+            .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT.copy(id = 987));
+
+        { service.update(ABC_NAMESPACE.copy(keyword = "new")) } shouldThrow OperationDeniedException::class
+    }
+
+    @Test
     fun `'update' should throw exception if new keyword is taken`() {
         whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
             .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
         whenever(namespaceRepo.findByKeyword("new"))
             .thenReturn(ABC_NAMESPACE);
 
@@ -76,6 +87,8 @@ class NamespaceServiceTest {
     fun `'update' should return updated namespace if provided namespace is valid`() {
         whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
             .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
         whenever(namespaceRepo.update(any()))
             .thenReturn(ABC_NAMESPACE)
 
@@ -101,9 +114,21 @@ class NamespaceServiceTest {
     }
 
     @Test
+    fun `'deleteById' should throw exception if the current user is not the owner`() {
+        whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
+            .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT.copy(id = 987));
+
+        { service.deleteById(ABC_NAMESPACE.id) } shouldThrow OperationDeniedException::class
+    }
+
+    @Test
     fun `'deleteById' should throw exception if there are aliases associated with namespace`() {
         whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
             .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
         whenever(aliasRepo.findByNamespace(ABC_NAMESPACE.keyword))
             .thenReturn(listOf(INBOX_ALIAS));
 
@@ -114,6 +139,8 @@ class NamespaceServiceTest {
     fun `'deleteById' should return deleted namespace if provided namespace was deleted with success`() {
         whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
             .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
         whenever(aliasRepo.findByNamespace(ABC_NAMESPACE.keyword))
             .thenReturn(emptyList())
 
