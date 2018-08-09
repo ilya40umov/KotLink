@@ -100,7 +100,7 @@ class AliasRepoImpl : AliasRepo {
         PsqlRegexpOp(this, QueryParameter(pattern, columnType))
 
     override fun findWithAtLeastOneOfTerms(terms: List<String>): List<Alias> {
-        val regexp = terms.joinToString("|")
+        val regexp = terms.joinToString("|") { "\\m$it\\M" }
         return Aliases.withJoins
             .select { Aliases.link.psqlRegexp(regexp) or Aliases.description.psqlRegexp(regexp) }
             .orderBy(Namespaces.keyword, isAsc = true)

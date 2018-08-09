@@ -10,6 +10,25 @@
     <!--/* @thymesVar id="aliases" type="java.util.List<org.kotlink.core.alias.Alias>" */-->
     <!--/* @thymesVar id="alias" type="org.kotlink.core.alias.Alias" */-->
     <div class="layout-spacer"></div>
+    <div class="mdc-card" style="padding: 0 15px 15px 25px;">
+
+        <form th:action="@{'/ui/alias'}" method="get">
+            <div class="mdc-text-field search-input" data-mdc-auto-init="MDCTextField">
+                <input id="my-text-field"
+                       name="input"
+                       th:value="${#request.getParameter('input')}"
+                       type="text"
+                       class="mdc-text-field__input">
+                <label for="my-text-field" class="mdc-floating-label">Keywords</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            <button class="mdc-button mdc-button--raised" style="margin-left: 10px">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">search</i>
+                Filter
+            </button>
+        </form>
+    </div>
+    <div class="layout-spacer"></div>
     <div class="mdc-card">
         <table class="mdl-data-table">
             <thead>

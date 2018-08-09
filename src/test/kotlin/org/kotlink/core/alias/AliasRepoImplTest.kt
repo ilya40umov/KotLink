@@ -1,5 +1,6 @@
 package org.kotlink.core.alias
 
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEndWith
@@ -131,6 +132,17 @@ class AliasRepoImplTest {
             listOf("term2")
         ).also {
             it shouldContain testAlias
+        }
+    }
+
+    @Test
+    fun `'findWithAtLeastOneOfTerms' should not return aliases partial term matches`() {
+        testAlias = repo.update(testAlias.copy(description = "term2"))
+
+        repo.findWithAtLeastOneOfTerms(
+            listOf("erm2")
+        ).also {
+            it.size shouldBe 0
         }
     }
 

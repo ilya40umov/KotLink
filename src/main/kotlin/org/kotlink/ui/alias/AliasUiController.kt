@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import javax.validation.Valid
 
@@ -34,8 +35,15 @@ class AliasUiController(
 
     @GetMapping
     @SelectView(UiView.LIST_ALIASES)
-    fun listAliases(model: Model): String {
-        val aliases = aliasService.findAll()
+    fun listAliases(
+        @RequestParam(name = "input", defaultValue = "") input: String,
+        model: Model
+    ): String {
+        val aliases = if (input.isBlank()) {
+            aliasService.findAll()
+        } else {
+            aliasService.searchAliasesMatchingInput(input)
+        }
         model.addAttribute("aliases", aliases)
         return "alias/list"
     }
