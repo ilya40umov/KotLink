@@ -86,6 +86,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.session:spring-session-jdbc")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE")

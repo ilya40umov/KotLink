@@ -11,6 +11,18 @@ spring:
   cache:
     cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch,apiSecret
     caffeine.spec: maximumSize=2000,expireAfterWrite=300s
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: never
+
+server:
+  servlet:
+    session:
+      timeout: 12h
+  compression:
+    enabled: true
+    mime-types: application/javascript,text/css,application/json
 
 security:
   oauth2:
