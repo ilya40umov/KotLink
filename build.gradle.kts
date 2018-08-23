@@ -12,29 +12,20 @@ allprojects {
     }
 }
 
-buildscript {
-    val kotlinVersion by extra { "1.2.61" }
-    val springBootVersion by extra { "2.0.4.RELEASE" }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
-    }
-}
-
 plugins {
+    // built-in plugins
     java
     jacoco
-}
-
-apply {
-    plugin("kotlin")
-    plugin("kotlin-spring")
-    plugin("org.springframework.boot")
-    plugin("io.spring.dependency-management")
+    idea
+    // versions of all kotlin plugins are resolved by logic in 'settings.gradle.kts'
+    kotlin("jvm")
+    kotlin("kapt")
+    kotlin("plugin.spring")
+    kotlin("plugin.allopen")
+    // version of spring boot plugin is also resolved by 'settings.gradle.kts'
+    id("org.springframework.boot")
+    // other plugins require a version to be mentioned
+    id("io.spring.dependency-management") version "1.0.6.RELEASE"
 }
 
 configure<JavaPluginConvention> {
@@ -72,9 +63,9 @@ tasks {
 
 dependencies {
 
-    val springBootVersion by extra { "2.0.4.RELEASE" }
-    val exposedVersion by extra { "0.10.4" }
-    val logbackVersion by extra { "1.2.3" }
+    val springBootVersion: String by project.extra
+    val exposedVersion = "0.10.4"
+    val logbackVersion = "1.2.3"
 
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
@@ -90,7 +81,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.session:spring-session-jdbc")
     compile("org.springframework.boot:spring-boot-devtools")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$springBootVersion")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
