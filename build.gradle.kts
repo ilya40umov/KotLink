@@ -13,7 +13,7 @@ allprojects {
 }
 
 buildscript {
-    val kotlinVersion by extra { "1.2.60" }
+    val kotlinVersion by extra { "1.2.61" }
     val springBootVersion by extra { "2.0.4.RELEASE" }
     repositories {
         mavenCentral()
@@ -49,7 +49,7 @@ tasks {
             freeCompilerArgs = listOf("-Xjsr305=strict")
         }
     }
-    tasks.withType<Test> {
+    withType<Test> {
         doFirst {
             systemProperty("spring.datasource.url", "jdbc:postgresql://localhost:45432/kotlink")
         }
@@ -72,7 +72,9 @@ tasks {
 
 dependencies {
 
+    val springBootVersion by extra { "2.0.4.RELEASE" }
     val exposedVersion by extra { "0.10.4" }
+    val logbackVersion by extra { "1.2.3" }
 
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
@@ -90,15 +92,15 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE")
+    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$springBootVersion")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("io.github.microutils:kotlin-logging:1.5.4")
+    compile("io.github.microutils:kotlin-logging:1.5.9")
     compile("org.slf4j:slf4j-api:1.7.25")
-    compile("ch.qos.logback:logback-classic:1.2.3")
-    compile("ch.qos.logback:logback-core:1.2.3")
-    compile("ch.qos.logback:logback-access:1.2.3")
+    compile("ch.qos.logback:logback-classic:$logbackVersion")
+    compile("ch.qos.logback:logback-core:$logbackVersion")
+    compile("ch.qos.logback:logback-access:$logbackVersion")
     compile("org.apache.logging.log4j:log4j-to-slf4j:2.11.0")
     compile("org.postgresql:postgresql:42.2.4")
     compile("org.flywaydb:flyway-core:5.1.4")
