@@ -43,10 +43,10 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .antMatchers(
                 "/login**",
                 "/callback/",
-                "/webjars/**",
                 "/error**",
                 "/js/**",
                 "/css/**",
+                "/img/**",
                 "/actuator/health",
                 "/favicon.ico"
             )

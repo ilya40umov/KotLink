@@ -21,9 +21,15 @@ class CurrentUser(private val userAccountService: UserAccountService) {
             val details = token.details as Map<*, *>
             return details["email"] as String
         }
-        return auth?.name ?: "unknown@user"
+        return UNKNOWN_USER_EMAIL
     }
+
+    fun isKnown() = getEmail() != UNKNOWN_USER_EMAIL
 
     fun getAccount(): UserAccount =
         userAccountService.findOrCreateAccountForEmail(getEmail())
+
+    companion object {
+        const val UNKNOWN_USER_EMAIL = "unknown"
+    }
 }

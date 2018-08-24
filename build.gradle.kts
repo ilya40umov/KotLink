@@ -82,6 +82,7 @@ dependencies {
     compile("org.springframework.session:spring-session-jdbc")
     compile("org.springframework.boot:spring-boot-devtools")
 
+    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$springBootVersion")

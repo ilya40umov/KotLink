@@ -23,6 +23,9 @@ server:
   compression:
     enabled: true
     mime-types: application/javascript,text/css,application/json
+  error:
+    whitelabel:
+      enabled: false
 
 security:
   oauth2:
