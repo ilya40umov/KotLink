@@ -5,6 +5,8 @@ import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldEndWith
 import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldNotBe
+import org.amshove.kluent.shouldStartWith
 import org.amshove.kluent.shouldThrow
 import org.junit.Before
 import org.junit.Test
@@ -195,6 +197,20 @@ class AliasRepoImplTest {
     fun `'deleteById' should return False if alias was not found`() {
         repo.deleteById(Long.MAX_VALUE).also {
             it shouldEqual false
+        }
+    }
+
+    @Test
+    fun `'refreshFullLinksInNamespaceWithId' should update full links in a given namespace`() {
+        val newKeyword = UUID.randomUUID().toString();
+        namespaceRepo.update(testNamespace.copy(keyword = newKeyword))
+
+        repo.refreshFullLinksInNamespaceWithId(testNamespace.id)
+
+        repo.findById(testAlias.id).also {
+            it shouldNotBe null
+            it?.fullLink shouldNotBe null
+            it?.fullLink?.shouldStartWith(newKeyword)
         }
     }
 }

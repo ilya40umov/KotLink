@@ -38,7 +38,11 @@ class NamespaceService(
         if (namespace.keyword != foundNamespace.keyword) {
             verifyKeywordNotTaken(namespace.keyword)
         }
-        return namespaceRepo.update(namespace)
+        return namespaceRepo.update(namespace).also {
+            if (namespace.keyword != foundNamespace.keyword) {
+                aliasRepo.refreshFullLinksInNamespaceWithId(namespaceId = namespace.id)
+            }
+        }
     }
 
     @EditOp

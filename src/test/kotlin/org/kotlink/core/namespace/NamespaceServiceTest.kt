@@ -1,6 +1,8 @@
 package org.kotlink.core.namespace
 
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.any
 import org.amshove.kluent.shouldEqual
@@ -94,6 +96,34 @@ class NamespaceServiceTest {
 
         service.update(ABC_NAMESPACE).also {
             it.keyword shouldEqual ABC_NAMESPACE.keyword
+        }
+    }
+
+    @Test
+    fun `'update' should refresh full links in the namespace if provided namespace contains a changed keyword`() {
+        whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
+            .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
+        whenever(namespaceRepo.update(any()))
+            .thenReturn(ABC_NAMESPACE)
+
+        service.update(ABC_NAMESPACE.copy(keyword = "abc888")).also {
+            verify(aliasRepo).refreshFullLinksInNamespaceWithId(ABC_NAMESPACE.id)
+        }
+    }
+
+    @Test
+    fun `'update' should not refresh full links in the namespace if provided namespace has not changed its keyword`() {
+        whenever(namespaceRepo.findByIdOrThrow(ABC_NAMESPACE.id))
+            .thenReturn(ABC_NAMESPACE)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT)
+        whenever(namespaceRepo.update(any()))
+            .thenReturn(ABC_NAMESPACE)
+
+        service.update(ABC_NAMESPACE).also {
+            verify(aliasRepo, never()).refreshFullLinksInNamespaceWithId(ABC_NAMESPACE.id)
         }
     }
 

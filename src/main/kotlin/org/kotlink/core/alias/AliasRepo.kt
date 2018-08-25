@@ -15,11 +15,13 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.update
 import org.kotlink.core.account.UserAccounts
 import org.kotlink.core.account.asUserAccount
 import org.kotlink.core.exposed.NoKeyGeneratedException
 import org.kotlink.core.exposed.RecordNotFoundException
+import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.Namespaces
 import org.kotlink.core.namespace.asNamespace
 import org.springframework.stereotype.Repository
@@ -50,6 +52,8 @@ interface AliasRepo {
     fun update(alias: Alias): Alias
 
     fun deleteById(id: Long): Boolean
+
+    fun refreshFullLinksInNamespaceWithId(namespaceId: Long)
 }
 
 @Repository
@@ -124,6 +128,7 @@ class AliasRepoImpl : AliasRepo {
         val aliasId = Aliases.insert {
             it[namespaceId] = alias.namespace.id
             it[link] = alias.link
+            it[fullLink] = alias.fullLink
             it[redirectUrl] = alias.redirectUrl
             it[description] = alias.description
             it[ownerAccountId] = alias.ownerAccount.id
@@ -135,6 +140,7 @@ class AliasRepoImpl : AliasRepo {
     override fun update(alias: Alias): Alias {
         Aliases.update({ Aliases.id.eq(alias.id) }) {
             it[link] = alias.link
+            it[fullLink] = alias.fullLink
             it[redirectUrl] = alias.redirectUrl
             it[description] = alias.description
             it[ownerAccountId] = alias.ownerAccount.id
@@ -145,12 +151,26 @@ class AliasRepoImpl : AliasRepo {
 
     override fun deleteById(id: Long): Boolean =
         Aliases.deleteWhere { Aliases.id.eq(id) } > 0
+
+    override fun refreshFullLinksInNamespaceWithId(namespaceId: Long) {
+        TransactionManager.current().exec(
+            """
+                UPDATE ${Aliases.tableName} AS aa
+                SET ${Aliases.fullLink.name} = trim(
+                    concat(nn.${Namespaces.keyword.name}, ' ', aa.${Aliases.link.name})
+                )
+                FROM ${Namespaces.tableName} AS nn
+                WHERE aa.${Aliases.namespaceId.name} = nn.${Namespaces.id.name}
+            """.trimIndent()
+        )
+    }
 }
 
 private object Aliases : Table("alias") {
     val id = long("id").autoIncrement("alias_id_seq").primaryKey()
     val namespaceId = long("namespace_id") references Namespaces.id
     val link = varchar("link", length = Alias.MAX_LINK_LENGTH)
+    val fullLink = varchar("full_link", length = Alias.MAX_LINK_LENGTH + Namespace.MAX_KEYWORD_LENGTH)
     val redirectUrl = varchar("redirect_url", length = Alias.MAX_REDIRECT_URL_LENGTH)
     val description = varchar("description", length = Alias.MAX_DESCRIPTION_LENGTH)
     val ownerAccountId = long("owner_account_id") references UserAccounts.id
