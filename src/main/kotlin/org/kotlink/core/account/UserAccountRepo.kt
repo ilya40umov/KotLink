@@ -1,3 +1,4 @@
+@file:Suppress("NoItParamInMultilineLambda")
 package org.kotlink.core.account
 
 import org.jetbrains.exposed.sql.ResultRow

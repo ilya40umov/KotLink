@@ -1,3 +1,4 @@
+@file:Suppress("NoItParamInMultilineLambda")
 package org.kotlink.core.alias
 
 import org.jetbrains.exposed.sql.JoinType
@@ -60,7 +61,6 @@ interface AliasRepo {
 }
 
 @Repository
-@Suppress("NoItParamInMultilineLambda")
 class AliasRepoImpl : AliasRepo {
 
     override fun findAll(offset: Int, limit: Int): List<Alias> =

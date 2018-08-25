@@ -1,3 +1,5 @@
+@file:Suppress("NoItParamInMultilineLambda")
+
 package org.kotlink.core.namespace
 
 import org.jetbrains.exposed.sql.JoinType
@@ -34,7 +36,6 @@ interface NamespaceRepo {
 }
 
 @Repository
-@Suppress("NoItParamInMultilineLambda")
 class NamespaceRepoImpl : NamespaceRepo {
 
     override fun findAll() =
