@@ -22,10 +22,10 @@ data class OpenSearchSuggestions(
         prefix = prefix,
         links = aliases.map { it.fullLink },
         descriptions = aliases.map { it.fullLink },
-        redirectUrls = aliases.map {
+        redirectUrls = aliases.map { alias ->
             UriComponentsBuilder
                 .fromUriString(redirectUri)
-                .replaceQueryParam("link", it.fullLink)
+                .replaceQueryParam("link", alias.fullLink)
                 .toUriString()
         }
     )

@@ -19,6 +19,7 @@ interface ApiSecretRepo {
 }
 
 @Repository
+@Suppress("NoItParamInMultilineLambda")
 class ApiSecretRepoImpl : ApiSecretRepo {
 
     override fun findBySecret(secret: String): ApiSecret? =

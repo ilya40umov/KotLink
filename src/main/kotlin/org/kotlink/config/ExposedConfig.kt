@@ -12,5 +12,4 @@ class ExposedConfig {
 
     @Bean
     fun transactionManager(dataSource: DataSource) = SpringTransactionManager(dataSource)
-
 }

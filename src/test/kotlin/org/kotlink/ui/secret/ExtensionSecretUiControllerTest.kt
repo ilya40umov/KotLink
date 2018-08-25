@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 @RunWith(SpringRunner::class)
 @WebMvcTest(ExtensionSecretUiController::class, secure = false)
 @Import(UiTestConfig::class)
-class ExtensionSecretUiControllerTest{
+class ExtensionSecretUiControllerTest {
 
     @Autowired
     private lateinit var mvc: MockMvc

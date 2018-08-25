@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.RequestScope
 import javax.servlet.http.HttpServletRequest
 
-
-
 @Component
 @RequestScope
 class ViewUtils {
@@ -21,15 +19,16 @@ class ViewUtils {
         return "go/$namespace${alias.link}".replace(' ', '␣')
     }
 
-    fun serverUrlFromRequest(request: HttpServletRequest) : String {
-        val serverPort = when(request.serverPort) {
-            80 or 443 -> ""
+    fun serverUrlFromRequest(request: HttpServletRequest): String {
+        val serverPort = when (request.serverPort) {
+            in DEFAULT_HTTP_PORTS -> ""
             else -> ":${request.serverPort}"
         }
         return "${request.scheme}://${request.serverName}$serverPort/"
     }
 
     companion object {
+        private val DEFAULT_HTTP_PORTS = setOf(80, 443)
         private const val DISPLAYED_URL_LENGTH = 60
     }
 }

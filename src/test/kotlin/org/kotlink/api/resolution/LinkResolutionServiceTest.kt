@@ -50,6 +50,4 @@ class LinkResolutionServiceTest {
                 .replace(" ", "%20"))
         )
     }
-
 }
-

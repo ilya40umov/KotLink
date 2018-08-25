@@ -57,6 +57,7 @@ interface AliasRepo {
 }
 
 @Repository
+@Suppress("NoItParamInMultilineLambda")
 class AliasRepoImpl : AliasRepo {
 
     override fun findAll(): List<Alias> =

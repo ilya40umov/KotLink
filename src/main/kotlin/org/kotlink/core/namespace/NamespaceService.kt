@@ -46,6 +46,7 @@ class NamespaceService(
     }
 
     @EditOp
+    @Suppress("")
     fun deleteById(id: Long): Namespace {
         val foundNamespace = namespaceRepo.findByIdOrThrow(id)
         if (foundNamespace.keyword.isEmpty()) {
@@ -55,10 +56,10 @@ class NamespaceService(
             throw OperationDeniedException(
                 "Only the owner (${foundNamespace.ownerAccount.email}) can delete this namespace")
         }
-        aliasRepo.findByNamespace(foundNamespace.keyword).also {
-            if (it.isNotEmpty()) {
+        aliasRepo.findByNamespace(foundNamespace.keyword).also { aliases ->
+            if (aliases.isNotEmpty()) {
                 throw UntouchableNamespaceException(
-                    "Namespace '${foundNamespace.keyword}' still contains ${it.size} aliases")
+                    "Namespace '${foundNamespace.keyword}' still contains ${aliases.size} aliases")
             }
         }
         namespaceRepo.deleteById(id)

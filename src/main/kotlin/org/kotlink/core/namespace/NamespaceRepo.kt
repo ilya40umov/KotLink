@@ -34,6 +34,7 @@ interface NamespaceRepo {
 }
 
 @Repository
+@Suppress("NoItParamInMultilineLambda")
 class NamespaceRepoImpl : NamespaceRepo {
 
     override fun findAll() =

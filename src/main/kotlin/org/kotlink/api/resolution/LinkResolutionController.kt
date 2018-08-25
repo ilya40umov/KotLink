@@ -24,7 +24,8 @@ class LinkResolutionController(private val linkResolutionService: LinkResolution
     @ResponseBody
     fun suggestAliases(
         @RequestParam("link") linkPrefix: String,
-        @RequestParam("mode", required = false, defaultValue = "simple") mode: String): Any {
+        @RequestParam("mode", required = false, defaultValue = "simple") mode: String
+    ): Any {
         val redirectUri = ServletUriComponentsBuilder
             .fromCurrentRequestUri()
             .replacePath("/api/link/redirect")
@@ -42,5 +43,5 @@ class LinkResolutionController(private val linkResolutionService: LinkResolution
         }
     }
 
-    companion object: KLogging()
+    companion object : KLogging()
 }

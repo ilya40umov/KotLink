@@ -7,7 +7,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.INIT_ALIAS
-import org.kotlink.api.resolution.OpenSearchSuggestions
 
 @RunWith(JUnit4::class)
 class OpenSearchSuggestionsSerializerTest {

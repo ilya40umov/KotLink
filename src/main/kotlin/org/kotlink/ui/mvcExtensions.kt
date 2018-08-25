@@ -13,7 +13,7 @@ fun RedirectAttributes.addErrorMessage(message: String) {
 }
 
 fun RedirectAttributes.addErrorMessage(e: Exception) {
-    val message = when(e) {
+    val message = when (e) {
         is KotLinkException -> e.message
         else -> "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}"
     }
@@ -25,7 +25,7 @@ fun Model.addErrorMessage(message: String) {
 }
 
 fun Model.addErrorMessage(e: Exception) {
-    val message = when(e) {
+    val message = when (e) {
         is KotLinkException -> e.message
         else -> "${e.javaClass.canonicalName} occurred (see logs for more details), message: ${e.message}"
     }
