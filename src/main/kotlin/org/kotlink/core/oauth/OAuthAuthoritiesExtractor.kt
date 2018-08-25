@@ -16,8 +16,7 @@ open class OAuthAuthoritiesExtractor(
     override fun extractAuthorities(map: MutableMap<String, Any>): MutableList<GrantedAuthority> {
         val email = map["email"].toString()
         if (email.isNotBlank() &&
-            (allowedEmailRegex.matches(email)
-                || allowedEmails.contains(email))) {
+            (allowedEmailRegex.matches(email) || allowedEmails.contains(email))) {
             userAccountService.findOrCreateAccountForEmail(email)
             return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")
         } else {

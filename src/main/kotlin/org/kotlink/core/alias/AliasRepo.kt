@@ -1,4 +1,5 @@
 @file:Suppress("NoItParamInMultilineLambda")
+
 package org.kotlink.core.alias
 
 import org.jetbrains.exposed.sql.JoinType
