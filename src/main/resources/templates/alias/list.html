@@ -7,7 +7,7 @@
 </head>
 <body>
 <main layout:fragment="content">
-    <!--/* @thymesVar id="aliases" type="java.util.List<org.kotlink.core.alias.Alias>" */-->
+    <!--/* @thymesVar id="aliases" type="org.kotlink.core.Page<org.kotlink.core.alias.Alias>" */-->
     <!--/* @thymesVar id="alias" type="org.kotlink.core.alias.Alias" */-->
     <div class="layout-spacer"></div>
     <div class="mdc-card" style="padding: 0 15px 15px 25px;">
@@ -41,7 +41,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="alias: ${aliases}" th:title="${alias.description}">
+            <tr th:each="alias: ${aliases.records}" th:title="${alias.description}">
                 <td>
                     <a th:href="@{'/ui/alias/' + ${alias.id} + '/edit'}"
                        class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded table-row-action-item"
@@ -76,6 +76,11 @@
             </tr>
             </tbody>
         </table>
+        <div class="layout-spacer"></div>
+        <fieldset layout:insert="~{fragment/_pagination :: pagination}"
+                  th:with="page=${aliases},path='/ui/alias?input=' + ${#request.getParameter('input') ?: ''}"
+                  th:remove="tag">
+        </fieldset>
     </div>
 </main>
 </body>

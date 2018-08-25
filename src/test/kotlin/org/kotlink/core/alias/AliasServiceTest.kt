@@ -1,6 +1,7 @@
 package org.kotlink.core.alias
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldContain
@@ -84,17 +85,17 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'searchAliasesMatchingInput should split user input and return aliases matching one of keywords if first term is not a namespace' `() {
+    fun `'searchAliasesMatchingAtLeastPartOfInput should split user input and return aliases matching one of keywords if first term is not a namespace' `() {
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("inbox", "gmail")))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        service.searchAliasesMatchingInput("inbox gmail").also { aliases ->
+        service.searchAliasesMatchingAtLeastPartOfInput("inbox gmail").also { aliases ->
             aliases.map { it.fullLink } shouldContain INBOX_ALIAS.fullLink
         }
     }
 
     @Test
-    fun `'searchAliasesMatchingInput should return all aliases in namespace and also matching one of keywords if the only term is a namespace' `() {
+    fun `'searchAliasesMatchingAtLeastPartOfInput should return all aliases in namespace and also matching one of keywords if the only term is a namespace' `() {
         whenever(namespaceRepo.findByKeyword("google"))
             .thenReturn(DEFAULT_NAMESPACE.copy(keyword = "google"))
         whenever(aliasRepo.findByNamespace("google"))
@@ -104,8 +105,46 @@ class AliasServiceTest {
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
             .thenReturn(listOf(INBOX_ALIAS))
 
-        service.searchAliasesMatchingInput("google").also { aliases ->
+        service.searchAliasesMatchingAtLeastPartOfInput("google").also { aliases ->
             aliases.map { it.fullLink } shouldContainAll listOf(INBOX_ALIAS.fullLink, "google tree")
+        }
+    }
+
+    @Test
+    fun `'findAliasesWithFullLinkMatchingEntireInput' should return all aliases if input is empty`() {
+        whenever(aliasRepo.findAll(any(), any()))
+            .thenReturn(listOf(INBOX_ALIAS))
+        whenever(aliasRepo.countAll())
+            .thenReturn(1)
+
+        service.findAliasesWithFullLinkMatchingEntireInput(
+            userProvidedInput = "  ",
+            offset = 0,
+            limit = 10
+        ).also { page ->
+            page.records shouldContain INBOX_ALIAS
+            page.offset shouldEqual 0
+            page.limit shouldEqual 10
+            page.totalCount shouldEqual 1
+        }
+    }
+
+    @Test
+    fun `'findAliasesWithFullLinkMatchingEntireInput' should return only aliases matching terms if input is not empty`() {
+        whenever(aliasRepo.findWithAllOfTermsInFullLink(eq(listOf("google")), any(), any()))
+            .thenReturn(emptyList())
+        whenever(aliasRepo.countWithAllOfTermsInFullLink(eq(listOf("google"))))
+            .thenReturn(0)
+
+        service.findAliasesWithFullLinkMatchingEntireInput(
+            userProvidedInput = "google ",
+            offset = 0,
+            limit = 25
+        ).also { page ->
+            page.records.size shouldEqual 0
+            page.offset shouldEqual 0
+            page.limit shouldEqual 25
+            page.totalCount shouldEqual 0
         }
     }
 

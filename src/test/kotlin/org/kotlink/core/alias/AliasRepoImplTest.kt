@@ -57,7 +57,7 @@ class AliasRepoImplTest {
 
     @Test
     fun `'findAll' should return the test alias`() {
-        repo.findAll().also {
+        repo.findAll(0, Int.MAX_VALUE).also {
             it.map { it.link } shouldContain testAlias.link
         }
     }
@@ -138,13 +138,37 @@ class AliasRepoImplTest {
     }
 
     @Test
-    fun `'findWithAtLeastOneOfTerms' should not return aliases partial term matches`() {
+    fun `'findWithAtLeastOneOfTerms' should not return aliases with partial term matches`() {
         testAlias = repo.update(testAlias.copy(description = "term2"))
 
         repo.findWithAtLeastOneOfTerms(
             listOf("erm2")
         ).also {
             it.size shouldBe 0
+        }
+    }
+
+    @Test
+    fun `'findWithAllOfTermsInFullLink' should return aliases having all given terms in their full link`() {
+        testAlias = repo.update(testAlias.copy(link = "${testAlias.link} term87654321"))
+
+        repo.findWithAllOfTermsInFullLink(
+            terms = testAlias.link.split(" ").toList(),
+            offset = 0,
+            limit = 10
+        ).also {
+            it shouldContain testAlias
+        }
+    }
+
+    @Test
+    fun `'countWithAllOfTermsInFullLink' should return number of aliases having all given terms in their full link`() {
+        testAlias = repo.update(testAlias.copy(link = "${testAlias.link} term87654321"))
+
+        repo.countWithAllOfTermsInFullLink(
+            terms = testAlias.link.split(" ").toList()
+        ).also {
+            it shouldEqual 1
         }
     }
 

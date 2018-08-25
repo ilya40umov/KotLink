@@ -46,7 +46,6 @@ class NamespaceService(
     }
 
     @EditOp
-    @Suppress("")
     fun deleteById(id: Long): Namespace {
         val foundNamespace = namespaceRepo.findByIdOrThrow(id)
         if (foundNamespace.keyword.isEmpty()) {

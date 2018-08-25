@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<!--/* @thymesVar id="page" type="org.kotlink.core.Page<?>" */-->
+<!--/* @thymesVar id="path" type="java.lang.String" */-->
+<body>
+<fieldset layout:fragment="pagination" class="pagination" style="margin-left: auto">
+    &nbsp;
+    <span th:text="${page.offset + 1}">1</span>
+    <span>-</span>
+    <span th:text="${page.offset + page.records.size()}">10</span>
+    <span>of </span>
+    <span th:text="${page.totalCount}">100</span>
+    <span>
+      <a id="prev-page" class="mdc-button"
+         th:href="@{${path}(offset=${page.prevOffset()},limit=${page.limit})}">
+           <i class="material-icons mdc-button__icon" aria-hidden="true">chevron_left</i>
+      </a>
+      <a id="next-page" class="mdc-button"
+         th:href="@{${path}(offset=${page.nextOffset()},limit=${page.limit})}">
+         <i class="material-icons mdc-button__icon" aria-hidden="true">chevron_right</i>
+       </a>
+   </span>
+</fieldset>
+</body>
+</html>

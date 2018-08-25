@@ -37,13 +37,15 @@ class AliasUiController(
     @SelectView(UiView.LIST_ALIASES)
     fun listAliases(
         @RequestParam(name = "input", defaultValue = "") input: String,
+        @RequestParam(defaultValue = "0") offset: Int,
+        @RequestParam(defaultValue = "25") limit: Int,
         model: Model
     ): String {
-        val aliases = if (input.isBlank()) {
-            aliasService.findAll()
-        } else {
-            aliasService.searchAliasesMatchingInput(input)
-        }
+        val aliases = aliasService.findAliasesWithFullLinkMatchingEntireInput(
+            userProvidedInput = input,
+            offset = offset,
+            limit = limit
+        )
         model.addAttribute("aliases", aliases)
         return "alias/list"
     }

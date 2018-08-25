@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.kotlink.ABC_NAMESPACE
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.TEST_ACCOUNT
+import org.kotlink.core.Page
 import org.kotlink.core.alias.AliasService
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.ui.UiTestConfig
@@ -49,8 +50,8 @@ class AliasUiControllerTest {
 
     @Test
     fun `'listAlias' should render a page with all aliases`() {
-        whenever(aliasService.findAll())
-            .thenReturn(listOf(INBOX_ALIAS))
+        whenever(aliasService.findAliasesWithFullLinkMatchingEntireInput(any(), any(), any()))
+            .thenReturn(Page(records = listOf(INBOX_ALIAS), offset = 0, limit = 25, totalCount = 1))
 
         mvc.perform(MockMvcRequestBuilders.get("/ui/alias"))
             .andExpect(MockMvcResultMatchers.status().isOk)

@@ -16,7 +16,7 @@ class LinkSearchUiController(private val aliasService: AliasService) {
     @GetMapping("/search")
     @SelectView(UiView.SEARCH)
     fun searchLinks(@RequestParam("input", defaultValue = "") input: String, model: Model): String {
-        val searchResults = aliasService.searchAliasesMatchingInput(input)
+        val searchResults = aliasService.searchAliasesMatchingAtLeastPartOfInput(input)
         model.addAttribute("input", input)
         model.addAttribute("aliases", searchResults)
         return "search/results"

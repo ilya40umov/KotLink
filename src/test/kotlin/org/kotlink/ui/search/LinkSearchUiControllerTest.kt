@@ -29,7 +29,7 @@ class LinkSearchUiControllerTest {
 
     @Test
     fun `'searchLinks' should return the page with aliases that matched the input`() {
-        whenever(aliasService.searchAliasesMatchingInput("inbox"))
+        whenever(aliasService.searchAliasesMatchingAtLeastPartOfInput("inbox"))
             .thenReturn(listOf(INBOX_ALIAS))
 
         mvc.perform(MockMvcRequestBuilders.get("/ui/search?input=inbox"))

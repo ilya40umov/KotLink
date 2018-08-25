@@ -2,6 +2,7 @@ package org.kotlink.core.alias
 
 import org.kotlink.core.CurrentUser
 import org.kotlink.core.OperationDeniedException
+import org.kotlink.core.Page
 import org.kotlink.core.ipblock.EditOp
 import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.cache.annotation.CacheEvict
@@ -16,8 +17,6 @@ class AliasService(
     private val namespaceRepo: NamespaceRepo,
     private val currentUser: CurrentUser
 ) {
-
-    fun findAll(): List<Alias> = aliasRepo.findAll()
 
     fun findById(id: Long): Alias? = aliasRepo.findById(id)
 
@@ -49,13 +48,8 @@ class AliasService(
         }
     }
 
-    @Cacheable(cacheNames = [ALIAS_SEARCH_CACHE])
-    fun searchAliasesMatchingInput(userProvidedInput: String): List<Alias> {
-        val terms = userProvidedInput
-            .replace("[^A-Za-z0-9\\s+]".toRegex(), "")
-            .toLowerCase()
-            .split("\\s+".toRegex())
-            .filter { it.isNotBlank() }
+    fun searchAliasesMatchingAtLeastPartOfInput(userProvidedInput: String): List<Alias> {
+        val terms = extractTerms(userProvidedInput)
         if (terms.isEmpty()) {
             return emptyList()
         }
@@ -73,10 +67,32 @@ class AliasService(
         }.toSet().toList()
     }
 
+    fun findAliasesWithFullLinkMatchingEntireInput(
+        userProvidedInput: String,
+        offset: Int,
+        limit: Int
+    ): Page<Alias> {
+        val terms = extractTerms(userProvidedInput)
+        if (terms.isEmpty()) {
+            return Page(
+                records = aliasRepo.findAll(offset, limit),
+                offset = offset,
+                limit = limit,
+                totalCount = aliasRepo.countAll()
+            )
+        }
+        return Page(
+            records = aliasRepo.findWithAllOfTermsInFullLink(terms, offset, limit),
+            offset = offset,
+            limit = limit,
+            totalCount = aliasRepo.countWithAllOfTermsInFullLink(terms)
+        )
+    }
+
     @EditOp
     @CacheEvict(
         allEntries = true,
-        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
+        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE]
     )
     fun create(alias: Alias): Alias {
         verifyFullLinkNotTaken(alias.fullLink)
@@ -86,7 +102,7 @@ class AliasService(
     @EditOp
     @CacheEvict(
         allEntries = true,
-        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
+        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE]
     )
     fun update(alias: Alias): Alias {
         val foundAlias = aliasRepo.findByIdOrThrow(alias.id)
@@ -106,7 +122,7 @@ class AliasService(
     @EditOp
     @CacheEvict(
         allEntries = true,
-        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE, ALIAS_SEARCH_CACHE]
+        cacheNames = [ALIAS_BY_FULL_LINK_CACHE, ALIAS_BY_FULL_LINK_PREFIX_CACHE]
     )
     fun deleteById(id: Long): Alias {
         val foundAlias = aliasRepo.findByIdOrThrow(id)
@@ -121,6 +137,13 @@ class AliasService(
         return foundAlias
     }
 
+    private fun extractTerms(userProvidedInput: String) =
+        userProvidedInput
+            .replace("[^A-Za-z0-9\\s+]".toRegex(), "")
+            .toLowerCase()
+            .split("\\s+".toRegex())
+            .filter { it.isNotBlank() }
+
     private fun verifyFullLinkNotTaken(fullLink: String) {
         if (findByFullLink(fullLink) != null) {
             throw FullLinkExistsException("Link '$fullLink' is already taken")
@@ -130,6 +153,5 @@ class AliasService(
     companion object {
         const val ALIAS_BY_FULL_LINK_CACHE = "aliasByFullLink"
         const val ALIAS_BY_FULL_LINK_PREFIX_CACHE = "aliasByFullLinkPrefix"
-        const val ALIAS_SEARCH_CACHE = "aliasSearch"
     }
 }

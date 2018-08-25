@@ -1,11 +1,6 @@
 package org.kotlink.core.alias
 
-import org.jetbrains.exposed.sql.ComparisonOp
-import org.jetbrains.exposed.sql.Expression
-import org.jetbrains.exposed.sql.ExpressionWithColumnType
 import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.QueryParameter
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
@@ -21,6 +16,8 @@ import org.kotlink.core.account.UserAccounts
 import org.kotlink.core.account.asUserAccount
 import org.kotlink.core.exposed.NoKeyGeneratedException
 import org.kotlink.core.exposed.RecordNotFoundException
+import org.kotlink.core.exposed.fullTextQuery
+import org.kotlink.core.exposed.psqlRegexp
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.Namespaces
 import org.kotlink.core.namespace.asNamespace
@@ -28,7 +25,9 @@ import org.springframework.stereotype.Repository
 
 interface AliasRepo {
 
-    fun findAll(): List<Alias>
+    fun findAll(offset: Int, limit: Int): List<Alias>
+
+    fun countAll(): Int
 
     fun findById(id: Long): Alias?
 
@@ -47,6 +46,10 @@ interface AliasRepo {
 
     fun findWithAtLeastOneOfTerms(terms: List<String>): List<Alias>
 
+    fun findWithAllOfTermsInFullLink(terms: List<String>, offset: Int, limit: Int): List<Alias>
+
+    fun countWithAllOfTermsInFullLink(terms: List<String>): Int
+
     fun insert(alias: Alias): Alias
 
     fun update(alias: Alias): Alias
@@ -60,12 +63,15 @@ interface AliasRepo {
 @Suppress("NoItParamInMultilineLambda")
 class AliasRepoImpl : AliasRepo {
 
-    override fun findAll(): List<Alias> =
+    override fun findAll(offset: Int, limit: Int): List<Alias> =
         Aliases.withJoins
             .selectAll()
             .orderBy(Namespaces.keyword, isAsc = true)
             .orderBy(Aliases.link, isAsc = true)
+            .limit(n = limit, offset = offset)
             .map { it.asAlias() }
+
+    override fun countAll(): Int = Aliases.selectAll().count()
 
     override fun findById(id: Long): Alias? =
         Aliases.withJoins
@@ -99,11 +105,6 @@ class AliasRepoImpl : AliasRepo {
             .orderBy(Aliases.link, isAsc = true)
             .map { it.asAlias() }
 
-    private class PsqlRegexpOp(expr1: Expression<*>, expr2: Expression<*>) : ComparisonOp(expr1, expr2, "~*")
-
-    private infix fun <T : String?> ExpressionWithColumnType<T>.psqlRegexp(pattern: String): Op<Boolean> =
-        PsqlRegexpOp(this, QueryParameter(pattern, columnType))
-
     override fun findWithAtLeastOneOfTerms(terms: List<String>): List<Alias> {
         val regexp = terms.joinToString("|") { "\\m$it\\M" }
         return Aliases.withJoins
@@ -111,6 +112,23 @@ class AliasRepoImpl : AliasRepo {
             .orderBy(Namespaces.keyword, isAsc = true)
             .orderBy(Aliases.link, isAsc = true)
             .map { it.asAlias() }
+    }
+
+    override fun findWithAllOfTermsInFullLink(terms: List<String>, offset: Int, limit: Int): List<Alias> {
+        val ftsQuery = terms.joinToString(separator = " & ")
+        return Aliases.withJoins
+            .select { Aliases.fullLink.fullTextQuery(ftsQuery) }
+            .orderBy(Namespaces.keyword, isAsc = true)
+            .orderBy(Aliases.link, isAsc = true)
+            .limit(n = limit, offset = offset)
+            .map { it.asAlias() }
+    }
+
+    override fun countWithAllOfTermsInFullLink(terms: List<String>): Int {
+        val ftsQuery = terms.joinToString(separator = " & ")
+        return Aliases.withJoins
+            .select { Aliases.fullLink.fullTextQuery(ftsQuery) }
+            .count()
     }
 
     override fun findByNamespaceAndWithAtLeastOneOfTerms(namespace: String, terms: List<String>): List<Alias> {

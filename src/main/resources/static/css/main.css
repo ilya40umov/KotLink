@@ -145,3 +145,11 @@ body {
 .error-page-icon {
     font-size: 55px;
 }
+
+/**
+ * Pagination
+ */
+
+.pagination {
+    border: 0;
+}
