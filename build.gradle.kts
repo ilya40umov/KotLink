@@ -63,7 +63,7 @@ tasks {
 dependencies {
 
     val springBootVersion: String by project.extra
-    val exposedVersion = "0.10.4"
+    val exposedVersion = "0.10.5"
     val logbackVersion = "1.2.3"
 
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -88,13 +88,13 @@ dependencies {
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
-    compile("io.github.microutils:kotlin-logging:1.5.9")
+    compile("io.github.microutils:kotlin-logging:1.6.10")
     compile("org.slf4j:slf4j-api:1.7.25")
     compile("ch.qos.logback:logback-classic:$logbackVersion")
     compile("ch.qos.logback:logback-core:$logbackVersion")
     compile("ch.qos.logback:logback-access:$logbackVersion")
-    compile("org.apache.logging.log4j:log4j-to-slf4j:2.11.0")
-    compile("org.postgresql:postgresql:42.2.4")
+    compile("org.apache.logging.log4j:log4j-to-slf4j:2.11.1")
+    compile("org.postgresql:postgresql:42.2.5")
     compile("org.flywaydb:flyway-core:5.1.4")
     compile("org.jetbrains.exposed:exposed:$exposedVersion")
     compile("org.jetbrains.exposed:spring-transaction:$exposedVersion")
@@ -102,7 +102,7 @@ dependencies {
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("io.projectreactor:reactor-test")
-    testCompile("org.amshove.kluent:kluent:1.38")
+    testCompile("org.amshove.kluent:kluent:1.41")
     testCompile("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
-    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1")
+    testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC2")
 }
