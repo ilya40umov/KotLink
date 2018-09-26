@@ -45,6 +45,8 @@ E.g. The OAuth2 Client ID for local development has `http://localhost:8080/login
 
 #### Limit Who Can Access Your Server
 
+* `KOTLINK_SECURITY_ADMIN_EMAIL` - email of the user who has admin privileges and owns the default namespace,
+* `KOTLINK_SECURITY_RESTRICT_EDITS_TO_IP_REGEX` - optional regex that limits IPs from which edits can be performed,
 * `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAILS` - an array of user emails that can access the server, 
  e.g. `user1@gmail.com,user2@gmail.com`; set to empty array by default.
 * `KOTLINK_SECURITY_OAUTH_ALLOWED_EMAIL_REGEX` - a [Java regular expression](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html) 
