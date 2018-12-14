@@ -2,14 +2,16 @@ package org.kotlink
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.web.reactive.server.WebTestClient
 
 @RunWith(SpringRunner::class)
+@ActiveProfiles("local", "integration-test")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class KotLinkSecurityAndSslTest {
 

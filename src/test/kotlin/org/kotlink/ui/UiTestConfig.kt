@@ -6,9 +6,11 @@ import org.kotlink.TEST_ACCOUNT
 import org.kotlink.core.CurrentUser
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.web.context.annotation.RequestScope
 
 @Configuration
+@Profile("!integration-test")
 class UiTestConfig {
 
     @Bean
