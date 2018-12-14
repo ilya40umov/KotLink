@@ -103,4 +103,12 @@ dependencies {
     testCompile("org.amshove.kluent:kluent:1.44")
     testCompile("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
     testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
+    testCompile("org.mockito:mockito-core:2.23.4") {
+        isForce = true
+        because("version that is enforced by Spring Boot is not compatible with Java 11")
+    }
+    testCompile("net.bytebuddy:byte-buddy:1.9.3") {
+        isForce = true
+        because("version that is enforced by Spring Boot is not compatible with Java 11")
+    }
 }
