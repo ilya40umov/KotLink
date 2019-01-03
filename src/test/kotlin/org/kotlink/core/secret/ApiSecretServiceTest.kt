@@ -1,23 +1,24 @@
 package org.kotlink.core.secret
 
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.any
 import org.amshove.kluent.shouldEqual
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.TEST_ACCOUNT
 import org.kotlink.TEST_SECRET
 import org.kotlink.core.account.UserAccountService
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 
-@RunWith(MockitoJUnitRunner::class)
-class ApiSecretServiceTest {
+@ExtendWith(MockitoExtension::class)
+class ApiSecretServiceTest(
+    @Mock private val apiSecretRepo: ApiSecretRepo,
+    @Mock private val userAccountService: UserAccountService
+) {
 
-    private val apiSecretRepo = mock<ApiSecretRepo>()
-    private val userAccountService = mock<UserAccountService>()
     private val service = ApiSecretService(apiSecretRepo, userAccountService)
 
     @Test

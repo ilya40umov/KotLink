@@ -2,30 +2,23 @@ package org.kotlink.core.account
 
 import org.amshove.kluent.shouldBeGreaterThan
 import org.amshove.kluent.shouldEqual
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ExposedRepoTest
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.junit4.SpringRunner
-import java.util.UUID
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @ExposedRepoTest
-class UserAccountRepoImplTest {
-
-    lateinit var testUserAccount: UserAccount
-
-    @Autowired
-    private lateinit var repo: UserAccountRepo
-
-    @Before
-    fun setUp() {
-        testUserAccount = repo.insert(UserAccount(email = "zorro@gmail.com"))
-    }
+class UserAccountRepoImplTest(
+    @Autowired private val repo: UserAccountRepo
+) {
 
     @Test
     fun `'findById' should return the user account if provided ID matches one`() {
+        val testUserAccount = repo.insert(UserAccount(email = "zorro@gmail.com"))
+
         repo.findById(testUserAccount.id).also {
             it?.email shouldEqual testUserAccount.email
         }
@@ -40,6 +33,8 @@ class UserAccountRepoImplTest {
 
     @Test
     fun `'findByUserEmail' should return the user account if provided email matches one`() {
+        val testUserAccount = repo.insert(UserAccount(email = "zorro@gmail.com"))
+
         repo.findByUserEmail(testUserAccount.email).also {
             it?.id shouldEqual testUserAccount.id
         }

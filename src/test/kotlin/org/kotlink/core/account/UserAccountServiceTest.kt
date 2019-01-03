@@ -1,19 +1,20 @@
 package org.kotlink.core.account
 
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldBe
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.TEST_ACCOUNT
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 
-@RunWith(MockitoJUnitRunner::class)
-class UserAccountServiceTest {
+@ExtendWith(MockitoExtension::class)
+class UserAccountServiceTest(
+    @Mock private val userAccountRepo: UserAccountRepo
+) {
 
-    private val userAccountRepo = mock<UserAccountRepo> {}
     private val service = UserAccountService(userAccountRepo)
 
     @Test

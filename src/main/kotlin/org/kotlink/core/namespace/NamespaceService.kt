@@ -33,7 +33,8 @@ class NamespaceService(
         }
         if (foundNamespace.ownerAccount.id != currentUser.getAccount().id) {
             throw OperationDeniedException(
-                "Only the owner (${foundNamespace.ownerAccount.email}) can modify this namespace")
+                "Only the owner (${foundNamespace.ownerAccount.email}) can modify this namespace"
+            )
         }
         if (namespace.keyword != foundNamespace.keyword) {
             verifyKeywordNotTaken(namespace.keyword)
@@ -54,12 +55,14 @@ class NamespaceService(
         }
         if (foundNamespace.ownerAccount.id != currentUser.getAccount().id) {
             throw OperationDeniedException(
-                "Only the owner (${foundNamespace.ownerAccount.email}) can delete this namespace")
+                "Only the owner (${foundNamespace.ownerAccount.email}) can delete this namespace"
+            )
         }
         aliasRepo.findByNamespace(foundNamespace.keyword).also { aliases ->
             if (aliases.isNotEmpty()) {
                 throw UntouchableNamespaceException(
-                    "Namespace '${foundNamespace.keyword}' still contains ${aliases.size} aliases")
+                    "Namespace '${foundNamespace.keyword}' still contains ${aliases.size} aliases"
+                )
             }
         }
         namespaceRepo.deleteById(id)

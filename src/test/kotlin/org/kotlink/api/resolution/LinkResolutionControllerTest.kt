@@ -1,26 +1,24 @@
 package org.kotlink.api.resolution
 
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.INIT_ALIAS
+import org.kotlink.perform
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @WebMvcTest(LinkResolutionController::class, secure = false)
-class LinkResolutionControllerTest {
-
-    @Autowired
-    private lateinit var mvc: MockMvc
+class LinkResolutionControllerTest(
+    @Autowired private val mvc: MockMvc
+) {
 
     @MockBean
     private lateinit var linkResolutionService: LinkResolutionService
@@ -30,16 +28,18 @@ class LinkResolutionControllerTest {
         whenever(linkResolutionService.findRedirectUrlByLink("inbox"))
             .thenReturn("https://inbox.google.com")
 
-        mvc.perform(get("/api/link/redirect?link=inbox"))
-            .andExpect(status().isFound)
-            .andExpect(redirectedUrl("https://inbox.google.com"))
+        mvc.perform(get("/api/link/redirect?link=inbox")) {
+            andExpect(status().isFound)
+            andExpect(redirectedUrl("https://inbox.google.com"))
+        }
     }
 
     @Test
     fun `'redirectByAlias' should redirect to search endpoint if alias does not exist`() {
-        mvc.perform(get("/api/link/redirect?link=abc"))
-            .andExpect(status().isFound)
-            .andExpect(redirectedUrl("/ui/search?input=abc"))
+        mvc.perform(get("/api/link/redirect?link=abc")) {
+            andExpect(status().isFound)
+            andExpect(redirectedUrl("/ui/search?input=abc"))
+        }
     }
 
     @Test
@@ -57,19 +57,24 @@ class LinkResolutionControllerTest {
             )
         )
 
-        mvc.perform(get("/api/link/suggest?link=in&mode=opensearch"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$").isArray)
-            .andExpect(jsonPath("$[0]").value("in"))
-            .andExpect(jsonPath("$[1]").isArray)
-            .andExpect(jsonPath("$[1][0]").value(INBOX_ALIAS.fullLink))
-            .andExpect(jsonPath("$[1][1]").value(INIT_ALIAS.fullLink))
-            .andExpect(jsonPath("$[2]").isArray)
-            .andExpect(jsonPath("$[2][0]").value(INBOX_ALIAS.fullLink))
-            .andExpect(jsonPath("$[3]").isArray)
-            .andExpect(jsonPath("$[3][0]")
-                .value("http://localhost/api/link/redirect?link=${INBOX_ALIAS.fullLink}"
-                    .replace(" ", "%20")))
+        mvc.perform(get("/api/link/suggest?link=in&mode=opensearch")) {
+            andExpect(status().isOk)
+            andExpect(jsonPath("$").isArray)
+            andExpect(jsonPath("$[0]").value("in"))
+            andExpect(jsonPath("$[1]").isArray)
+            andExpect(jsonPath("$[1][0]").value(INBOX_ALIAS.fullLink))
+            andExpect(jsonPath("$[1][1]").value(INIT_ALIAS.fullLink))
+            andExpect(jsonPath("$[2]").isArray)
+            andExpect(jsonPath("$[2][0]").value(INBOX_ALIAS.fullLink))
+            andExpect(jsonPath("$[3]").isArray)
+            andExpect(
+                jsonPath("$[3][0]")
+                    .value(
+                        "http://localhost/api/link/redirect?link=${INBOX_ALIAS.fullLink}"
+                            .replace(" ", "%20")
+                    )
+            )
+        }
     }
 
     @Test
@@ -87,10 +92,11 @@ class LinkResolutionControllerTest {
             )
         )
 
-        mvc.perform(get("/api/link/suggest?link=in&mode=simple"))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$").isArray)
-            .andExpect(jsonPath("$[0]").value(INBOX_ALIAS.fullLink))
-            .andExpect(jsonPath("$[1]").value(INIT_ALIAS.fullLink))
+        mvc.perform(get("/api/link/suggest?link=in&mode=simple")) {
+            andExpect(status().isOk)
+            andExpect(jsonPath("$").isArray)
+            andExpect(jsonPath("$[0]").value(INBOX_ALIAS.fullLink))
+            andExpect(jsonPath("$[1]").value(INIT_ALIAS.fullLink))
+        }
     }
 }

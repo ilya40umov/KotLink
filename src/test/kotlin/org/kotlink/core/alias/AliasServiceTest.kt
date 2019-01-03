@@ -2,14 +2,14 @@ package org.kotlink.core.alias
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainAll
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.TEST_ACCOUNT
@@ -18,14 +18,16 @@ import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 
-@RunWith(MockitoJUnitRunner::class)
-class AliasServiceTest {
+@ExtendWith(MockitoExtension::class)
+class AliasServiceTest(
+    @Mock private val aliasRepo: AliasRepo,
+    @Mock private val namespaceRepo: NamespaceRepo,
+    @Mock private val currentUser: CurrentUser
+) {
 
-    private val aliasRepo = mock<AliasRepo>()
-    private val namespaceRepo = mock<NamespaceRepo>()
-    private val currentUser = mock<CurrentUser>()
     private val service = AliasService(aliasRepo, namespaceRepo, currentUser)
 
     @Test
@@ -56,14 +58,25 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'findByFullLinkPrefix' should return aliases from both default and the matching namespace if prefix has at least 2 words`() {
+    @DisplayName(
+        """
+        'findByFullLinkPrefix' should
+        return aliases from both default and the matching namespace
+        if prefix has at least 2 words
+    """
+    )
+    fun `'findByFullLinkPrefix' should search in default & matching namespace if prefix is 2+ words`() {
         whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "google inb"))
             .thenReturn(listOf(INBOX_ALIAS))
         whenever(aliasRepo.findByNamespaceAndLinkPrefix("google", "inb"))
-            .thenReturn(listOf(
-                INBOX_ALIAS.copy(
-                    namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
-                    link = "inbound")))
+            .thenReturn(
+                listOf(
+                    INBOX_ALIAS.copy(
+                        namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
+                        link = "inbound"
+                    )
+                )
+            )
 
         service.findByFullLinkPrefix("google inb").also { aliases ->
             aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbound")
@@ -71,13 +84,25 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'findByFullLinkPrefix' should return aliases from default and namespaces matching prefix if prefix has only single word`() {
+    @DisplayName(
+        """
+        'findByFullLinkPrefix' should
+        return aliases from default and namespaces matching prefix
+        if prefix has only single word
+    """
+    )
+    fun `'findByFullLinkPrefix' should search in default & namespace matching prefix if prefix has 1 word`() {
         whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "inb"))
             .thenReturn(listOf(INBOX_ALIAS))
         whenever(aliasRepo.findByNamespacePrefix("inb"))
-            .thenReturn(listOf(INBOX_ALIAS.copy(
-                namespace = Namespace(keyword = "inbound", ownerAccount = TEST_ACCOUNT),
-                link = "whatever")))
+            .thenReturn(
+                listOf(
+                    INBOX_ALIAS.copy(
+                        namespace = Namespace(keyword = "inbound", ownerAccount = TEST_ACCOUNT),
+                        link = "whatever"
+                    )
+                )
+            )
 
         service.findByFullLinkPrefix("inb").also { aliases ->
             aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "inbound whatever")
@@ -85,7 +110,14 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'searchAliasesMatchingAtLeastPartOfInput should split user input and return aliases matching one of keywords if first term is not a namespace' `() {
+    @DisplayName(
+        """
+        'searchAliasesMatchingAtLeastPartOfInput' should
+        split user input and return aliases matching one of keywords
+        if first term is not a namespace
+    """
+    )
+    fun `'searchAliasesMatchingAtLeastPartOfInput' should return matches for one of keywords if 1st term not a ns`() {
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("inbox", "gmail")))
             .thenReturn(listOf(INBOX_ALIAS))
 
@@ -95,13 +127,25 @@ class AliasServiceTest {
     }
 
     @Test
-    fun `'searchAliasesMatchingAtLeastPartOfInput should return all aliases in namespace and also matching one of keywords if the only term is a namespace' `() {
+    @DisplayName(
+        """
+        'searchAliasesMatchingAtLeastPartOfInput' should
+        return all aliases in namespace and also matching one of keywords
+        if the only term is a namespace
+    """
+    )
+    fun `'searchAliasesMatchingAtLeastPartOfInput' should return all in ns & matches for keyword if term is a ns`() {
         whenever(namespaceRepo.findByKeyword("google"))
             .thenReturn(DEFAULT_NAMESPACE.copy(keyword = "google"))
         whenever(aliasRepo.findByNamespace("google"))
-            .thenReturn(listOf(INBOX_ALIAS.copy(
-                namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
-                link = "tree")))
+            .thenReturn(
+                listOf(
+                    INBOX_ALIAS.copy(
+                        namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
+                        link = "tree"
+                    )
+                )
+            )
         whenever(aliasRepo.findWithAtLeastOneOfTerms(listOf("google")))
             .thenReturn(listOf(INBOX_ALIAS))
 

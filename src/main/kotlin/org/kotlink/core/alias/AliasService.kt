@@ -111,10 +111,13 @@ class AliasService(
         }
         if (currentUser.getAccount().id !in setOf(
                 foundAlias.ownerAccount.id,
-                foundAlias.namespace.ownerAccount.id)) {
+                foundAlias.namespace.ownerAccount.id
+            )
+        ) {
             throw OperationDeniedException(
                 "Only the link owner (${foundAlias.ownerAccount.email}) " +
-                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link")
+                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link"
+            )
         }
         return aliasRepo.update(alias)
     }
@@ -128,10 +131,13 @@ class AliasService(
         val foundAlias = aliasRepo.findByIdOrThrow(id)
         if (currentUser.getAccount().id !in setOf(
                 foundAlias.ownerAccount.id,
-                foundAlias.namespace.ownerAccount.id)) {
+                foundAlias.namespace.ownerAccount.id
+            )
+        ) {
             throw OperationDeniedException(
                 "Only the link owner (${foundAlias.ownerAccount.email}) " +
-                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link")
+                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link"
+            )
         }
         aliasRepo.deleteById(id)
         return foundAlias

@@ -1,23 +1,24 @@
 package org.kotlink.core.exposed
 
 import com.nhaarman.mockitokotlin2.doThrow
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldThrow
 import org.aspectj.lang.ProceedingJoinPoint
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 import java.lang.reflect.UndeclaredThrowableException
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class)
 class DatabaseExceptionAspectTest {
 
-    private val joinPoint = mock<ProceedingJoinPoint> {}
     private val aspect = DatabaseExceptionAspect()
 
     @Test
-    fun `'normalizeExceptions' should unwrap UndeclaredThrowableException as DatabaseException`() {
+    fun `'normalizeExceptions' should unwrap UndeclaredThrowableException as DatabaseException`(
+        @Mock joinPoint: ProceedingJoinPoint
+    ) {
         doThrow(UndeclaredThrowableException(Exception("fake error")))
             .whenever(joinPoint)
             .proceed();

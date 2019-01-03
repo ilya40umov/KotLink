@@ -3,19 +3,18 @@ package org.kotlink.ui
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.http.HttpStatus
 import javax.servlet.RequestDispatcher
 import javax.servlet.http.HttpServletRequest
 
-@RunWith(MockitoJUnitRunner::class)
-class UiErrorViewResolverTest {
-
-    @Mock
-    private lateinit var request: HttpServletRequest
+@ExtendWith(MockitoExtension::class)
+class UiErrorViewResolverTest(
+    @Mock private val request: HttpServletRequest
+) {
 
     private val resolver = UiErrorViewResolver()
 

@@ -1,21 +1,21 @@
 package org.kotlink.core.oauth
 
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldThrow
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.core.account.UserAccountService
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.security.authentication.BadCredentialsException
 import javax.servlet.http.HttpSession
 
-@RunWith(MockitoJUnitRunner::class)
-class OAuthAuthoritiesExtractorTest {
-
-    private val session = mock<HttpSession> {}
-    private val userAccountService = mock<UserAccountService> {}
+@ExtendWith(MockitoExtension::class)
+class OAuthAuthoritiesExtractorTest(
+    @Mock private val session: HttpSession,
+    @Mock private val userAccountService: UserAccountService
+) {
 
     private fun extractor(allowedEmails: Set<String> = emptySet(), allowedEmailRegex: Regex = "^$".toRegex()) =
         OAuthAuthoritiesExtractor(
@@ -37,8 +37,8 @@ class OAuthAuthoritiesExtractorTest {
     fun `'extractAuthorities' should return ROLE_USER if email matches the allowed regex`() {
         extractor(allowedEmailRegex = """.*@gmail\.com""".toRegex())
             .extractAuthorities(mutableMapOf("email" to "zorro@gmail.com"))
-            .also {
-                it.map { it.authority } shouldContain "ROLE_USER"
+            .also { authorities ->
+                authorities.map { it.authority } shouldContain "ROLE_USER"
             }
     }
 
@@ -46,8 +46,8 @@ class OAuthAuthoritiesExtractorTest {
     fun `'extractAuthorities' should return ROLE_USER if email is one of the allowed set`() {
         extractor(allowedEmails = setOf("zorro@gmail.com"))
             .extractAuthorities(mutableMapOf("email" to "zorro@gmail.com"))
-            .also {
-                it.map { it.authority } shouldContain "ROLE_USER"
+            .also { authorities ->
+                authorities.map { it.authority } shouldContain "ROLE_USER"
             }
     }
 

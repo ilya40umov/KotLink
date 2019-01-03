@@ -2,35 +2,23 @@ package org.kotlink.core
 
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldEqual
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.core.account.UserAccountService
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.security.oauth2.provider.OAuth2Request
 
-@RunWith(MockitoJUnitRunner::class)
-class CurrentUserTest {
-
-    @Mock
-    private lateinit var userAccountService: UserAccountService
-
-    @Mock
-    private lateinit var storedRequest: OAuth2Request
-
-    @Mock
-    private lateinit var authenticationToken: UsernamePasswordAuthenticationToken
-
-    private lateinit var currentUser: CurrentUser
-
-    @Before
-    fun setUp() {
-        currentUser = CurrentUser(userAccountService)
-    }
+@ExtendWith(MockitoExtension::class)
+class CurrentUserTest(
+    @Mock private val userAccountService: UserAccountService,
+    @Mock private val storedRequest: OAuth2Request,
+    @Mock private val authenticationToken: UsernamePasswordAuthenticationToken
+) {
+    private val currentUser = CurrentUser(userAccountService)
 
     @Test
     fun `'getEmail' should return user email if authentication is oauth2`() {

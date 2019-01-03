@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern
 
 class AliasUiValue() {
 
-    constructor(alias: Alias): this() {
+    constructor(alias: Alias) : this() {
         id = alias.id
         namespaceId = alias.namespace.id
         link = alias.link

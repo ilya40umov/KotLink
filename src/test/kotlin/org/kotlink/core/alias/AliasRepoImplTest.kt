@@ -1,16 +1,9 @@
 package org.kotlink.core.alias
 
-import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldBeGreaterThan
-import org.amshove.kluent.shouldContain
-import org.amshove.kluent.shouldEndWith
-import org.amshove.kluent.shouldEqual
-import org.amshove.kluent.shouldNotBe
-import org.amshove.kluent.shouldStartWith
-import org.amshove.kluent.shouldThrow
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.amshove.kluent.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ExposedRepoTest
 import org.kotlink.core.account.UserAccount
 import org.kotlink.core.account.UserAccountRepo
@@ -18,31 +11,27 @@ import org.kotlink.core.exposed.DatabaseException
 import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.junit4.SpringRunner
-import java.util.UUID
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @ExposedRepoTest
-class AliasRepoImplTest {
+class AliasRepoImplTest(
+    @Autowired private val repo: AliasRepo,
+    @Autowired private val namespaceRepo: NamespaceRepo,
+    @Autowired private val userAccountRepo: UserAccountRepo
+) {
 
     lateinit var testUserAccount: UserAccount
     lateinit var testNamespace: Namespace
     lateinit var testAlias: Alias
 
-    @Autowired
-    private lateinit var repo: AliasRepo
-
-    @Autowired
-    private lateinit var namespaceRepo: NamespaceRepo
-
-    @Autowired
-    private lateinit var userAccountRepo: UserAccountRepo
-
-    @Before
+    @BeforeEach
     fun setUp() {
         testUserAccount = userAccountRepo.insert(UserAccount(email = "zorro@gmail.com"))
         testNamespace = namespaceRepo.insert(
-            Namespace(keyword = UUID.randomUUID().toString(), ownerAccount = testUserAccount))
+            Namespace(keyword = UUID.randomUUID().toString(), ownerAccount = testUserAccount)
+        )
         testAlias = repo.insert(
             Alias(
                 id = 0,
@@ -57,8 +46,8 @@ class AliasRepoImplTest {
 
     @Test
     fun `'findAll' should return the test alias`() {
-        repo.findAll(0, Int.MAX_VALUE).also {
-            it.map { it.link } shouldContain testAlias.link
+        repo.findAll(0, Int.MAX_VALUE).also { aliases ->
+            aliases.map { it.link } shouldContain testAlias.link
         }
     }
 
@@ -226,7 +215,7 @@ class AliasRepoImplTest {
 
     @Test
     fun `'refreshFullLinksInNamespaceWithId' should update full links in a given namespace`() {
-        val newKeyword = UUID.randomUUID().toString();
+        val newKeyword = UUID.randomUUID().toString()
         namespaceRepo.update(testNamespace.copy(keyword = newKeyword))
 
         repo.refreshFullLinksInNamespaceWithId(testNamespace.id)

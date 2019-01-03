@@ -4,25 +4,20 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.core.account.UserAccountService
 import org.kotlink.core.namespace.NamespaceRepo
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.context.event.ContextRefreshedEvent
 
-@RunWith(MockitoJUnitRunner::class)
-class DefaultNamespaceAppropriatorTest {
-
-    @Mock
-    private lateinit var namespaceRepo: NamespaceRepo
-
-    @Mock
-    private lateinit var userAccountService: UserAccountService
-
-    @Mock
-    private lateinit var event: ContextRefreshedEvent
+@ExtendWith(MockitoExtension::class)
+class DefaultNamespaceAppropriatorTest(
+    @Mock private val namespaceRepo: NamespaceRepo,
+    @Mock private val userAccountService: UserAccountService,
+    @Mock private val event: ContextRefreshedEvent
+) {
 
     @Test
     fun `'onApplicationEvent' should change owner of the default namespace if it's not current admin`() {

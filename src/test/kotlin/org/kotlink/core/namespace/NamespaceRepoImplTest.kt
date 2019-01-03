@@ -1,45 +1,38 @@
 package org.kotlink.core.namespace
 
-import org.amshove.kluent.shouldBeGreaterThan
-import org.amshove.kluent.shouldContain
-import org.amshove.kluent.shouldEndWith
-import org.amshove.kluent.shouldEqual
-import org.amshove.kluent.shouldThrow
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.amshove.kluent.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ExposedRepoTest
 import org.kotlink.core.account.UserAccount
 import org.kotlink.core.account.UserAccountRepo
 import org.kotlink.core.exposed.DatabaseException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.junit4.SpringRunner
-import java.util.UUID
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.*
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @ExposedRepoTest
-class NamespaceRepoImplTest {
+class NamespaceRepoImplTest(
+    @Autowired private val repo: NamespaceRepo,
+    @Autowired private val userAccountRepo: UserAccountRepo
+) {
 
     private val testKeyword = UUID.randomUUID().toString()
 
     lateinit var testUserAccount: UserAccount
 
-    @Autowired
-    private lateinit var repo: NamespaceRepo
-
-    @Autowired
-    private lateinit var userAccountRepo: UserAccountRepo
-
-    @Before
-    fun setUp() {
+    @BeforeEach
+    internal fun setUp() {
         testUserAccount = userAccountRepo.insert(UserAccount(email = "zorro@gmail.com"))
         repo.insert(Namespace(keyword = testKeyword, ownerAccount = testUserAccount))
     }
 
     @Test
     fun `'findAll' should return test namespace`() {
-        repo.findAll().also {
-            it.map { it.keyword } shouldContain testKeyword
+        repo.findAll().also { namespace ->
+            namespace.map { it.keyword } shouldContain testKeyword
         }
     }
 
@@ -128,4 +121,5 @@ class NamespaceRepoImplTest {
             it shouldEqual false
         }
     }
+
 }

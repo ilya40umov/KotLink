@@ -1,12 +1,9 @@
 package org.kotlink.core
 
 import org.amshove.kluent.shouldEqual
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import org.junit.jupiter.api.Test
 import org.kotlink.core.alias.Alias
 
-@RunWith(JUnit4::class)
 class PageTest {
 
     @Test

@@ -31,8 +31,8 @@ data class OpenSearchSuggestions(
     )
 }
 
-class OpenSearchSuggestionsSerializer(t: Class<OpenSearchSuggestions>? = null)
-    : StdSerializer<OpenSearchSuggestions>(t) {
+class OpenSearchSuggestionsSerializer(t: Class<OpenSearchSuggestions>? = null) :
+    StdSerializer<OpenSearchSuggestions>(t) {
 
     override fun serialize(value: OpenSearchSuggestions?, gen: JsonGenerator?, provider: SerializerProvider?) {
         gen?.run {

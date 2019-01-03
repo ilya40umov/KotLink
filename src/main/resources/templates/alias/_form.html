@@ -180,6 +180,7 @@
                 document.getElementById("go-link-preview").innerHTML =
                     `go/${namespace}${link}`.replace(/ /g, "␣");
             }
+
             refreshGoLinkPreview();
             document.getElementById("select-namespace-id").addEventListener("change", refreshGoLinkPreview);
             document.getElementById("link-field").addEventListener("change", refreshGoLinkPreview);

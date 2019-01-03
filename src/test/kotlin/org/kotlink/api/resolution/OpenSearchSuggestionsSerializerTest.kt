@@ -1,17 +1,14 @@
 package org.kotlink.api.resolution
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.gregwoodfill.assert.shouldEqualJson
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.junit.jupiter.api.Test
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.INIT_ALIAS
+import org.skyscreamer.jsonassert.JSONAssert
 
-@RunWith(JUnit4::class)
 class OpenSearchSuggestionsSerializerTest {
 
-    private val objectMapper = ObjectMapper()
+    private val objectMapper = jacksonObjectMapper()
 
     @Test
     fun `'serialize' should produce JSON in format defined by OpenSearch spec`() {
@@ -43,4 +40,7 @@ class OpenSearchSuggestionsSerializerTest {
 
         json shouldEqualJson "['abc', [], [], []]"
     }
+
+    private infix fun String.shouldEqualJson(expected: String) =
+        JSONAssert.assertEquals(expected, this, false)
 }

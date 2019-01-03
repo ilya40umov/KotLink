@@ -7,8 +7,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.any
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldThrow
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ABC_NAMESPACE
 import org.kotlink.DEFAULT_NAMESPACE
 import org.kotlink.INBOX_ALIAS
@@ -17,14 +17,16 @@ import org.kotlink.core.CurrentUser
 import org.kotlink.core.OperationDeniedException
 import org.kotlink.core.alias.AliasRepo
 import org.kotlink.core.exposed.RecordNotFoundException
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 
-@RunWith(MockitoJUnitRunner::class)
-class NamespaceServiceTest {
+@ExtendWith(MockitoExtension::class)
+class NamespaceServiceTest(
+    @Mock private val aliasRepo: AliasRepo,
+    @Mock private val namespaceRepo: NamespaceRepo,
+    @Mock private val currentUser: CurrentUser
+) {
 
-    private val aliasRepo = mock<AliasRepo>()
-    private val namespaceRepo = mock<NamespaceRepo>()
-    private val currentUser = mock<CurrentUser>()
     private val service = NamespaceService(aliasRepo, namespaceRepo, currentUser)
 
     @Test

@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 allprojects {
     group = "org.kotlink"
-
     repositories {
         jcenter()
     }
@@ -13,7 +12,6 @@ plugins {
     // built-in plugins
     java
     jacoco
-    idea
     // versions of all kotlin plugins are resolved by logic in 'settings.gradle.kts'
     kotlin("jvm")
     kotlin("kapt")
@@ -38,7 +36,7 @@ tasks {
         }
     }
     withType<Test> {
-        doFirst {
+        useJUnitPlatform {
             systemProperty("spring.datasource.url", "jdbc:postgresql://localhost:45432/kotlink")
         }
         testLogging.apply {
@@ -99,9 +97,10 @@ dependencies {
     compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.3.0")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("io.projectreactor:reactor-test")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.2")
     testCompile("org.amshove.kluent:kluent:1.44")
-    testCompile("com.gregwoodfill.assert:kotlin-json-assert:0.1.0")
+    testCompile("io.projectreactor:reactor-test")
     testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
     testCompile("org.mockito:mockito-core:2.23.4") {
         isForce = true
@@ -111,4 +110,5 @@ dependencies {
         isForce = true
         because("version that is enforced by Spring Boot is not compatible with Java 11")
     }
+    testCompile("org.mockito:mockito-junit-jupiter:2.23.4")
 }

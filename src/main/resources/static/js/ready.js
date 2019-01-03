@@ -8,7 +8,7 @@
  * resources have finished loading, the given handler function will be invoked synchronously (in the same call stack).
  * Handlers are invoked in FIFO order.
  */
-if (typeof(kotlink) === "undefined") {
+if (typeof (kotlink) === "undefined") {
     window.kotlink = {};
 }
 
@@ -89,7 +89,7 @@ kotlink.onReady = (() => {
 
     document.addEventListener("DOMContentLoaded", function () {
         isDomLoaded = true;
-        document.addEventListener("MDCAutoInit:End", function() {
+        document.addEventListener("MDCAutoInit:End", function () {
             isMdcInitialized = true;
         });
         mdc.autoInit();
