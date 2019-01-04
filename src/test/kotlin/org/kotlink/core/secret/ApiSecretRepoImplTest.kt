@@ -55,5 +55,4 @@ class ApiSecretRepoImplTest(
             it shouldEqual null
         }
     }
-
 }

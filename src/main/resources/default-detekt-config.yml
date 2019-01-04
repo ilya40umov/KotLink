@@ -260,7 +260,7 @@ formatting:
     active: true
     autoCorrect: true
   NoWildcardImports:
-    active: true
+    active: false
     autoCorrect: true
   ParameterListWrapping:
     active: true

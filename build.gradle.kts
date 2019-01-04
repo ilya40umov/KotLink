@@ -1,11 +1,11 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-allprojects {
-    group = "org.kotlink"
-    repositories {
-        jcenter()
-    }
+group = "org.kotlink"
+
+repositories {
+    jcenter()
 }
 
 plugins {
@@ -21,6 +21,8 @@ plugins {
     id("org.springframework.boot")
     // other plugins require a version to be mentioned
     id("io.spring.dependency-management") version "1.0.6.RELEASE"
+    id("org.owasp.dependencycheck") version "4.0.1"
+    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
 }
 
 configure<JavaPluginConvention> {
@@ -53,6 +55,10 @@ tasks {
                 isEnabled = false
             }
         }
+    }
+    withType<Detekt> {
+        description = "Runs Detekt code analysis"
+        config = files("src/main/resources/default-detekt-config.yml")
     }
 }
 

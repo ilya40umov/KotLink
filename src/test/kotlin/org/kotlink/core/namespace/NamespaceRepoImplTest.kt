@@ -121,5 +121,4 @@ class NamespaceRepoImplTest(
             it shouldEqual false
         }
     }
-
 }

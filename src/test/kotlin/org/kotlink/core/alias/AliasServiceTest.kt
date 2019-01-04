@@ -174,7 +174,7 @@ class AliasServiceTest(
     }
 
     @Test
-    fun `'findAliasesWithFullLinkMatchingEntireInput' should return only aliases matching terms if input is not empty`() {
+    fun `'findAliasesWithFullLinkMatchingEntireInput' should return only aliases matching terms if input not empty`() {
         whenever(aliasRepo.findWithAllOfTermsInFullLink(eq(listOf("google")), any(), any()))
             .thenReturn(emptyList())
         whenever(aliasRepo.countWithAllOfTermsInFullLink(eq(listOf("google"))))
