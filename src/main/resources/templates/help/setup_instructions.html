@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title>KotLink - Extension Secret</title>
+</head>
+<body>
+<!--/* @thymesVar id="apiSecret" type="org.kotlink.core.secret.ApiSecret" */-->
+<main layout:fragment="content">
+
+    <h4>Set up Your browser</h4>
+    <div id="select-browser-tab-bar"
+         class="mdc-tab-bar"
+         role="tablist"
+         aria-label="Navigation"
+         data-mdc-auto-init="MDCTabBar">
+        <div class="mdc-tab-scroller mdc-tab-scroller--align-start">
+            <div class="mdc-tab-scroller__scroll-area">
+                <div class="mdc-tab-scroller__scroll-content">
+                    <button class="mdc-tab mdc-tab--min-width mdc-tab--active"
+                            role="tab"
+                            aria-selected="true"
+                            tabindex="0">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__text-label">Chrome / Chromium</span>
+                        </span>
+                        <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </button>
+                    <button class="mdc-tab mdc-tab--min-width"
+                            role="tab"
+                            aria-selected="true"
+                            tabindex="-1">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__text-label">FireFox</span>
+                        </span>
+                        <span class="mdc-tab-indicator">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </button>
+                    <button class="mdc-tab mdc-tab--min-width"
+                            role="tab"
+                            aria-selected="false"
+                            tabindex="-1">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__text-label">Vivaldi</span>
+                        </span>
+                        <span class="mdc-tab-indicator">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </button>
+                    <button class="mdc-tab mdc-tab--min-width"
+                            role="tab"
+                            aria-selected="false"
+                            tabindex="-1">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__text-label">Safari</span>
+                        </span>
+                        <span class="mdc-tab-indicator">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout-spacer"></div>
+    <div id="card-0"
+         class="mdc-card tab-card-visible"
+         style="padding: 15px 25px 25px 25px;">
+        <div style="width: 600px;">
+            <p>
+                <b>Step 1:</b> Install
+                <a href="https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod">
+                    KotLink browser extension for Chrome</a>.
+            </p>
+            <p>
+                <b>Step 2:</b> Configure you browser extension:
+            </p>
+            <ol>
+                <li>
+                    <p>
+                        Click on the icon of the newly installed extension and select "Options" from the drop-down menu.
+                    </p>
+                    <p>
+                        <i>(Or alternatively open "More Tools" -> "Extensions" in the main menu,
+                            then find and click on "Details" button for "KotLink Browser Extension",
+                            and finally click on "Extension Options".)</i>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        In the shown dialog, enter Your Kotlink Server URL and Your Extension Secret,
+                        and then click "Save".
+                    </p>
+                    <div class="mdc-text-field"
+                         data-mdc-auto-init="MDCTextField"
+                         style="width: 550px; margin-top: 0">
+                        <input id="server-url-input-0"
+                               type="text"
+                               class="mdc-text-field__input"
+                               th:value="${@viewUtils.serverUrlFromRequest(#request)}"
+                               readonly>
+                        <label class="mdc-floating-label"
+                               for="server-url-input-0">
+                            Your KotLink Server URL:
+                        </label>
+                        <button class="mdc-button copy-server-url-to-clipboard"
+                                type="button"
+                                style="float: right;">
+                            To Clipboard
+                        </button>
+                    </div>
+                    <div style="display: block"></div>
+                    <div class="mdc-text-field"
+                         data-mdc-auto-init="MDCTextField"
+                         style="width: 550px">
+                        <input id="user-secret-input-0"
+                               type="text"
+                               class="mdc-text-field__input"
+                               th:value="${apiSecret.secret}"
+                               readonly>
+                        <label class="mdc-floating-label"
+                               for="user-secret-input-0">
+                            Your Secret for Browser Extension:
+                        </label>
+                        <button class="mdc-button copy-token-to-clipboard"
+                                type="button"
+                                style="float: right;">
+                            To Clipboard
+                        </button>
+                    </div>
+                    <p>
+                        <em>Here is how the dialog will look like:</em>
+                        <img th:src="@{/img/extension-options-chrome.png}"
+                             alt="Dialog With Options Of Browser Extension"
+                             style="width: 90%">
+                    </p>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div id="card-1"
+         class="mdc-card tab-card-hidden"
+         style="padding: 15px 25px 25px 25px;">
+        <div style="width: 600px;">
+            <p>
+                <b>Step 1:</b> Install
+                <a href="https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension/">
+                    KotLink browser extension for FireFox</a>.
+            </p>
+            <p>
+                <b>Step 2:</b> Configure you browser extension:
+            </p>
+            <ol>
+                <li>
+                    <p>
+                        Go the main menu and select "Add-ons" (Ctrl+Shift+A).
+                        On the page that will open,
+                        you should find a section called "KotLink Browser Extension"
+                        and click on button "Preferences" on the right.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        At the bottom of the page that will follow,
+                        enter Your Kotlink Server URL and Your Extension Secret,
+                        and then press "Save".
+                    </p>
+                    <div class="mdc-text-field"
+                         data-mdc-auto-init="MDCTextField"
+                         style="width: 550px; margin-top: 0">
+                        <input id="server-url-input-1"
+                               type="text"
+                               class="mdc-text-field__input"
+                               th:value="${@viewUtils.serverUrlFromRequest(#request)}"
+                               readonly>
+                        <label class="mdc-floating-label"
+                               for="server-url-input-1">
+                            Your KotLink Server URL:
+                        </label>
+                        <button class="mdc-button copy-server-url-to-clipboard"
+                                type="button"
+                                style="float: right;">
+                            To Clipboard
+                        </button>
+                    </div>
+                    <div style="display: block"></div>
+                    <div class="mdc-text-field"
+                         data-mdc-auto-init="MDCTextField"
+                         style="width: 550px">
+                        <input id="user-secret-input-1"
+                               type="text"
+                               class="mdc-text-field__input"
+                               th:value="${apiSecret.secret}"
+                               readonly>
+                        <label class="mdc-floating-label"
+                               for="user-secret-input-1">
+                            Your Secret for Browser Extension:
+                        </label>
+                        <button class="mdc-button copy-token-to-clipboard"
+                                type="button"
+                                style="float: right;">
+                            To Clipboard
+                        </button>
+                    </div>
+                    <p>
+                        <em>Here is how it will look like:</em>
+                        <img th:src="@{/img/extension-options-ff.png}"
+                             alt="Dialog With Options Of Browser Extension"
+                             style="width: 90%">
+                    </p>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div id="card-2"
+         class="mdc-card tab-card-hidden"
+         style="padding: 15px 25px 25px 25px;">
+        <div style="width: 600px;">
+            <p>
+                <b>Step 1: </b>Go to "Settings" -> "Privacy"
+                and enable "Search Suggestions in Address Field".
+            </p>
+            <p>
+                <b>Step 2: </b>Go to "Settings" -> "Search"
+                and make sure "Allow Search Suggestions" is checked for "In Address Field".
+            </p>
+            <p><b>Step 3: </b>Also under "Settings" -> "Search", add a new search engine where:</p>
+            <ul>
+                <li>
+                    <p>
+                        <em>Name</em> is <b><code>KotLink</code></b>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>Nickname</em> is <b><code>go</code></b>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>URL</em> is
+                        <b>
+                            <code th:text="${@viewUtils.serverUrlFromRequest(#request)} + 'api/link/redirect?link=%s'"></code>
+                        </b>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>Suggest URL</em> is
+                        <b>
+                            <code th:text="${@viewUtils.serverUrlFromRequest(#request)} + 'api/link/suggest?link=%s&amp;mode=opensearch&amp;secret=' + ${apiSecret.secret}"></code>
+                        </b>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="card-3"
+         class="mdc-card tab-card-hidden"
+         style="padding: 15px 25px 25px 25px;">
+        <div style="width: 600px;">
+            <p>
+                <b>Please, note!</b> Safari is currently only partially supported via 3rd-party
+                <a href="http://marioestrada.github.io/safari-omnikey/">Safari Omnikey</a> extension.
+                As unlike regular KotLink extension for Chrome / FireFox,
+                <em>Safari Omnikey</em> does not support autocomplete.
+            </p>
+            <p>
+                <b>Step 1: </b>Install <a href="http://marioestrada.github.io/safari-omnikey/">Safari Omnikey</a>.
+            </p>
+            <p>
+                <b>Step 2: </b>Click on the extension icon (looks like a magnifying glass),
+                then click <em>Add Site</em> and use the following data:
+            </p>
+            <ul>
+                <li>
+                    <p>
+                        <em>Prefix</em> is <b><code>go</code></b>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <em>URL</em> is
+                        <b>
+                            <code th:text="${@viewUtils.serverUrlFromRequest(#request)} + 'api/link/redirect?link={search}'"></code>
+                        </b>
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <p class="mdc-typography--caption" style="padding-top: 5px">
+        For more information, check the documentation at
+        <a href="http://kotlink.org/docs/extension-guide.html#kotlink-extension-options">kotlink.org</a>
+    </p>
+
+    <script>
+        kotlink.onReady(() => {
+            const selectBrowserTabBar = document.getElementById("select-browser-tab-bar");
+            selectBrowserTabBar.addEventListener("MDCTabBar:activated", (event) => {
+                const oldCard = document.querySelector(".mdc-card.tab-card-visible");
+                oldCard.classList.remove("tab-card-visible");
+                oldCard.classList.add("tab-card-hidden");
+                const newCard = document.getElementById(`card-${event.detail.index}`);
+                newCard.classList.add("tab-card-visible");
+                newCard.classList.remove("tab-card-hidden");
+            });
+            document.querySelectorAll(".copy-server-url-to-clipboard").forEach((button) => {
+                button.addEventListener("click", () => {
+                    button.parentElement.querySelector("input").select();
+                    document.execCommand("copy");
+                });
+            });
+            document.querySelectorAll(".copy-token-to-clipboard").forEach((button) => {
+                button.addEventListener("click", () => {
+                    button.parentElement.querySelector("input").select();
+                    document.execCommand("copy");
+                });
+            });
+            // XXX this is hack to make all cards have the same height, regardless of content
+            const height = document.getElementById("card-0").clientHeight;
+            document.getElementById("card-1").style.height = `${height}px`;
+            document.getElementById("card-2").style.height = `${height}px`;
+            document.getElementById("card-3").style.height = `${height}px`;
+        });
+    </script>
+
+</main>
+</body>
+</html>

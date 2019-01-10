@@ -153,3 +153,13 @@ body {
 .pagination {
     border: 0;
 }
+
+/**
+ * Tabs
+ */
+.tab-card-visible {
+}
+
+.tab-card-hidden {
+    display: none;
+}

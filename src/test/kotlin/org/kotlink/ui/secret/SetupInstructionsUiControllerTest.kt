@@ -9,6 +9,7 @@ import org.kotlink.TEST_SECRET
 import org.kotlink.core.secret.ApiSecretService
 import org.kotlink.perform
 import org.kotlink.ui.UiTestConfig
+import org.kotlink.ui.help.SetupInstructionsUiController
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -19,9 +20,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(ExtensionSecretUiController::class, secure = false)
+@WebMvcTest(SetupInstructionsUiController::class, secure = false)
 @Import(UiTestConfig::class)
-class ExtensionSecretUiControllerTest(
+class SetupInstructionsUiControllerTest(
     @Autowired private val mvc: MockMvc
 ) {
 
@@ -29,11 +30,11 @@ class ExtensionSecretUiControllerTest(
     private lateinit var apiSecretService: ApiSecretService
 
     @Test
-    fun `'searchLinks' should return the page with aliases that matched the input`() {
+    fun `'showSetupInstructions' should return the page with instructions for different browsers`() {
         whenever(apiSecretService.findOrCreateForEmail(any()))
             .thenReturn(TEST_SECRET)
 
-        mvc.perform(MockMvcRequestBuilders.get("/ui/extension_secret")) {
+        mvc.perform(MockMvcRequestBuilders.get("/ui/setup_instructions")) {
             andExpect(MockMvcResultMatchers.status().isOk)
             andExpect(MockMvcResultMatchers.content().string(Matchers.containsString(TEST_SECRET.secret)))
         }

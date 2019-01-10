@@ -14,7 +14,7 @@ enum class UiView(val title: String) {
     LIST_NAMESPACES("KotLink - Namespaces"),
     NEW_NAMESPACE("KotLink - New Namespace"),
     EDIT_NAMESPACE("KotLink - Edit Namespace"),
-    EXTENSION_SECRET("KotLink - Extension Secret")
+    SETUP_INSTRUCTIONS("KotLink - Setup Instructions")
 }
 
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)

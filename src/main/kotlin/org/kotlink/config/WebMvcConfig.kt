@@ -24,5 +24,10 @@ class WebMvcConfig : WebMvcConfigurer {
             .addRedirectViewController("/ui/sign_out_success", "/ui/search")
             .setKeepQueryParams(false)
             .setStatusCode(HttpStatus.TEMPORARY_REDIRECT)
+
+        registry
+            .addRedirectViewController("/ui/extension_secret", "/ui/setup_instructions")
+            .setKeepQueryParams(false)
+            .setStatusCode(HttpStatus.PERMANENT_REDIRECT)
     }
 }

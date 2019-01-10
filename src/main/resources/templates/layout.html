@@ -108,11 +108,11 @@
                 </a>
                 <hr class="mdc-list-divider">
                 <a class="mdc-list-item"
-                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).EXTENSION_SECRET) ? ' mdc-list-item--selected' : '' }"
+                   th:class="'mdc-list-item' + ${(selectedView == T(org.kotlink.ui.UiView).SETUP_INSTRUCTIONS) ? ' mdc-list-item--selected' : '' }"
                    href="#"
-                   th:href="@{/ui/extension_secret}"
+                   th:href="@{/ui/setup_instructions}"
                    tabindex="-1">
-                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">security</i>Extension Secret
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">info</i>Setup Instructions
                 </a>
             </nav>
         </div>
