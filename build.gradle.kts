@@ -89,6 +89,7 @@ dependencies {
     compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$springBootVersion")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
 
+    compile("io.micrometer:micrometer-registry-prometheus")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("io.github.microutils:kotlin-logging:1.6.22")
     compile("org.slf4j:slf4j-api:1.7.25")

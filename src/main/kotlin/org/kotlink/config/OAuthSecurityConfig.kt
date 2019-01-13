@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.http.HttpSession
 
-@Order(2)
+@Order(OAUTH_SECURITY_CONFIG_ORDER)
 @Configuration
 @ConfigurationProperties("kotlink.security.oauth")
 @EnableWebSecurity
@@ -30,6 +30,7 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
     lateinit var allowedEmailRegex: String
 
     @Throws(Exception::class)
+    @Suppress("ELValidationInJSP", "SpringElInspection")
     override fun configure(http: HttpSecurity) {
         http
             .requiresChannel()
@@ -45,7 +46,6 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
                 "/js/**",
                 "/css/**",
                 "/img/**",
-                "/actuator/health",
                 "/favicon.ico"
             )
             .permitAll()
@@ -59,7 +59,8 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .and()
             .authorizeRequests()
             .anyRequest()
-            .authenticated()
+            // prevents ACTUATOR user from being used to access UI
+            .access("not(hasRole('ROLE_ACTUATOR')) and authenticated")
 
         logger.info { "OAuth security has been configured." }
     }

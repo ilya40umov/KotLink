@@ -15,6 +15,11 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: never
+  security:
+    user:
+      name: kotlinkactuator
+      password: kotlinkpass
+      roles: ACTUATOR
 
 server:
   servlet:
@@ -54,3 +59,13 @@ kotlink:
     restrict-edits-to-ip-regex: .*
   logging:
     enable-access-log: false
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        kotlink.api: true
+  endpoints:
+    web:
+      exposure:
+        include: ["health", "metrics", "prometheus"]

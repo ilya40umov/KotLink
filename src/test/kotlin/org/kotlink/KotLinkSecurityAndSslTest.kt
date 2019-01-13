@@ -9,6 +9,8 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.util.Base64Utils
+import java.nio.charset.StandardCharsets.UTF_8
 
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles("local", "integration-test")
@@ -54,13 +56,6 @@ class KotLinkSecurityAndSslTest(
     }
 
     @Test
-    fun `actuator health endpoint should return 200 even if user is not authenticated`() {
-        webClient.get().uri("/actuator/health")
-            .exchange()
-            .expectStatus().isOk
-    }
-
-    @Test
     fun `list aliases page should redirect to login given the user is not authenticated`() {
         webClient.get().uri("/ui/alias")
             .exchange()
@@ -81,5 +76,34 @@ class KotLinkSecurityAndSslTest(
         webClient.get().uri("/api/link/suggest?link=abc")
             .exchange()
             .expectStatus().isUnauthorized
+    }
+
+    @Test
+    fun `actuator health endpoint should return 200 even if user is not authenticated`() {
+        webClient.get().uri("/actuator/health")
+            .exchange()
+            .expectStatus().isOk
+    }
+
+    @Test
+    fun `actuator metrics endpoint should return 401 if user is not authenticated`() {
+        webClient.get().uri("/actuator/metrics")
+            .exchange()
+            .expectStatus().isUnauthorized
+    }
+
+    @Test
+    fun `actuator metrics endpoint should return 200 if user is authenticated`() {
+        webClient.get().uri("/actuator/metrics")
+            .header("Authorization", "Basic ${ACTUATOR_USER_PASSWORD.toBase64()}")
+            .exchange()
+            .expectStatus().isOk
+    }
+
+    private fun String.toBase64() =
+        Base64Utils.encodeToString(this.toByteArray(UTF_8))
+
+    companion object {
+        private const val ACTUATOR_USER_PASSWORD = "kotlinkactuator:kotlinkpass"
     }
 }
