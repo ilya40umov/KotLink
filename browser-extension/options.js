@@ -29,7 +29,7 @@ function saveOptions(e) {
         document.querySelector("#message").innerHTML = "Preferences have been saved.";
         setTimeout(() => {
             document.querySelector("#message").innerHTML = "";
-        }, 750);
+        }, 1000);
     });
 }
 
