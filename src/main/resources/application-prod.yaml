@@ -1,0 +1,7 @@
+# by default using Caffeine for caching & JDBC for session persistence
+# to allow single-node deployments to run with in-memory cache
+spring:
+  cache:
+    type: caffeine
+  session:
+    store-type: jdbc

@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.5'
 
 services:
   postgresql:
@@ -17,10 +17,26 @@ services:
       interval: 15s
       timeout: 30s
       retries: 3
+  redis:
+    build:
+      context: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 15s
+      timeout: 30s
+      retries: 3
+
+
 
 
 volumes:
   postgresql:
+    driver: local
+  redis:
     driver: local
 
 networks:

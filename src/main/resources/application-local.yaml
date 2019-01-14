@@ -1,4 +1,6 @@
 spring:
+  redis:
+    url: redis://localhost:6379
   thymeleaf:
     cache: false
 

@@ -40,6 +40,7 @@ tasks {
     withType<Test> {
         useJUnitPlatform {
             systemProperty("spring.datasource.url", "jdbc:postgresql://localhost:45432/kotlink")
+            systemProperty("spring.redis.url", "redis://localhost:46379")
         }
         testLogging.apply {
             events("passed", "skipped", "failed")
@@ -79,8 +80,10 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-webflux")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.session:spring-session-jdbc")
+    compile("org.springframework.session:spring-session-data-redis")
     compile("org.springframework.boot:spring-boot-devtools")
 
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")

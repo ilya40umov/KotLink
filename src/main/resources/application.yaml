@@ -6,13 +6,18 @@ spring:
     url: jdbc:postgresql://localhost:55432/kotlink
     username: kotlinkuser
     password: kotlinkpass
+  redis:
+    timeout: 200ms
   flyway:
     enabled: true
   cache:
     cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch,apiSecret
+    type: redis
     caffeine.spec: maximumSize=2000,expireAfterWrite=300s
+    redis:
+      time-to-live: 1h
   session:
-    store-type: jdbc
+    store-type: redis
     jdbc:
       initialize-schema: never
   security:
