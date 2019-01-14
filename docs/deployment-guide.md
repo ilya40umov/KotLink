@@ -71,3 +71,33 @@ e.g. `10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}`;
 see [RemoveIpValve](https://tomcat.apache.org/tomcat-8.5-doc/api/org/apache/catalina/valves/RemoteIpValve.html)
 and [Spring Boot Reference Guide](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#howto-customize-tomcat-behind-a-proxy-server)
 for more details.
+
+#### Use Redis As Cache And Session Storage
+
+To enable using Redis as storage for caches (by default lives in memory) 
+and session information (by default is stored in Postgres), 
+which in turn will help improving performance and availability 
+(e.g. without a stand-alone cache you can only have a single-node deployment, 
+as local caches on each node will quickly become stale and cause issues),
+you can tweak the following properties:
+
+* `SPRING_REDIS_URL` - must be set to `redis://username:password@your-redis-host:6379` 
+(where `username:password` pair is optional and `username` is always ignored)
+* `SPRING_CACHE_TYPE` - must be set to `redis`
+* `SPRING_SESSION_STORE_TYPE` - must be set to `redis`
+
+#### Monitoring
+
+KotLink server also exposes some endpoints that help with monitoring how it's doing:
+
+* `/actuator/health` - (unprotected) reports health of the application
+* `/actuator/metrics` and `/actuator/metrics/{metric}` - 
+(behind Basic Auth) allow checking the list of metric names and their concrete values
+* `/actuator/prometheus` - (behind Basic Auth) allows fetching all metric values in Prometheus format
+
+To access protected endpoint, KotLink has a special user with name `kotlinkactuator` password `kotlinkpass`.
+This user can't access anything other than `/actuator/*` 
+and can be changed to have a different name / password via the following two properties:
+
+* `SPRING_SECURITY_USER_NAME` - defaults to `kotlinkactuator`
+* `SPRING_SECURITY_USER_PASSWORD` - defaults to `kotlinkpass`
