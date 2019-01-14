@@ -13,7 +13,8 @@ spring:
   cache:
     cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch,apiSecret
     type: redis
-    caffeine.spec: maximumSize=2000,expireAfterWrite=300s
+    caffeine:
+      spec: maximumSize=2000,expireAfterWrite=300s
     redis:
       time-to-live: 1h
   session:
