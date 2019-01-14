@@ -74,10 +74,10 @@ for more details.
 
 #### Use Redis As Cache And Session Storage
 
-To enable using Redis as storage for caches (by default lives in memory) 
-and session information (by default is stored in Postgres), 
+To enable using Redis as a backing store for cache (by default lives in memory) 
+and for session information (by default is stored in Postgres), 
 which in turn will help improving performance and availability 
-(e.g. without a stand-alone cache you can only have a single-node deployment, 
+(e.g. without a stand-alone cache you can only have a single-node deployment of KotLink server, 
 as local caches on each node will quickly become stale and cause issues),
 you can tweak the following properties:
 
@@ -88,12 +88,12 @@ you can tweak the following properties:
 
 #### Monitoring
 
-KotLink server also exposes some endpoints that help with monitoring how it's doing:
+KotLink server also exposes a few endpoints that help with monitoring its status:
 
 * `/actuator/health` - (unprotected) reports health of the application
-* `/actuator/metrics` and `/actuator/metrics/{metric}` - 
-(behind Basic Auth) allow checking the list of metric names and their concrete values
-* `/actuator/prometheus` - (behind Basic Auth) allows fetching all metric values in Prometheus format
+* `/actuator/metrics/` and `/actuator/metrics/{metric}` - 
+(both behind Basic Auth) allow checking the list of metric names and their concrete values
+* `/actuator/prometheus` - (also behind Basic Auth) allows fetching all metrics values in Prometheus format
 
 To access protected endpoint, KotLink has a special user with name `kotlinkactuator` password `kotlinkpass`.
 This user can't access anything other than `/actuator/*` 
