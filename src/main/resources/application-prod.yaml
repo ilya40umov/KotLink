@@ -5,3 +5,7 @@ spring:
     type: caffeine
   session:
     store-type: jdbc
+management:
+  health:
+    redis:
+      enabled: false
