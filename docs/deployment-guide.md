@@ -101,3 +101,7 @@ and can be changed to have a different name / password via the following two pro
 
 * `SPRING_SECURITY_USER_NAME` - defaults to `kotlinkactuator`
 * `SPRING_SECURITY_USER_PASSWORD` - defaults to `kotlinkpass`
+
+Note: Redis should also further be configured due to 
+[spring-session/issues/124](https://github.com/spring-projects/spring-session/issues/124). 
+Make sure to set `notify-keyspace-events` to `eA`.
