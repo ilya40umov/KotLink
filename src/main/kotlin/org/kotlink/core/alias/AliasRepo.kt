@@ -33,6 +33,8 @@ interface AliasRepo {
 
     fun findById(id: Long): Alias?
 
+    fun findByFullLink(fullLink: String): Alias?
+
     fun findByIdOrThrow(id: Long): Alias =
         findById(id) ?: throw RecordNotFoundException("Alias #$id not found")
 
@@ -48,7 +50,12 @@ interface AliasRepo {
 
     fun findWithAtLeastOneOfTerms(terms: List<String>): List<Alias>
 
-    fun findWithAllOfTermsInFullLink(terms: List<String>, offset: Int, limit: Int): List<Alias>
+    fun findWithAllOfTermsInFullLink(
+        terms: List<String>,
+        lastTermIsPrefix: Boolean,
+        offset: Int,
+        limit: Int
+    ): List<Alias>
 
     fun countWithAllOfTermsInFullLink(terms: List<String>): Int
 
@@ -77,6 +84,12 @@ class AliasRepoImpl : AliasRepo {
     override fun findById(id: Long): Alias? =
         Aliases.withJoins
             .select { Aliases.id.eq(id) }
+            .map { it.asAlias() }
+            .firstOrNull()
+
+    override fun findByFullLink(fullLink: String): Alias? =
+        Aliases.withJoins
+            .select { Aliases.fullLink.eq(fullLink) }
             .map { it.asAlias() }
             .firstOrNull()
 
@@ -115,8 +128,8 @@ class AliasRepoImpl : AliasRepo {
             .map { it.asAlias() }
     }
 
-    override fun findWithAllOfTermsInFullLink(terms: List<String>, offset: Int, limit: Int): List<Alias> {
-        val ftsQuery = terms.joinToString(separator = " & ")
+    override fun findWithAllOfTermsInFullLink(terms: List<String>, lastTermIsPrefix: Boolean, offset: Int, limit: Int): List<Alias> {
+        val ftsQuery = terms.joinToString(separator = " & ") + if (lastTermIsPrefix) ":*" else ""
         return Aliases.withJoins
             .select { Aliases.fullLink.fullTextQuery(ftsQuery) }
             .orderBy(Namespaces.keyword, isAsc = true)

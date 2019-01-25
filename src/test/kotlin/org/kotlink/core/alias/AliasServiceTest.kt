@@ -1,8 +1,10 @@
 package org.kotlink.core.alias
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainAll
 import org.amshove.kluent.shouldEqual
@@ -31,8 +33,8 @@ class AliasServiceTest(
     private val service = AliasService(aliasRepo, namespaceRepo, currentUser)
 
     @Test
-    fun `'findByFullLink' should return alias if it can be found in default namespace`() {
-        whenever(aliasRepo.findByNamespaceAndLink("", "inbox"))
+    fun `'findByFullLink' should return alias if it can be found by full link`() {
+        whenever(aliasRepo.findByFullLink("inbox"))
             .thenReturn(INBOX_ALIAS)
 
         service.findByFullLink("inbox").also {
@@ -41,71 +43,73 @@ class AliasServiceTest(
     }
 
     @Test
-    fun `'findByFullLink' should return alias if it can be found in other namespaces`() {
-        whenever(aliasRepo.findByNamespaceAndLink("google", "inbox"))
-            .thenReturn(INBOX_ALIAS)
+    fun `'findByFullLink' should return alias if it can be found with terms in different order`() {
+        whenever(
+            aliasRepo.findWithAllOfTermsInFullLink(
+                terms = argThat { containsAll(listOf("inbox", "google")) },
+                lastTermIsPrefix = eq(false),
+                offset = eq(0),
+                limit = eq(2)
+            )
+        ).thenReturn(listOf(INBOX_ALIAS.copy(link = "inbox google")))
 
         service.findByFullLink("google inbox").also {
-            it shouldEqual INBOX_ALIAS
+            it shouldEqual INBOX_ALIAS.copy(link = "inbox google")
         }
     }
 
     @Test
-    fun `'findByFullLink' should not return any alias if it can't be found by full link`() {
+    fun `'findByFullLink' should not return any alias if all given terms match but there are extra terms`() {
+        whenever(
+            aliasRepo.findWithAllOfTermsInFullLink(
+                terms = argThat { containsAll(listOf("inbox", "bla")) },
+                lastTermIsPrefix = eq(false),
+                offset = eq(0),
+                limit = eq(2)
+            )
+        ).thenReturn(listOf(INBOX_ALIAS.copy(link = "inbox bla")))
+
+        service.findByFullLink("google inbox").also {
+            it shouldBe null
+        }
+    }
+
+    @Test
+    fun `'findByFullLink' should not return any alias if nothing matching given term can be found`() {
         service.findByFullLink("google inbox").also {
             it shouldEqual null
         }
     }
 
     @Test
-    @DisplayName(
-        """
-        'findByFullLinkPrefix' should
-        return aliases from both default and the matching namespace
-        if prefix has at least 2 words
-    """
-    )
-    fun `'findByFullLinkPrefix' should search in default & matching namespace if prefix is 2+ words`() {
-        whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "google inb"))
-            .thenReturn(listOf(INBOX_ALIAS))
-        whenever(aliasRepo.findByNamespaceAndLinkPrefix("google", "inb"))
-            .thenReturn(
-                listOf(
-                    INBOX_ALIAS.copy(
-                        namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
-                        link = "inbound"
-                    )
-                )
-            )
-
-        service.findByFullLinkPrefix("google inb").also { aliases ->
-            aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbound")
+    fun `'findByFullLinkPrefix' should return no aliases if input contains zero terms`() {
+        service.findByFullLinkPrefix(" ").also { aliases ->
+            aliases.size shouldBe 0
         }
     }
 
     @Test
-    @DisplayName(
-        """
-        'findByFullLinkPrefix' should
-        return aliases from default and namespaces matching prefix
-        if prefix has only single word
-    """
-    )
-    fun `'findByFullLinkPrefix' should search in default & namespace matching prefix if prefix has 1 word`() {
-        whenever(aliasRepo.findByNamespaceAndLinkPrefix("", "inb"))
-            .thenReturn(listOf(INBOX_ALIAS))
-        whenever(aliasRepo.findByNamespacePrefix("inb"))
-            .thenReturn(
-                listOf(
-                    INBOX_ALIAS.copy(
-                        namespace = Namespace(keyword = "inbound", ownerAccount = TEST_ACCOUNT),
-                        link = "whatever"
-                    )
-                )
+    fun `'findByFullLinkPrefix' should return aliases ordered by length of common prefix with input`() {
+        whenever(
+            aliasRepo.findWithAllOfTermsInFullLink(
+                terms = argThat { containsAll(listOf("in")) },
+                lastTermIsPrefix = eq(true),
+                offset = eq(0),
+                limit = eq(Int.MAX_VALUE)
             )
+        ).thenReturn(
+            listOf(
+                INBOX_ALIAS.copy(
+                    namespace = Namespace(keyword = "google", ownerAccount = TEST_ACCOUNT),
+                    link = "inbox"
+                ),
+                INBOX_ALIAS
+            )
+        )
 
-        service.findByFullLinkPrefix("inb").also { aliases ->
-            aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "inbound whatever")
+        service.findByFullLinkPrefix("in").also { aliases ->
+            aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbox")
+            aliases[0].fullLink shouldEqual INBOX_ALIAS.fullLink
         }
     }
 
@@ -175,10 +179,17 @@ class AliasServiceTest(
 
     @Test
     fun `'findAliasesWithFullLinkMatchingEntireInput' should return only aliases matching terms if input not empty`() {
-        whenever(aliasRepo.findWithAllOfTermsInFullLink(eq(listOf("google")), any(), any()))
-            .thenReturn(emptyList())
-        whenever(aliasRepo.countWithAllOfTermsInFullLink(eq(listOf("google"))))
-            .thenReturn(0)
+        whenever(
+            aliasRepo.findWithAllOfTermsInFullLink(
+                terms = eq(listOf("google")),
+                lastTermIsPrefix = eq(false),
+                offset = any(),
+                limit = any()
+            )
+        ).thenReturn(emptyList())
+        whenever(
+            aliasRepo.countWithAllOfTermsInFullLink(eq(listOf("google")))
+        ).thenReturn(0)
 
         service.findAliasesWithFullLinkMatchingEntireInput(
             userProvidedInput = "google ",
@@ -194,7 +205,7 @@ class AliasServiceTest(
 
     @Test
     fun `'create' should throw exception if the new full link is already taken`() {
-        whenever(aliasRepo.findByNamespaceAndLink(INBOX_ALIAS.namespace.keyword, INBOX_ALIAS.link))
+        whenever(aliasRepo.findByFullLink(INBOX_ALIAS.fullLink))
             .thenReturn(INBOX_ALIAS);
 
         { service.create(INBOX_ALIAS) } shouldThrow FullLinkExistsException::class
@@ -222,7 +233,7 @@ class AliasServiceTest(
     fun `'update' should throw exception if the new full link is taken`() {
         whenever(aliasRepo.findByIdOrThrow(INBOX_ALIAS.id))
             .thenReturn(INBOX_ALIAS)
-        whenever(aliasRepo.findByNamespaceAndLink("", "inbox test"))
+        whenever(aliasRepo.findByFullLink("inbox test"))
             .thenReturn(INBOX_ALIAS.copy(link = "inbox test"));
 
         { service.update(INBOX_ALIAS.copy(link = "inbox test")) } shouldThrow FullLinkExistsException::class

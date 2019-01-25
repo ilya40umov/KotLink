@@ -22,29 +22,35 @@ class AliasService(
 
     @Cacheable(cacheNames = [ALIAS_BY_FULL_LINK_CACHE], unless = "#result == null")
     fun findByFullLink(fullLink: String): Alias? {
-        return aliasRepo.findByNamespaceAndLink(namespace = "", link = fullLink)
-            .let { alias ->
-                when {
-                    alias != null -> alias
-                    fullLink.contains(" ") ->
-                        fullLink.split(" ", limit = 2).let { terms ->
-                            aliasRepo.findByNamespaceAndLink(terms[0], terms[1])
-                        }
-                    else -> null
-                }
+        val trimmedFullLink = fullLink.trim().toLowerCase()
+        return aliasRepo.findByFullLink(trimmedFullLink) ?: run {
+            val terms = extractTerms(trimmedFullLink)
+            val aliases = aliasRepo.findWithAllOfTermsInFullLink(terms, false, 0, 2)
+            when {
+                aliases.size == 1 && aliases[0].fullLink.length == trimmedFullLink.length -> aliases[0]
+                else -> null
             }
+        }
     }
 
     @Cacheable(cacheNames = [ALIAS_BY_FULL_LINK_PREFIX_CACHE])
     fun findByFullLinkPrefix(fullLinkPrefix: String): List<Alias> {
-        val matchesInDefaultNamespace =
-            aliasRepo.findByNamespaceAndLinkPrefix(namespace = "", linkPrefix = fullLinkPrefix)
-        return when {
-            fullLinkPrefix.contains(" ") ->
-                fullLinkPrefix.split(" ", limit = 2).let {
-                    matchesInDefaultNamespace + aliasRepo.findByNamespaceAndLinkPrefix(it[0], it[1])
-                }
-            else -> matchesInDefaultNamespace + aliasRepo.findByNamespacePrefix(fullLinkPrefix)
+        val prefixTrimmed = fullLinkPrefix.trim()
+        if (prefixTrimmed.isBlank()) {
+            return emptyList()
+        }
+        val terms = extractTerms(prefixTrimmed)
+        return aliasRepo.findWithAllOfTermsInFullLink(
+            terms = terms,
+            lastTermIsPrefix = !fullLinkPrefix.last().isWhitespace(),
+            offset = 0,
+            limit = Int.MAX_VALUE
+        ).map {
+            it to it.fullLink.commonPrefixWith(prefixTrimmed, ignoreCase = true)
+        }.sortedByDescending {
+            it.second.length
+        }.map {
+            it.first
         }
     }
 
@@ -82,7 +88,7 @@ class AliasService(
             )
         }
         return Page(
-            records = aliasRepo.findWithAllOfTermsInFullLink(terms, offset, limit),
+            records = aliasRepo.findWithAllOfTermsInFullLink(terms, false, offset, limit),
             offset = offset,
             limit = limit,
             totalCount = aliasRepo.countWithAllOfTermsInFullLink(terms)
@@ -151,7 +157,7 @@ class AliasService(
             .filter { it.isNotBlank() }
 
     private fun verifyFullLinkNotTaken(fullLink: String) {
-        if (findByFullLink(fullLink) != null) {
+        if (aliasRepo.findByFullLink(fullLink) != null) {
             throw FullLinkExistsException("Link '$fullLink' is already taken")
         }
     }

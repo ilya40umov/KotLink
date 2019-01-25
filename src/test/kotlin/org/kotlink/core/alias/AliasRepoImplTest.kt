@@ -1,6 +1,13 @@
 package org.kotlink.core.alias
 
-import org.amshove.kluent.*
+import org.amshove.kluent.shouldBe
+import org.amshove.kluent.shouldBeGreaterThan
+import org.amshove.kluent.shouldContain
+import org.amshove.kluent.shouldEndWith
+import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldNotBe
+import org.amshove.kluent.shouldStartWith
+import org.amshove.kluent.shouldThrow
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,7 +19,7 @@ import org.kotlink.core.namespace.Namespace
 import org.kotlink.core.namespace.NamespaceRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 @ExposedRepoTest
@@ -62,6 +69,13 @@ class AliasRepoImplTest(
     fun `'findById' should return no alias if provided ID does not match any of the aliases`() {
         repo.findById(Long.MAX_VALUE).also {
             it shouldEqual null
+        }
+    }
+
+    @Test
+    fun `'findByFullLink' should return an alias if provided full link matches an alias`() {
+        repo.findByFullLink(testAlias.fullLink).also {
+            it?.link shouldEqual testAlias.link
         }
     }
 
@@ -143,6 +157,21 @@ class AliasRepoImplTest(
 
         repo.findWithAllOfTermsInFullLink(
             terms = testAlias.link.split(" ").toList(),
+            lastTermIsPrefix = false,
+            offset = 0,
+            limit = 10
+        ).also {
+            it shouldContain testAlias
+        }
+    }
+
+    @Test
+    fun `'findWithAllOfTermsInFullLink' should treat last term as prefix if lastTermIsPrefix is set to true`() {
+        testAlias = repo.update(testAlias.copy(link = "${testAlias.link} term9999"))
+
+        repo.findWithAllOfTermsInFullLink(
+            terms = listOf("term999"),
+            lastTermIsPrefix = true,
             offset = 0,
             limit = 10
         ).also {
