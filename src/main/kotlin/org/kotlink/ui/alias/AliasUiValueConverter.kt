@@ -16,7 +16,7 @@ class AliasUiValueConverter(
             Alias(
                 id = id,
                 namespace = namespace,
-                link = link,
+                link = link.trim(),
                 redirectUrl = redirectUrl,
                 description = description,
                 ownerAccount = userAccountService.findByUserEmail(ownerAccountEmail)
