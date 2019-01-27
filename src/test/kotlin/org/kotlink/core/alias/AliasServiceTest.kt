@@ -48,8 +48,8 @@ class AliasServiceTest(
             aliasRepo.findWithAllOfTermsInFullLink(
                 terms = argThat { containsAll(listOf("inbox", "google")) },
                 lastTermIsPrefix = eq(false),
-                offset = eq(0),
-                limit = eq(2)
+                offset = any(),
+                limit = any()
             )
         ).thenReturn(listOf(INBOX_ALIAS.copy(link = "inbox google")))
 
@@ -64,8 +64,8 @@ class AliasServiceTest(
             aliasRepo.findWithAllOfTermsInFullLink(
                 terms = argThat { containsAll(listOf("inbox", "bla")) },
                 lastTermIsPrefix = eq(false),
-                offset = eq(0),
-                limit = eq(2)
+                offset = any(),
+                limit = any()
             )
         ).thenReturn(listOf(INBOX_ALIAS.copy(link = "inbox bla")))
 

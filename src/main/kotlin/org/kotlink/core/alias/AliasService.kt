@@ -24,11 +24,12 @@ class AliasService(
     fun findByFullLink(fullLink: String): Alias? {
         val trimmedFullLink = fullLink.trim().toLowerCase()
         return aliasRepo.findByFullLink(trimmedFullLink) ?: run {
-            val terms = extractTerms(trimmedFullLink)
-            val aliases = aliasRepo.findWithAllOfTermsInFullLink(terms, false, 0, 2)
-            when {
-                aliases.size == 1 && aliases[0].fullLink.length == trimmedFullLink.length -> aliases[0]
-                else -> null
+            val matchingAliases = findMatchingAllTermsInFullLinkSortedByCommonPrefix(
+                fullLink = trimmedFullLink,
+                isPrefix = false
+            )
+            matchingAliases.firstOrNull()?.takeIf {
+                it.fullLink.length == trimmedFullLink.length
             }
         }
     }
@@ -39,19 +40,10 @@ class AliasService(
         if (prefixTrimmed.isBlank()) {
             return emptyList()
         }
-        val terms = extractTerms(prefixTrimmed)
-        return aliasRepo.findWithAllOfTermsInFullLink(
-            terms = terms,
-            lastTermIsPrefix = !fullLinkPrefix.last().isWhitespace(),
-            offset = 0,
-            limit = Int.MAX_VALUE
-        ).map {
-            it to it.fullLink.commonPrefixWith(prefixTrimmed, ignoreCase = true)
-        }.sortedByDescending {
-            it.second.length
-        }.map {
-            it.first
-        }
+        return findMatchingAllTermsInFullLinkSortedByCommonPrefix(
+            fullLink = prefixTrimmed,
+            isPrefix = !fullLinkPrefix.last().isWhitespace()
+        )
     }
 
     fun searchAliasesMatchingAtLeastPartOfInput(userProvidedInput: String): List<Alias> {
@@ -147,6 +139,24 @@ class AliasService(
         }
         aliasRepo.deleteById(id)
         return foundAlias
+    }
+
+    private fun findMatchingAllTermsInFullLinkSortedByCommonPrefix(
+        fullLink: String,
+        isPrefix: Boolean
+    ): List<Alias> {
+        return aliasRepo.findWithAllOfTermsInFullLink(
+            terms = extractTerms(fullLink),
+            lastTermIsPrefix = isPrefix,
+            offset = 0,
+            limit = Int.MAX_VALUE
+        ).map {
+            it to it.fullLink.commonPrefixWith(fullLink, ignoreCase = true)
+        }.sortedByDescending {
+            it.second.length
+        }.map {
+            it.first
+        }
     }
 
     private fun extractTerms(userProvidedInput: String) =
