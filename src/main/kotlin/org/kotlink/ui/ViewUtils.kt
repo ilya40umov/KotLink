@@ -16,7 +16,7 @@ class ViewUtils {
 
     fun asGoLink(alias: Alias): String {
         val namespace = if (alias.namespace.keyword.isBlank()) "" else "<b>${alias.namespace.keyword}</b> "
-        return "go/$namespace${alias.link}".replace(' ', '␣')
+        return "kk/$namespace${alias.link}".replace(' ', '␣')
     }
 
     fun serverUrlFromRequest(request: HttpServletRequest): String {

@@ -15,7 +15,7 @@ To use KotLink with Vivaldi perform the following steps:
 1. Go to Settings / Search and make sure "Allow Search Suggestions" is checked for "In Address Field".
 1. Also in Settings / Search, add a new search engine where:
   - *Name* is `KotLink` 
-  - *Nickname* is `go`
+  - *Nickname* is `kk`
   - *URL* is `http://YOUR_SERVER_ADDRESS/api/link/redirect?link=%s`
   - *Suggest URL* is `http://YOUR_SERVER_ADDRESS/api/link/suggest?link=%s&mode=opensearch&secret=YOUR_SECRET`
 
@@ -28,7 +28,7 @@ Safari is currently only partially supported via 3rd-party
 [Safari Omnikey](http://marioestrada.github.io/safari-omnikey/) extension.
 
 In order to make it work, first install the extension, then click on the extension icon (looks like a magnifying glass), 
-click *Add Site* and use prefix `go` with the following URL `http://YOUR_SERVER_ADDRESS/api/link/redirect?link={search}`
+click *Add Site* and use prefix `kk` with the following URL `http://YOUR_SERVER_ADDRESS/api/link/redirect?link={search}`
 
 Please, make sure to replace `YOUR_SERVER_ADDRESS` in the URL with your actual server address. 
 Also, it's worth to mention that unlike regular KotLink extension for Chrome / FireFox, 

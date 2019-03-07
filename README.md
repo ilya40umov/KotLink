@@ -17,7 +17,7 @@ which takes its inspiration from Google's internal Go-Links system.
 ### Overview
 
 KotLink works by letting people install a tiny browser extension 
-that activates when the person first types *go* in the address bar and then presses *space*. 
+that activates when the person first types *kk* in the address bar and then presses *space*. 
 While activated, the extension is providing autocomplete based on the database of aliases,
 and after the user has hit *enter*, 
 it will redirect the user to the actual URL that matches the provided alias 
@@ -27,7 +27,7 @@ it will redirect the user to the actual URL that matches the provided alias
 
 For example, if someone has already created an alias for `vim shortcuts` 
 that maps to `https://vim.rtorr.com`,
-by typing *go␣vim␣shortcuts↵*, the user will be redirected to the actual link.
+by typing *kk␣vim␣shortcuts↵*, the user will be redirected to the actual link.
 
 Please beware that to make use of the browser extension, 
 you will first need to set up a dedicated KotLink server,
