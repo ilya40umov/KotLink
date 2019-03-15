@@ -43,6 +43,10 @@ Chrome and Firefox extensions will require some
 [configuration](http://kotlink.org/docs/extension-guide.html#kotlink-extension-options)
 before they can be used.
 
+Alternatively, MacOS and [Alfred](https://www.alfredapp.com) users can install [this workflow](https://github.com/augustocdias/alfred-kotlink) (requires [Node.js](https://nodejs.org) 8+ and the Alfred [Powerpack](https://www.alfredapp.com/powerpack/)):
+
+    npm install --global alfred-kotlink
+
 ### KotLink Server
 
 KotLink server requires an instance of PostgreSQL as the backend store, 
