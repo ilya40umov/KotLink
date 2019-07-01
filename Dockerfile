@@ -1,4 +1,4 @@
-FROM openjdk:11.0.1-jdk
+FROM openjdk:11.0.3-jdk
 LABEL maintainer="illia.sorokoumov@gmail.com"
 
 COPY build/libs/kotlink.jar /opt/kotlink/kotlink.jar

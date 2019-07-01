@@ -4,6 +4,7 @@ package org.kotlink.core.namespace
 
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.deleteWhere
@@ -13,7 +14,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import org.kotlink.core.account.UserAccounts
 import org.kotlink.core.account.asUserAccount
-import org.kotlink.core.exposed.NoKeyGeneratedException
+import org.kotlink.core.alias.Aliases
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
 
@@ -41,7 +42,7 @@ class NamespaceRepoImpl : NamespaceRepo {
     override fun findAll() =
         Namespaces.withJoins
             .selectAll()
-            .orderBy(Namespaces.keyword, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
             .map { it.asNamespace() }
 
     override fun findById(id: Long) =
@@ -61,9 +62,10 @@ class NamespaceRepoImpl : NamespaceRepo {
             it[keyword] = namespace.keyword
             it[description] = namespace.description
             it[ownerAccountId] = namespace.ownerAccount.id
-        }.generatedKey ?: throw NoKeyGeneratedException("No primary key generated for namespace '${namespace.keyword}'")
-        return findById(namespaceId.toLong())
-            ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
+        }.let {
+            it[Aliases.id]
+        }
+        return findById(namespaceId) ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
     }
 
     override fun update(namespace: Namespace): Namespace {
@@ -88,8 +90,7 @@ internal object Namespaces : Table("namespace") {
 
     val userAccountsAlias = UserAccounts.alias("ns_owner")
     val withJoins =
-        Namespaces
-            .join(userAccountsAlias, JoinType.LEFT, Namespaces.ownerAccountId, userAccountsAlias[UserAccounts.id])
+        join(userAccountsAlias, JoinType.LEFT, ownerAccountId, userAccountsAlias[UserAccounts.id])
 }
 
 internal fun ResultRow.asNamespace() = Namespace(

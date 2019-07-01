@@ -4,6 +4,7 @@ package org.kotlink.core.alias
 
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.and
@@ -16,7 +17,6 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.update
 import org.kotlink.core.account.UserAccounts
 import org.kotlink.core.account.asUserAccount
-import org.kotlink.core.exposed.NoKeyGeneratedException
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.kotlink.core.exposed.fullTextQuery
 import org.kotlink.core.exposed.psqlRegexp
@@ -74,8 +74,8 @@ class AliasRepoImpl : AliasRepo {
     override fun findAll(offset: Int, limit: Int): List<Alias> =
         Aliases.withJoins
             .selectAll()
-            .orderBy(Namespaces.keyword, isAsc = true)
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .limit(n = limit, offset = offset)
             .map { it.asAlias() }
 
@@ -96,14 +96,14 @@ class AliasRepoImpl : AliasRepo {
     override fun findByNamespace(namespace: String): List<Alias> =
         Aliases.withJoins
             .select { Namespaces.keyword.eq(namespace) }
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .map { it.asAlias() }
 
     override fun findByNamespacePrefix(namespacePrefix: String): List<Alias> =
         Aliases.withJoins
             .select { Namespaces.keyword.like("$namespacePrefix%") }
-            .orderBy(Namespaces.keyword, isAsc = true)
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .map { it.asAlias() }
 
     override fun findByNamespaceAndLink(namespace: String, link: String): Alias? =
@@ -115,25 +115,30 @@ class AliasRepoImpl : AliasRepo {
     override fun findByNamespaceAndLinkPrefix(namespace: String, linkPrefix: String): List<Alias> =
         Aliases.withJoins
             .select { Namespaces.keyword.eq(namespace) and Aliases.link.like("$linkPrefix%") }
-            .orderBy(Namespaces.keyword, isAsc = true)
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .map { it.asAlias() }
 
     override fun findWithAtLeastOneOfTerms(terms: List<String>): List<Alias> {
         val regexp = terms.joinToString("|") { "\\m$it\\M" }
         return Aliases.withJoins
             .select { Aliases.link.psqlRegexp(regexp) or Aliases.description.psqlRegexp(regexp) }
-            .orderBy(Namespaces.keyword, isAsc = true)
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .map { it.asAlias() }
     }
 
-    override fun findWithAllOfTermsInFullLink(terms: List<String>, lastTermIsPrefix: Boolean, offset: Int, limit: Int): List<Alias> {
+    override fun findWithAllOfTermsInFullLink(
+        terms: List<String>,
+        lastTermIsPrefix: Boolean,
+        offset: Int,
+        limit: Int
+    ): List<Alias> {
         val ftsQuery = terms.joinToString(separator = " & ") + if (lastTermIsPrefix) ":*" else ""
         return Aliases.withJoins
             .select { Aliases.fullLink.fullTextQuery(ftsQuery) }
-            .orderBy(Namespaces.keyword, isAsc = true)
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .limit(n = limit, offset = offset)
             .map { it.asAlias() }
     }
@@ -152,8 +157,8 @@ class AliasRepoImpl : AliasRepo {
                 Namespaces.keyword.eq(namespace) and
                     (Aliases.link.psqlRegexp(regexp) or Aliases.description.psqlRegexp(regexp))
             }
-            .orderBy(Namespaces.keyword, isAsc = true)
-            .orderBy(Aliases.link, isAsc = true)
+            .orderBy(Namespaces.keyword, order = SortOrder.ASC)
+            .orderBy(Aliases.link, order = SortOrder.ASC)
             .map { it.asAlias() }
     }
 
@@ -165,9 +170,10 @@ class AliasRepoImpl : AliasRepo {
             it[redirectUrl] = alias.redirectUrl
             it[description] = alias.description
             it[ownerAccountId] = alias.ownerAccount.id
-        }.generatedKey ?: throw NoKeyGeneratedException("No primary key generated for alias '${alias.fullLink}'")
-        return findById(aliasId.toLong())
-            ?: throw RecordNotFoundException("Created alias #${alias.id} not found")
+        }.let {
+            it[Aliases.id]
+        }
+        return findById(aliasId) ?: throw RecordNotFoundException("Created alias #${alias.id} not found")
     }
 
     override fun update(alias: Alias): Alias {
@@ -211,7 +217,7 @@ internal object Aliases : Table("alias") {
     val userAccountsAlias = UserAccounts.alias("alias_owner")
     val withJoins =
         (Aliases leftJoin Namespaces.withJoins)
-            .join(userAccountsAlias, JoinType.LEFT, Aliases.ownerAccountId, userAccountsAlias[UserAccounts.id])
+            .join(userAccountsAlias, JoinType.LEFT, ownerAccountId, userAccountsAlias[UserAccounts.id])
 }
 
 private fun ResultRow.asAlias() = Alias(

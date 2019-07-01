@@ -6,7 +6,6 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.kotlink.core.exposed.NoKeyGeneratedException
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
 import org.jetbrains.exposed.sql.Alias as ExposedAlias
@@ -38,10 +37,10 @@ class UserAccountRepoImpl : UserAccountRepo {
     override fun insert(userAccount: UserAccount): UserAccount {
         val aliasId = UserAccounts.insert {
             it[email] = userAccount.email
-        }.generatedKey
-            ?: throw NoKeyGeneratedException("No primary key generated for user account '${userAccount.email}'")
-        return findById(aliasId.toLong())
-            ?: throw RecordNotFoundException("Created user account #${userAccount.id} not found")
+        }.let {
+            it[UserAccounts.id]
+        }
+        return findById(aliasId) ?: throw RecordNotFoundException("Created user account #${userAccount.id} not found")
     }
 }
 
