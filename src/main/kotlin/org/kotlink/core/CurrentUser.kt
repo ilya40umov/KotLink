@@ -2,6 +2,7 @@ package org.kotlink.core
 
 import org.kotlink.core.account.UserAccount
 import org.kotlink.core.account.UserAccountService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -10,9 +11,12 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication
 import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.RequestScope
 
-@RequestScope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
-class CurrentUser(private val userAccountService: UserAccountService) {
+@RequestScope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+class CurrentUser(
+    private val userAccountService: UserAccountService,
+    @Value("\${kotlink.security.admin-email:#{null}}") private val adminEmail: String? = null
+) {
 
     fun getEmail(): String {
         val auth: Authentication? = SecurityContextHolder.getContext().authentication
@@ -25,6 +29,8 @@ class CurrentUser(private val userAccountService: UserAccountService) {
     }
 
     fun isKnown() = getEmail() != UNKNOWN_USER_EMAIL
+
+    fun isAdmin() = getEmail() == adminEmail
 
     fun getAccount(): UserAccount =
         userAccountService.findOrCreateAccountForEmail(getEmail())

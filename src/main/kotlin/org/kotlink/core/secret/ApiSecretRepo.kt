@@ -46,7 +46,7 @@ class ApiSecretRepoImpl : ApiSecretRepo {
     }
 }
 
-internal object ApiSecrets : Table("api_secret") {
+object ApiSecrets : Table("api_secret") {
     val id = long("id").autoIncrement("api_secret_id_seq").primaryKey()
     val secret = varchar("secret", length = 64).primaryKey()
     val userAccountId = long("user_account_id") references UserAccounts.id

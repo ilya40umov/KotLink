@@ -170,9 +170,7 @@ class AliasRepoImpl : AliasRepo {
             it[redirectUrl] = alias.redirectUrl
             it[description] = alias.description
             it[ownerAccountId] = alias.ownerAccount.id
-        }.let {
-            it[Aliases.id]
-        }
+        } get Aliases.id
         return findById(aliasId) ?: throw RecordNotFoundException("Created alias #${alias.id} not found")
     }
 
@@ -205,7 +203,7 @@ class AliasRepoImpl : AliasRepo {
     }
 }
 
-internal object Aliases : Table("alias") {
+object Aliases : Table("alias") {
     val id = long("id").autoIncrement("alias_id_seq").primaryKey()
     val namespaceId = long("namespace_id") references Namespaces.id
     val link = varchar("link", length = Alias.MAX_LINK_LENGTH)

@@ -14,7 +14,6 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import org.kotlink.core.account.UserAccounts
 import org.kotlink.core.account.asUserAccount
-import org.kotlink.core.alias.Aliases
 import org.kotlink.core.exposed.RecordNotFoundException
 import org.springframework.stereotype.Repository
 
@@ -62,9 +61,7 @@ class NamespaceRepoImpl : NamespaceRepo {
             it[keyword] = namespace.keyword
             it[description] = namespace.description
             it[ownerAccountId] = namespace.ownerAccount.id
-        }.let {
-            it[Aliases.id]
-        }
+        } get Namespaces.id
         return findById(namespaceId) ?: throw RecordNotFoundException("Inserted namespace #$namespaceId not found")
     }
 

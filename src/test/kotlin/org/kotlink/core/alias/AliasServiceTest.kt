@@ -292,4 +292,16 @@ class AliasServiceTest(
             it.fullLink shouldEqual INBOX_ALIAS.fullLink
         }
     }
+
+    @Test
+    fun `'deleteById' should allow global admin to delete aliases`() {
+        whenever(aliasRepo.findByIdOrThrow(INBOX_ALIAS.id))
+            .thenReturn(INBOX_ALIAS)
+        whenever(currentUser.getAccount())
+            .thenReturn(TEST_ACCOUNT.copy(id = 999)) // ensure current user is not the owner
+        whenever(currentUser.isAdmin())
+            .thenReturn(true)
+
+        service.deleteById(INBOX_ALIAS.id)
+    }
 }

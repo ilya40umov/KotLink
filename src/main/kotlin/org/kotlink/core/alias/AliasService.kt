@@ -107,15 +107,9 @@ class AliasService(
         if (alias.fullLink != foundAlias.fullLink) {
             verifyFullLinkNotTaken(alias.fullLink)
         }
-        if (currentUser.getAccount().id !in setOf(
-                foundAlias.ownerAccount.id,
-                foundAlias.namespace.ownerAccount.id
-            )
-        ) {
-            throw OperationDeniedException(
-                "Only the link owner (${foundAlias.ownerAccount.email}) " +
-                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link"
-            )
+        foundAlias.verifyCanModify(currentUser) {
+            "Only the link owner (${foundAlias.ownerAccount.email}) " +
+                "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link"
         }
         return aliasRepo.update(alias)
     }
@@ -127,18 +121,22 @@ class AliasService(
     )
     fun deleteById(id: Long): Alias {
         val foundAlias = aliasRepo.findByIdOrThrow(id)
-        if (currentUser.getAccount().id !in setOf(
-                foundAlias.ownerAccount.id,
-                foundAlias.namespace.ownerAccount.id
-            )
-        ) {
-            throw OperationDeniedException(
-                "Only the link owner (${foundAlias.ownerAccount.email}) " +
-                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link"
-            )
+        foundAlias.verifyCanModify(currentUser) {
+            "Only the link owner (${foundAlias.ownerAccount.email}) " +
+                "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link"
         }
         aliasRepo.deleteById(id)
         return foundAlias
+    }
+
+    private fun Alias.verifyCanModify(currentUser: CurrentUser, message: () -> String) {
+        val isOwner = currentUser.getAccount().id in setOf(
+            ownerAccount.id,
+            namespace.ownerAccount.id
+        )
+        if (!isOwner && !currentUser.isAdmin()) {
+            throw OperationDeniedException(message = message())
+        }
     }
 
     private fun findMatchingAllTermsInFullLinkSortedByCommonPrefix(

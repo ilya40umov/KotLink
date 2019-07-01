@@ -108,10 +108,10 @@ dependencies {
     compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.2")
     testCompile("org.amshove.kluent:kluent:1.51")
     testCompile("io.projectreactor:reactor-test")
     testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-    testCompile("org.mockito:mockito-junit-jupiter:2.28.2")
+    testCompile("org.mockito:mockito-junit-jupiter:2.23.4")
 }

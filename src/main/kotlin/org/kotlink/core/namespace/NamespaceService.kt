@@ -31,10 +31,8 @@ class NamespaceService(
         if (foundNamespace.keyword.isEmpty()) {
             throw UntouchableNamespaceException("Default namespace can't be edited")
         }
-        if (foundNamespace.ownerAccount.id != currentUser.getAccount().id) {
-            throw OperationDeniedException(
-                "Only the owner (${foundNamespace.ownerAccount.email}) can modify this namespace"
-            )
+        foundNamespace.verifyCanModify(currentUser) {
+            "Only the owner (${foundNamespace.ownerAccount.email}) can modify this namespace"
         }
         if (namespace.keyword != foundNamespace.keyword) {
             verifyKeywordNotTaken(namespace.keyword)
@@ -53,10 +51,8 @@ class NamespaceService(
         if (foundNamespace.keyword.isEmpty()) {
             throw UntouchableNamespaceException("Default namespace can't be removed")
         }
-        if (foundNamespace.ownerAccount.id != currentUser.getAccount().id) {
-            throw OperationDeniedException(
-                "Only the owner (${foundNamespace.ownerAccount.email}) can delete this namespace"
-            )
+        foundNamespace.verifyCanModify(currentUser) {
+            "Only the owner (${foundNamespace.ownerAccount.email}) can delete this namespace"
         }
         aliasRepo.findByNamespace(foundNamespace.keyword).also { aliases ->
             if (aliases.isNotEmpty()) {
@@ -67,6 +63,13 @@ class NamespaceService(
         }
         namespaceRepo.deleteById(id)
         return foundNamespace
+    }
+
+    private fun Namespace.verifyCanModify(currentUser: CurrentUser, message: () -> String) {
+        val isOwner = ownerAccount.id == currentUser.getAccount().id
+        if (!isOwner && !currentUser.isAdmin()) {
+            throw OperationDeniedException(message = message())
+        }
     }
 
     private fun verifyKeywordNotTaken(keyword: String) {

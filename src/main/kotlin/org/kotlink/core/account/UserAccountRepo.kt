@@ -37,14 +37,12 @@ class UserAccountRepoImpl : UserAccountRepo {
     override fun insert(userAccount: UserAccount): UserAccount {
         val aliasId = UserAccounts.insert {
             it[email] = userAccount.email
-        }.let {
-            it[UserAccounts.id]
-        }
+        } get UserAccounts.id
         return findById(aliasId) ?: throw RecordNotFoundException("Created user account #${userAccount.id} not found")
     }
 }
 
-internal object UserAccounts : Table("user_account") {
+object UserAccounts : Table("user_account") {
     val id = long("id").autoIncrement("user_account_id_seq").primaryKey()
     val email = varchar("email", length = 1024)
 }
