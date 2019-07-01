@@ -63,6 +63,7 @@ kotlink:
       allowed-email-regex: .*
       allowed-emails: []
     restrict-edits-to-ip-regex: .*
+    restrict-edits-to-ip-cidrs: 0.0.0.0/0,::/0
   logging:
     enable-access-log: false
 

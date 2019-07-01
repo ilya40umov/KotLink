@@ -17,15 +17,27 @@ class EditOpIpBasedRestrictingAspectTest(
     @Mock private val joinPoint: ProceedingJoinPoint
 ) {
 
-    init {
-        whenever(request.remoteAddr).thenReturn("8.8.8.8")
+    @Test
+    fun `'checkIp' should throw exception if IP is not allowed to perform EditOp due to not fitting into CIDRs`() {
+        whenever(request.remoteAddr).thenReturn("8.8.8.8");
+
+        {
+            EditOpIpBasedRestrictingAspect(
+                restrictEditsToIpMask = ".*",
+                restrictEditsToIpCidrs = "7.8.9.10/32",
+                request = request
+            ).checkIp(joinPoint)
+        } shouldThrow OperationDeniedException::class
     }
 
     @Test
-    fun `'checkIp' should throw exception if IP is not allowed to perform EditOp`() {
+    fun `'checkIp' should throw exception if IP is not allowed to perform EditOp due to not fitting the regex`() {
+        whenever(request.remoteAddr).thenReturn("8.8.8.8");
+
         {
             EditOpIpBasedRestrictingAspect(
                 restrictEditsToIpMask = "123\\.123\\.123\\.123",
+                restrictEditsToIpCidrs = "0.0.0.0/0",
                 request = request
             ).checkIp(joinPoint)
         } shouldThrow OperationDeniedException::class
@@ -33,8 +45,11 @@ class EditOpIpBasedRestrictingAspectTest(
 
     @Test
     fun `'checkIp' should let the method call proceed if IP is allowed to perform EditOp`() {
+        whenever(request.remoteAddr).thenReturn("8.8.8.8")
+
         EditOpIpBasedRestrictingAspect(
             restrictEditsToIpMask = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
+            restrictEditsToIpCidrs = "0.0.0.0/0",
             request = request
         ).checkIp(joinPoint)
 
