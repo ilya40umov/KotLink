@@ -32,7 +32,6 @@ services:
       timeout: 30s
       retries: 3
 
-
 networks:
   default:
     ipam:

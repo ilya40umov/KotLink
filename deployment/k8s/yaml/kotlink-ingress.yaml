@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kotlink-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+    - hosts:
+        - local.kotlink.org
+    - secretName: self-signed
+  rules:
+    - host: local.kotlink.org
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kotlink
+              servicePort: 8080

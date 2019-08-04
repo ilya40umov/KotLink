@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kotlink
+  labels:
+    app: kotlink
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: kotlink
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: kotlink
+    spec:
+      containers:
+        - name: kotlink
+          args:
+            - -server
+            - -Xmx1024m
+            - -Xms1024m
+            - -Dspring.profiles.active=prod
+            - -Dserver.use-forward-headers=true
+            - -Dserver.tomcat.remote-ip-header=x-forwarded-for
+            - -Dserver.tomcat.protocol-header=x-forwarded-proto
+            - -Dkotlink.security.admin-email=illia.sorokoumov@gmail.com
+            - -jar
+            - /opt/kotlink/kotlink.jar
+          command:
+            - java
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: MANAGEMENT_PORT
+              value: "8081"
+            - name: SECURITY_OAUTH2_CLIENT_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: google_oauth_client_id
+                  name: kotlink
+            - name: SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: google_oauth_client_secret
+                  name: kotlink
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kotlink
+                  key: spring_datasource_url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kotlink
+                  key: spring_datasource_username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kotlink
+                  key: spring_datasource_password
+            - name: SPRING_SECURITY_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: kotlink
+                  key: actuator_user_name
+            - name: SPRING_SECURITY_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kotlink
+                  key: actuator_user_password
+          image: registry.hub.docker.com/ilya40umov/kotlink
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 1.5Gi
+            requests:
+              cpu: "0.5"
+              memory: 1.5Gi
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 10
