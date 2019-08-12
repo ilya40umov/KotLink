@@ -32,6 +32,9 @@ spec:
             - -Dserver.tomcat.remote-ip-header=x-forwarded-for
             - -Dserver.tomcat.protocol-header=x-forwarded-proto
             - -Dkotlink.security.admin-email=illia.sorokoumov@gmail.com
+            - -Dspring.cache.type=redis
+            - -Dspring.session.store-type=redis
+            - -Dspring.redis.timeout=500ms
             - -jar
             - /opt/kotlink/kotlink.jar
           command:
@@ -51,6 +54,11 @@ spec:
                 secretKeyRef:
                   key: google_oauth_client_secret
                   name: kotlink
+            - name: SPRING_REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kotlink
+                  key: spring_redis_url
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 secretKeyRef:

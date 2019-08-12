@@ -62,9 +62,9 @@ spec:
                 - sh
                 - -c
                 - exec pg_isready --host $POD_IP
-            failureThreshold: 6
             initialDelaySeconds: 60
             periodSeconds: 10
+            failureThreshold: 6
             successThreshold: 1
             timeoutSeconds: 5
           readinessProbe:
@@ -73,9 +73,9 @@ spec:
                 - sh
                 - -c
                 - exec pg_isready --host $POD_IP
-            failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 5
+            failureThreshold: 3
             successThreshold: 1
             timeoutSeconds: 3
           volumeMounts:

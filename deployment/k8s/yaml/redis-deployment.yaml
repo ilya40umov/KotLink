@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: redis
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: redis
+          image: redis:5.0.5
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - exec redis-cli ping
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - exec redis-cli ping
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
