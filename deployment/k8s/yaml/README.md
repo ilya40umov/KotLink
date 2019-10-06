@@ -17,6 +17,7 @@
 
 * `kubectl apply -f kotlink-secret.yaml`
 * `kubectl apply -f kotlink-deployment.yaml`
+* `kubectl apply -f kotlink-hpa.yaml`
 * `kubectl apply -f kotlink-service.yaml`
 * `kubectl apply -f kotlink-ingress.yaml`
 
@@ -31,10 +32,6 @@ To access Redis:
 To access Postgres:
 * Run `kubectl port-forward service/postgres 5432:5432` in one Terminal
 * In a different terminal run `psql -h 127.0.0.1 -p 5432 -U kotlinkuser -W kotlink` (password is `kotlinkpass`)
-
-TODOs:
-* Add limits to cpu/memory
-* [Deploying Redis Cluster on Top of Kubernetes](https://rancher.com/blog/2019/deploying-redis-cluster/)
 
 References:
 * [Using StatefulSets to setup Postgres](https://github.com/arianitu/postgres-statefulset)
