@@ -1,0 +1,137 @@
+{{- $fullName := include "kotlink.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+{{ include "kotlink.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "kotlink.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.rollingUpdate.maxUnavailable }}
+  minReadySeconds: {{ .Values.deployment.minReadySeconds }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "kotlink.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ template "kotlink.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - java
+          args:
+            - -server
+            - -Xmx1024m
+            - -Xms1024m
+            - -Dspring.profiles.active=prod
+            - -Dserver.use-forward-headers=true
+            - -Dserver.tomcat.remote-ip-header=x-forwarded-for
+            - -Dserver.tomcat.protocol-header=x-forwarded-proto
+            - -Dkotlink.security.admin-email=illia.sorokoumov@gmail.com
+            - -Dspring.cache.type=redis
+            - -Dspring.session.store-type=redis
+            - -Dspring.redis.timeout=500ms
+            - -jar
+            - /opt/kotlink/kotlink.jar
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: MANAGEMENT_PORT
+              value: "8081"
+            - name: SECURITY_OAUTH2_CLIENT_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: google_oauth_client_id
+            - name: SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: google_oauth_client_secret
+            - name: SPRING_REDIS_SENTINEL_MASTER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: spring_redis_sentinel_master
+            - name: SPRING_REDIS_SENTINEL_NODES
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: spring_redis_sentinel_nodes
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: spring_datasource_url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: spring_datasource_username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: postgresql-password
+            - name: SPRING_SECURITY_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: actuator_user_name
+            - name: SPRING_SECURITY_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: actuator_user_password
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
