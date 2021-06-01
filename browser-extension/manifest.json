@@ -3,7 +3,7 @@
   "name": "KotLink Browser Extension",
   "description": "To activate: type 'kk' followed by a space, then enter the alias to resolve.",
   "homepage_url": "http://kotlink.org",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "background": {
     "scripts": [
       "background.js"
@@ -23,7 +23,6 @@
   },
   "permissions": [
     "<all_urls>",
-    "tabs",
     "storage"
   ]
 }
