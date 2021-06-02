@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.Authoriti
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession
 @EnableWebSecurity
 @EnableOAuth2Sso
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Profile("!mvc-test")
 class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
     val allowedEmails = mutableSetOf<String>()
@@ -61,6 +63,8 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .anyRequest()
             // prevents ACTUATOR user from being used to access UI
             .access("not(hasRole('ROLE_ACTUATOR')) and authenticated")
+//            .and()
+//            .oauth2Login()
 
         logger.info { "OAuth security has been configured." }
     }

@@ -1,7 +1,7 @@
 package org.kotlink.core
 
 import com.nhaarman.mockitokotlin2.whenever
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.core.account.UserAccountService
@@ -29,7 +29,7 @@ class CurrentUserTest(
         whenever(authenticationToken.details).thenReturn(mapOf("email" to "batman@gmail.com"))
 
         currentUser.getEmail().also {
-            it shouldEqual "batman@gmail.com"
+            it shouldBeEqualTo "batman@gmail.com"
         }
     }
 
@@ -38,7 +38,7 @@ class CurrentUserTest(
         SecurityContextHolder.getContext().authentication = null
 
         currentUser.getEmail().also {
-            it shouldEqual CurrentUser.UNKNOWN_USER_EMAIL
+            it shouldBeEqualTo CurrentUser.UNKNOWN_USER_EMAIL
         }
     }
 }

@@ -1,7 +1,7 @@
 package org.kotlink.core.account
 
 import org.amshove.kluent.shouldBeGreaterThan
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ExposedRepoTest
@@ -20,14 +20,14 @@ class UserAccountRepoImplTest(
         val testUserAccount = repo.insert(UserAccount(email = "zorro@gmail.com"))
 
         repo.findById(testUserAccount.id).also {
-            it?.email shouldEqual testUserAccount.email
+            it?.email shouldBeEqualTo testUserAccount.email
         }
     }
 
     @Test
     fun `'findById' should return no user account if provided ID does not match any of the user accounts`() {
         repo.findById(Long.MAX_VALUE).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
@@ -36,14 +36,14 @@ class UserAccountRepoImplTest(
         val testUserAccount = repo.insert(UserAccount(email = "zorro@gmail.com"))
 
         repo.findByUserEmail(testUserAccount.email).also {
-            it?.id shouldEqual testUserAccount.id
+            it?.id shouldBeEqualTo testUserAccount.id
         }
     }
 
     @Test
     fun `'findByUserEmail' should return no user account if provided email does not match any of the user accounts`() {
         repo.findByUserEmail(UUID.randomUUID().toString()).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
@@ -56,7 +56,7 @@ class UserAccountRepoImplTest(
             )
         ).also {
             it.id shouldBeGreaterThan 0
-            repo.findById(it.id)?.id shouldEqual it.id
+            repo.findById(it.id)?.id shouldBeEqualTo it.id
         }
     }
 }

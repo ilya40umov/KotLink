@@ -30,9 +30,7 @@ class CachingConfig {
     @Bean
     @ConditionalOnProperty("spring.cache.type", havingValue = "redis")
     fun redisCacheConfiguration(
-        objectMapper: ObjectMapper,
         flyway: Flyway,
-        flywayMigrationInitializer: FlywayMigrationInitializer,
         @Value("\${spring.cache.redis.time-to-live}") timeToLive: Duration
     ): RedisCacheConfiguration {
         val currentMigrationVersion = flyway.info().current().version.version

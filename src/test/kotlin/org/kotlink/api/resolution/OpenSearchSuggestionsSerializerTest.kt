@@ -21,7 +21,7 @@ class OpenSearchSuggestionsSerializerTest {
 
         val json = objectMapper.writeValueAsString(suggestions)
 
-        json shouldEqualJson "['in', " +
+        json shouldBeEqualToJson "['in', " +
             "['${INIT_ALIAS.link}', '${INBOX_ALIAS.link}'], " +
             "['${INIT_ALIAS.link}', '${INBOX_ALIAS.link}'], " +
             "['${INIT_ALIAS.redirectUrl}', '${INBOX_ALIAS.redirectUrl}']]"
@@ -38,9 +38,9 @@ class OpenSearchSuggestionsSerializerTest {
 
         val json = objectMapper.writeValueAsString(suggestions)
 
-        json shouldEqualJson "['abc', [], [], []]"
+        json shouldBeEqualToJson "['abc', [], [], []]"
     }
 
-    private infix fun String.shouldEqualJson(expected: String) =
+    private infix fun String.shouldBeEqualToJson(expected: String) =
         JSONAssert.assertEquals(expected, this, false)
 }

@@ -26,8 +26,15 @@ spring:
       name: kotlinkactuator
       password: kotlinkpass
       roles: ACTUATOR
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com
+#            client-secret: SZDICodbaLAkNXjbFKfOFZCO
 
 server:
+  forward-headers-strategy: NATIVE
   servlet:
     session:
       timeout: 12h

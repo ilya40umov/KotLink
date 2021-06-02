@@ -6,10 +6,10 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ABC_NAMESPACE
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.TEST_ACCOUNT
+import org.kotlink.WithMockMvcSetUp
 import org.kotlink.core.Page
 import org.kotlink.core.alias.AliasService
 import org.kotlink.core.namespace.NamespaceService
@@ -22,14 +22,17 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ExtendWith(SpringExtension::class)
-@WebMvcTest(AliasUiController::class, secure = false)
-@Import(UiTestConfig::class)
+@WebMvcTest(AliasUiController::class)
+@WithMockMvcSetUp
 class AliasUiControllerTest(
     @Autowired private val mvc: MockMvc
 ) {
@@ -88,6 +91,7 @@ class AliasUiControllerTest(
                 .param("link", "")
                 .param("redirectUrl", "")
                 .param("description", "")
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -113,6 +117,7 @@ class AliasUiControllerTest(
                 .param("link", INBOX_ALIAS.link)
                 .param("redirectUrl", INBOX_ALIAS.redirectUrl)
                 .param("description", INBOX_ALIAS.description)
+                .with(csrf())
         ) {
             andExpect(status().isFound)
         }
@@ -130,6 +135,7 @@ class AliasUiControllerTest(
                 .param("link", INBOX_ALIAS.link)
                 .param("redirectUrl", INBOX_ALIAS.redirectUrl)
                 .param("description", INBOX_ALIAS.description)
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -144,7 +150,7 @@ class AliasUiControllerTest(
         mvc.perform(MockMvcRequestBuilders.get("/ui/alias/1/edit")) {
             andExpect(status().isFound)
             andExpect(
-                flash().attribute<String>(
+                flash().attribute(
                     "error_message",
                     Matchers.containsString("Alias #1 was not found")
                 )
@@ -177,6 +183,7 @@ class AliasUiControllerTest(
                 .param("link", "")
                 .param("redirectUrl", "")
                 .param("description", "")
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -201,6 +208,7 @@ class AliasUiControllerTest(
                 .param("link", INBOX_ALIAS.link)
                 .param("redirectUrl", INBOX_ALIAS.redirectUrl)
                 .param("description", INBOX_ALIAS.description)
+                .with(csrf())
         ) {
             andExpect(status().isFound)
         }
@@ -220,6 +228,7 @@ class AliasUiControllerTest(
                 .param("link", INBOX_ALIAS.link)
                 .param("redirectUrl", INBOX_ALIAS.redirectUrl)
                 .param("description", INBOX_ALIAS.description)
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -234,12 +243,9 @@ class AliasUiControllerTest(
         whenever(aliasService.deleteById(any()))
             .thenReturn(INBOX_ALIAS)
 
-        mvc.perform(MockMvcRequestBuilders.delete("/ui/alias/1")) {
+        mvc.perform(MockMvcRequestBuilders.delete("/ui/alias/1").with(csrf())) {
             andExpect(status().isFound)
-            andExpect(
-                flash()
-                    .attribute<String>("error_message", Matchers.isEmptyOrNullString())
-            )
+            andExpect(flash().attribute("error_message", Matchers.isEmptyOrNullString()))
         }
     }
 
@@ -248,12 +254,9 @@ class AliasUiControllerTest(
         whenever(aliasService.deleteById(any()))
             .thenThrow(RuntimeException("Fake exception"))
 
-        mvc.perform(MockMvcRequestBuilders.delete("/ui/alias/1")) {
+        mvc.perform(MockMvcRequestBuilders.delete("/ui/alias/1").with(csrf())) {
             andExpect(status().isFound)
-            andExpect(
-                flash()
-                    .attribute<String>("error_message", Matchers.containsString("Fake exception"))
-            )
+            andExpect(flash().attribute("error_message", Matchers.containsString("Fake exception")))
         }
     }
 }

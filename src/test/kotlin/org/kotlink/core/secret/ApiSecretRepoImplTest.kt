@@ -1,6 +1,6 @@
 package org.kotlink.core.secret
 
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -9,7 +9,7 @@ import org.kotlink.core.account.UserAccount
 import org.kotlink.core.account.UserAccountRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 @ExposedRepoTest
@@ -31,28 +31,28 @@ class ApiSecretRepoImplTest(
     @Test
     fun `'findBySecret' should return ApiSecret if provided secret matches a record in database`() {
         repo.findBySecret(secret).also {
-            it?.secret shouldEqual secret
+            it?.secret shouldBeEqualTo secret
         }
     }
 
     @Test
     fun `'findBySecret' should not return ApiSecret if provided secret does not match a record in database`() {
         repo.findBySecret(UUID.randomUUID().toString()).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
     @Test
     fun `'findByUserEmail' should return ApiSecret if provided email matches a record in database`() {
         repo.findByUserEmail(testUserAccount.email).also {
-            it?.userAccount shouldEqual testUserAccount
+            it?.userAccount shouldBeEqualTo testUserAccount
         }
     }
 
     @Test
     fun `'findByUserEmail' should not return ApiSecret if provided email does not match a record in database`() {
         repo.findByUserEmail(UUID.randomUUID().toString()).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 }

@@ -22,7 +22,7 @@ class AliasService(
 
     @Cacheable(cacheNames = [ALIAS_BY_FULL_LINK_CACHE], unless = "#result == null")
     fun findByFullLink(fullLink: String): Alias? {
-        val trimmedFullLink = fullLink.trim().toLowerCase()
+        val trimmedFullLink = fullLink.trim().lowercase()
         return aliasRepo.findByFullLink(trimmedFullLink) ?: run {
             val matchingAliases = findMatchingAllTermsInFullLinkSortedByCommonPrefix(
                 fullLink = trimmedFullLink,
@@ -55,11 +55,11 @@ class AliasService(
         return when {
             namespace != null && terms.size == 1 ->
                 aliasRepo.findByNamespace(namespace.keyword) +
-                    aliasRepo.findWithAtLeastOneOfTerms(terms)
+                        aliasRepo.findWithAtLeastOneOfTerms(terms)
             namespace != null ->
                 aliasRepo.findByNamespaceAndWithAtLeastOneOfTerms(namespace.keyword, terms.subList(1, terms.size)) +
-                    aliasRepo.findByNamespace(namespace.keyword) +
-                    aliasRepo.findWithAtLeastOneOfTerms(terms)
+                        aliasRepo.findByNamespace(namespace.keyword) +
+                        aliasRepo.findWithAtLeastOneOfTerms(terms)
             else ->
                 aliasRepo.findWithAtLeastOneOfTerms(terms)
         }.toSet().toList()
@@ -109,7 +109,7 @@ class AliasService(
         }
         foundAlias.verifyCanModify(currentUser) {
             "Only the link owner (${foundAlias.ownerAccount.email}) " +
-                "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link"
+                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can modify the link"
         }
         return aliasRepo.update(alias)
     }
@@ -123,7 +123,7 @@ class AliasService(
         val foundAlias = aliasRepo.findByIdOrThrow(id)
         foundAlias.verifyCanModify(currentUser) {
             "Only the link owner (${foundAlias.ownerAccount.email}) " +
-                "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link"
+                    "or the namespace owner (${foundAlias.namespace.ownerAccount.email}) can remove the link"
         }
         aliasRepo.deleteById(id)
         return foundAlias
@@ -160,7 +160,7 @@ class AliasService(
     private fun extractTerms(userProvidedInput: String) =
         userProvidedInput
             .replace("[^A-Za-z0-9\\s+]".toRegex(), "")
-            .toLowerCase()
+            .lowercase()
             .split("\\s+".toRegex())
             .filter { it.isNotBlank() }
 

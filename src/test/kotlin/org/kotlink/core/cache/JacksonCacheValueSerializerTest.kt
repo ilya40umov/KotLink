@@ -1,9 +1,9 @@
 package org.kotlink.core.cache
 
 import org.amshove.kluent.shouldBe
+import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldContainAll
-import org.amshove.kluent.shouldEqual
 import org.junit.jupiter.api.Test
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.INIT_ALIAS
@@ -19,7 +19,7 @@ class JacksonCacheValueSerializerTest {
 
     @Test
     fun deserialize_canHandleOutputOfSerialize_givenAliasWasSerialized() {
-        serializer.deserialize(serializer.serialize(INBOX_ALIAS)) shouldEqual INBOX_ALIAS
+        serializer.deserialize(serializer.serialize(INBOX_ALIAS)) shouldBeEqualTo INBOX_ALIAS
     }
 
     @Test

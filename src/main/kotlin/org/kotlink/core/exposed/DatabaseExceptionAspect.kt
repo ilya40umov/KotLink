@@ -12,7 +12,7 @@ import java.lang.reflect.UndeclaredThrowableException
  */
 @Aspect
 @Component
-@Suppress("TooGenericExceptionCaught", "ThrowsCount")
+@Suppress("TooGenericExceptionCaught", "ThrowsCount", "SwallowedException", "RethrowCaughtException")
 class DatabaseExceptionAspect {
 
     @Around("execution(* org.kotlink.core..*(..)) && @target(org.springframework.stereotype.Repository)")

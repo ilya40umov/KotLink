@@ -41,28 +41,28 @@ class NamespaceRepoImplTest(
         val existingId = repo.findAll().find { it.keyword == testKeyword }!!.id
 
         repo.findById(existingId).also {
-            it?.keyword shouldEqual testKeyword
+            it?.keyword shouldBeEqualTo testKeyword
         }
     }
 
     @Test
     fun `'findById' should return no namespace if ID is not present in database`() {
         repo.findById(Long.MAX_VALUE).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
     @Test
     fun `'findByKeyword' should return namespace if keyword is present in database`() {
         repo.findByKeyword(testKeyword).also {
-            it?.keyword shouldEqual testKeyword
+            it?.keyword shouldBeEqualTo testKeyword
         }
     }
 
     @Test
     fun `'findByKeyword' should return no namespace if keyword is not present in database`() {
         repo.findByKeyword(UUID.randomUUID().toString()).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
@@ -75,7 +75,7 @@ class NamespaceRepoImplTest(
             )
         ).also {
             it.id shouldBeGreaterThan 0
-            repo.findById(it.id)?.id shouldEqual it.id
+            repo.findById(it.id)?.id shouldBeEqualTo it.id
         }
     }
 
@@ -96,7 +96,7 @@ class NamespaceRepoImplTest(
         )
 
         repo.update(existingNamespace.copy(keyword = existingNamespace.keyword + ".abc")).also {
-            it.id shouldEqual existingNamespace.id
+            it.id shouldBeEqualTo existingNamespace.id
             repo.findById(it.id)?.keyword!! shouldEndWith ".abc"
         }
     }
@@ -111,14 +111,14 @@ class NamespaceRepoImplTest(
         ).id
 
         repo.deleteById(existingId).also {
-            it shouldEqual true
+            it shouldBeEqualTo true
         }
     }
 
     @Test
     fun `'deleteById' should return False if ID didn't exist in database`() {
         repo.deleteById(Long.MAX_VALUE).also {
-            it shouldEqual false
+            it shouldBeEqualTo false
         }
     }
 }
