@@ -1,0 +1,26 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+    - name: Run CI
+      run: ./environment/bin/kotlink_ci
+    - name: Upload JAR file
+      uses: actions/upload-artifact@v2
+      with:
+        name: jar_file
+        path: build/libs/kotlink.jar
+    - uses: codecov/codecov-action@v1
