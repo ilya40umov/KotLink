@@ -6,28 +6,30 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.ABC_NAMESPACE
 import org.kotlink.TEST_ACCOUNT
+import org.kotlink.WithMockMvcSetUp
 import org.kotlink.core.CurrentUser
 import org.kotlink.core.namespace.NamespaceService
 import org.kotlink.perform
-import org.kotlink.ui.UiTestConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ExtendWith(SpringExtension::class)
-@WebMvcTest(NamespaceUiController::class, secure = false)
-@Import(UiTestConfig::class)
+@WebMvcTest(NamespaceUiController::class)
+@WithMockMvcSetUp
 class NamespaceUiControllerTest(
     @Autowired private val mvc: MockMvc
 ) {
@@ -83,6 +85,7 @@ class NamespaceUiControllerTest(
             post("/ui/namespace/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("keyword", "")
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -101,6 +104,7 @@ class NamespaceUiControllerTest(
             post("/ui/namespace/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("keyword", "abc")
+                .with(csrf())
         ) {
             andExpect(status().isFound)
         }
@@ -115,6 +119,7 @@ class NamespaceUiControllerTest(
             post("/ui/namespace/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("keyword", "abc")
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -159,6 +164,7 @@ class NamespaceUiControllerTest(
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("keyword", "")
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -178,6 +184,7 @@ class NamespaceUiControllerTest(
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("keyword", "def")
+                .with(csrf())
         ) {
             andExpect(status().isFound)
         }
@@ -193,6 +200,7 @@ class NamespaceUiControllerTest(
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("keyword", "def")
+                .with(csrf())
         ) {
             andExpect(status().isOk)
             andExpect(
@@ -207,11 +215,11 @@ class NamespaceUiControllerTest(
         whenever(namespaceService.deleteById(any()))
             .thenReturn(ABC_NAMESPACE)
 
-        mvc.perform(delete("/ui/namespace/1")) {
+        mvc.perform(delete("/ui/namespace/1").with(csrf())) {
             andExpect(status().isFound)
             andExpect(
                 flash()
-                    .attribute<String>("error_message", Matchers.isEmptyOrNullString())
+                    .attribute("error_message", Matchers.emptyOrNullString())
             )
         }
     }
@@ -221,7 +229,7 @@ class NamespaceUiControllerTest(
         whenever(namespaceService.deleteById(any()))
             .thenThrow(RuntimeException("Fake exception"))
 
-        mvc.perform(delete("/ui/namespace/1")) {
+        mvc.perform(delete("/ui/namespace/1").with(csrf())) {
             andExpect(status().isFound)
             andExpect(
                 flash()

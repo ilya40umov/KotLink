@@ -76,10 +76,10 @@ class AliasRepoImpl : AliasRepo {
             .selectAll()
             .orderBy(Namespaces.keyword, order = SortOrder.ASC)
             .orderBy(Aliases.link, order = SortOrder.ASC)
-            .limit(n = limit, offset = offset)
+            .limit(n = limit, offset = offset.toLong())
             .map { it.asAlias() }
 
-    override fun countAll(): Int = Aliases.selectAll().count()
+    override fun countAll(): Int = Aliases.selectAll().count().toInt()
 
     override fun findById(id: Long): Alias? =
         Aliases.withJoins
@@ -139,7 +139,7 @@ class AliasRepoImpl : AliasRepo {
             .select { Aliases.fullLink.fullTextQuery(ftsQuery) }
             .orderBy(Namespaces.keyword, order = SortOrder.ASC)
             .orderBy(Aliases.link, order = SortOrder.ASC)
-            .limit(n = limit, offset = offset)
+            .limit(n = limit, offset = offset.toLong())
             .map { it.asAlias() }
     }
 
@@ -148,6 +148,7 @@ class AliasRepoImpl : AliasRepo {
         return Aliases.withJoins
             .select { Aliases.fullLink.fullTextQuery(ftsQuery) }
             .count()
+            .toInt()
     }
 
     override fun findByNamespaceAndWithAtLeastOneOfTerms(namespace: String, terms: List<String>): List<Alias> {
@@ -155,7 +156,7 @@ class AliasRepoImpl : AliasRepo {
         return Aliases.withJoins
             .select {
                 Namespaces.keyword.eq(namespace) and
-                    (Aliases.link.psqlRegexp(regexp) or Aliases.description.psqlRegexp(regexp))
+                        (Aliases.link.psqlRegexp(regexp) or Aliases.description.psqlRegexp(regexp))
             }
             .orderBy(Namespaces.keyword, order = SortOrder.ASC)
             .orderBy(Aliases.link, order = SortOrder.ASC)
@@ -204,7 +205,7 @@ class AliasRepoImpl : AliasRepo {
 }
 
 object Aliases : Table("alias") {
-    val id = long("id").autoIncrement("alias_id_seq").primaryKey()
+    val id = long("id").autoIncrement("alias_id_seq")
     val namespaceId = long("namespace_id") references Namespaces.id
     val link = varchar("link", length = Alias.MAX_LINK_LENGTH)
     val fullLink = varchar("full_link", length = Alias.MAX_LINK_LENGTH + Namespace.MAX_KEYWORD_LENGTH)
@@ -216,6 +217,8 @@ object Aliases : Table("alias") {
     val withJoins =
         (Aliases leftJoin Namespaces.withJoins)
             .join(userAccountsAlias, JoinType.LEFT, ownerAccountId, userAccountsAlias[UserAccounts.id])
+
+    override val primaryKey = PrimaryKey(id)
 }
 
 private fun ResultRow.asAlias() = Alias(

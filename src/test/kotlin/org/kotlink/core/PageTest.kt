@@ -1,6 +1,6 @@
 package org.kotlink.core
 
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.kotlink.core.alias.Alias
 
@@ -13,7 +13,7 @@ class PageTest {
             offset = 15,
             limit = 10,
             totalCount = 0
-        ).prevOffset() shouldEqual 5
+        ).prevOffset() shouldBeEqualTo 5
     }
 
     @Test
@@ -23,7 +23,7 @@ class PageTest {
             offset = 3,
             limit = 10,
             totalCount = 0
-        ).prevOffset() shouldEqual 0
+        ).prevOffset() shouldBeEqualTo 0
     }
 
     @Test
@@ -33,7 +33,7 @@ class PageTest {
             offset = 0,
             limit = 10,
             totalCount = 20
-        ).nextOffset() shouldEqual 10
+        ).nextOffset() shouldBeEqualTo 10
     }
 
     @Test
@@ -43,6 +43,6 @@ class PageTest {
             offset = 0,
             limit = 10,
             totalCount = 8
-        ).nextOffset() shouldEqual 0
+        ).nextOffset() shouldBeEqualTo 0
     }
 }

@@ -1,10 +1,10 @@
 package org.kotlink.core.secret
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.amshove.kluent.any
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.TEST_ACCOUNT
@@ -27,7 +27,7 @@ class ApiSecretServiceTest(
             .thenReturn(TEST_SECRET)
 
         service.findBySecret(TEST_SECRET.secret).also {
-            it shouldEqual TEST_SECRET
+            it shouldBeEqualTo TEST_SECRET
         }
     }
 
@@ -37,7 +37,7 @@ class ApiSecretServiceTest(
             .thenReturn(null)
 
         service.findBySecret(TEST_SECRET.secret).also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
@@ -47,7 +47,7 @@ class ApiSecretServiceTest(
             .thenReturn(TEST_SECRET)
 
         service.findOrCreateForEmail(TEST_SECRET.userAccount.email).also {
-            it shouldEqual TEST_SECRET
+            it shouldBeEqualTo TEST_SECRET
             verify(apiSecretRepo, times(0)).insert(any())
         }
     }
@@ -62,7 +62,7 @@ class ApiSecretServiceTest(
             .thenReturn(TEST_ACCOUNT)
 
         service.findOrCreateForEmail(TEST_SECRET.userAccount.email).also {
-            it shouldEqual TEST_SECRET
+            it shouldBeEqualTo TEST_SECRET
             verify(apiSecretRepo, times(1)).insert(any())
         }
     }

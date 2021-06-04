@@ -1,6 +1,5 @@
 package org.kotlink.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KLogging
 import org.flywaydb.core.Flyway
 import org.kotlink.core.cache.JacksonCacheValueSerializer
@@ -30,11 +29,12 @@ class CachingConfig {
     @Bean
     @ConditionalOnProperty("spring.cache.type", havingValue = "redis")
     fun redisCacheConfiguration(
-        objectMapper: ObjectMapper,
         flyway: Flyway,
-        flywayMigrationInitializer: FlywayMigrationInitializer,
+        @SuppressWarnings("UnusedPrivateMember") flywayMigrationInitializer: FlywayMigrationInitializer,
         @Value("\${spring.cache.redis.time-to-live}") timeToLive: Duration
     ): RedisCacheConfiguration {
+        // XXX if flywayMigrationInitializer is not in the dependencies,
+        // then flyway migrations won't be executed prior to this method call
         val currentMigrationVersion = flyway.info().current().version.version
         logger.info { "Determined current migration version as: $currentMigrationVersion." }
         return RedisCacheConfiguration.defaultCacheConfig()

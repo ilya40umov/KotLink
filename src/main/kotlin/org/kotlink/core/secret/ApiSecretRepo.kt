@@ -47,9 +47,11 @@ class ApiSecretRepoImpl : ApiSecretRepo {
 }
 
 object ApiSecrets : Table("api_secret") {
-    val id = long("id").autoIncrement("api_secret_id_seq").primaryKey()
-    val secret = varchar("secret", length = 64).primaryKey()
+    val id = long("id").autoIncrement("api_secret_id_seq")
+    val secret = varchar("secret", length = 64)
     val userAccountId = long("user_account_id") references UserAccounts.id
+
+    override val primaryKey = PrimaryKey(UserAccounts.id)
 }
 
 private fun ResultRow.asApiSecret() = ApiSecret(

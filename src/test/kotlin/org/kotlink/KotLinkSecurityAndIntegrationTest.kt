@@ -110,7 +110,7 @@ class KotLinkSecurityAndIntegrationTest(
             .header("X-Forwarded-Proto", "https")
             .exchange()
             .expectStatus().isFound
-            .expectHeader().valueMatches("Location", "https://accounts.google.com.*")
+            .expectHeader().valueMatches("Location", "https://localhost/oauth2/authorization/google")
     }
 
     @Test

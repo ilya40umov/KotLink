@@ -2,17 +2,18 @@ package org.kotlink.config
 
 import mu.KLogging
 import org.kotlink.core.account.UserAccountService
-import org.kotlink.core.oauth.OAuthAuthoritiesExtractor
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso
-import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor
+import org.kotlink.core.oauth.OAuthAuthoritiesMapper
+import org.kotlink.core.oauth.OAuthFailureHandler
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.http.HttpSession
@@ -21,8 +22,8 @@ import javax.servlet.http.HttpSession
 @Configuration
 @ConfigurationProperties("kotlink.security.oauth")
 @EnableWebSecurity
-@EnableOAuth2Sso
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Profile("!mvc-test")
 class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
 
     val allowedEmails = mutableSetOf<String>()
@@ -41,7 +42,7 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .authorizeRequests()
             .antMatchers(
                 "/login**",
-                "/callback/",
+                "/oauth/**",
                 "/error**",
                 "/js/**",
                 "/css/**",
@@ -61,15 +62,19 @@ class OAuthSecurityConfig : WebSecurityConfigurerAdapter() {
             .anyRequest()
             // prevents ACTUATOR user from being used to access UI
             .access("not(hasRole('ROLE_ACTUATOR')) and authenticated")
+            .and()
+            .oauth2Login()
+            .loginPage("/login")
+            .failureHandler(OAuthFailureHandler())
 
         logger.info { "OAuth security has been configured." }
     }
 
     @Bean
-    fun authoritiesExtractor(
+    fun authoritiesMapper(
         session: HttpSession,
         userAccountService: UserAccountService
-    ): AuthoritiesExtractor = OAuthAuthoritiesExtractor(
+    ): GrantedAuthoritiesMapper = OAuthAuthoritiesMapper(
         session = session,
         allowedEmails = allowedEmails,
         allowedEmailRegex = allowedEmailRegex.toRegex(),

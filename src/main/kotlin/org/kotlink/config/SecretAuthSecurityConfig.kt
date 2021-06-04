@@ -5,6 +5,7 @@ import org.kotlink.api.security.SecretAuthFilter
 import org.kotlink.api.security.SecretValidator
 import org.kotlink.core.secret.ApiSecretService
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 @Order(SECRET_AUTH_SECURITY_CONFIG_ORDER)
 @Configuration
 @EnableWebSecurity
+@Profile("!mvc-test")
 class SecretAuthSecurityConfig(
     private val apiSecretService: ApiSecretService
 ) : WebSecurityConfigurerAdapter() {

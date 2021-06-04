@@ -1,8 +1,8 @@
 package org.kotlink.ui
 
 import org.springframework.web.method.HandlerMethod
+import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -21,7 +21,7 @@ enum class UiView(val title: String) {
 @Retention(AnnotationRetention.RUNTIME)
 annotation class SelectView(val value: UiView)
 
-class SelectViewInterceptor : HandlerInterceptorAdapter() {
+class SelectViewInterceptor : HandlerInterceptor {
 
     override fun postHandle(
         request: HttpServletRequest,

@@ -79,7 +79,7 @@ class AliasUiController(
             val createdAlias = aliasService.create(alias)
             attributes.addSuccessMessage("Alias '${createdAlias.fullLink}' has been successfully created.")
             "redirect:/ui/alias"
-        } catch (e: FullLinkExistsException) {
+        } catch (_: FullLinkExistsException) {
             bindResult.rejectValue("link", "", "alias is taken")
             model.addFormAttributes(aliasUiValue)
             "alias/new"
@@ -125,11 +125,11 @@ class AliasUiController(
             return "alias/edit"
         }
         return try {
-            val alias = aliasUiValueConverter.convertValueToModel(aliasUiValue, namespace)
+            val alias = aliasUiValueConverter.convertValueToModel(aliasUiValue, namespace).copy(id = aliasId)
             val updatedAlias = aliasService.update(alias)
             attributes.addSuccessMessage("Alias '${updatedAlias.fullLink}' has been successfully updated.")
             "redirect:/ui/alias"
-        } catch (e: FullLinkExistsException) {
+        } catch (_: FullLinkExistsException) {
             bindResult.rejectValue("link", "", "alias is taken")
             model.addFormAttributes(aliasUiValue)
             "alias/edit"
@@ -144,7 +144,6 @@ class AliasUiController(
     @DeleteMapping("/{aliasId}")
     fun deleteAlias(
         @PathVariable aliasId: Long,
-        model: Model,
         attributes: RedirectAttributes
     ): String {
         return try {

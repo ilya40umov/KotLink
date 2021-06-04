@@ -8,4 +8,4 @@ fi
 ENV=$1
 PROJECT_NAME="kotlink${ENV}"
 
-docker-compose -p $PROJECT_NAME -f environment/docker-compose-$ENV.yaml down -v
+docker-compose -p $PROJECT_NAME  -f environment/docker-compose.yaml -f environment/docker-compose-$ENV.yaml down -v

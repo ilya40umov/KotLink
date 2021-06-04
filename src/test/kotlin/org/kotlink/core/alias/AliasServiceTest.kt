@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainAll
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldThrow
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -38,7 +38,7 @@ class AliasServiceTest(
             .thenReturn(INBOX_ALIAS)
 
         service.findByFullLink("inbox").also {
-            it shouldEqual INBOX_ALIAS
+            it shouldBeEqualTo INBOX_ALIAS
         }
     }
 
@@ -54,7 +54,7 @@ class AliasServiceTest(
         ).thenReturn(listOf(INBOX_ALIAS.copy(link = "inbox google")))
 
         service.findByFullLink("google inbox").also {
-            it shouldEqual INBOX_ALIAS.copy(link = "inbox google")
+            it shouldBeEqualTo INBOX_ALIAS.copy(link = "inbox google")
         }
     }
 
@@ -77,7 +77,7 @@ class AliasServiceTest(
     @Test
     fun `'findByFullLink' should not return any alias if nothing matching given term can be found`() {
         service.findByFullLink("google inbox").also {
-            it shouldEqual null
+            it shouldBeEqualTo null
         }
     }
 
@@ -109,7 +109,7 @@ class AliasServiceTest(
 
         service.findByFullLinkPrefix("in").also { aliases ->
             aliases.map { it.fullLink } shouldContainAll arrayOf(INBOX_ALIAS.fullLink, "google inbox")
-            aliases[0].fullLink shouldEqual INBOX_ALIAS.fullLink
+            aliases[0].fullLink shouldBeEqualTo INBOX_ALIAS.fullLink
         }
     }
 
@@ -171,9 +171,9 @@ class AliasServiceTest(
             limit = 10
         ).also { page ->
             page.records shouldContain INBOX_ALIAS
-            page.offset shouldEqual 0
-            page.limit shouldEqual 10
-            page.totalCount shouldEqual 1
+            page.offset shouldBeEqualTo 0
+            page.limit shouldBeEqualTo 10
+            page.totalCount shouldBeEqualTo 1
         }
     }
 
@@ -196,10 +196,10 @@ class AliasServiceTest(
             offset = 0,
             limit = 25
         ).also { page ->
-            page.records.size shouldEqual 0
-            page.offset shouldEqual 0
-            page.limit shouldEqual 25
-            page.totalCount shouldEqual 0
+            page.records.size shouldBeEqualTo 0
+            page.offset shouldBeEqualTo 0
+            page.limit shouldBeEqualTo 25
+            page.totalCount shouldBeEqualTo 0
         }
     }
 
@@ -217,7 +217,7 @@ class AliasServiceTest(
             .thenReturn(INBOX_ALIAS)
 
         service.create(INBOX_ALIAS).also {
-            it.fullLink shouldEqual INBOX_ALIAS.fullLink
+            it.fullLink shouldBeEqualTo INBOX_ALIAS.fullLink
         }
     }
 
@@ -259,7 +259,7 @@ class AliasServiceTest(
             .thenReturn(TEST_ACCOUNT)
 
         service.update(INBOX_ALIAS).also {
-            it.fullLink shouldEqual INBOX_ALIAS.fullLink
+            it.fullLink shouldBeEqualTo INBOX_ALIAS.fullLink
         }
     }
 
@@ -289,7 +289,7 @@ class AliasServiceTest(
             .thenReturn(TEST_ACCOUNT)
 
         service.deleteById(INBOX_ALIAS.id).also {
-            it.fullLink shouldEqual INBOX_ALIAS.fullLink
+            it.fullLink shouldBeEqualTo INBOX_ALIAS.fullLink
         }
     }
 

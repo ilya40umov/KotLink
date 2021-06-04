@@ -2,23 +2,21 @@ package org.kotlink.api.resolution
 
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.INBOX_ALIAS
 import org.kotlink.INIT_ALIAS
-import org.kotlink.MockMvcExtras
+import org.kotlink.WithMockMvcSetUp
 import org.kotlink.perform
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Import
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ExtendWith(SpringExtension::class)
-@WebMvcTest(LinkResolutionController::class, secure = false)
-@Import(MockMvcExtras::class)
+@WebMvcTest(LinkResolutionController::class)
+@WithMockMvcSetUp
 class LinkResolutionControllerTest(
     @Autowired private val mvc: MockMvc
 ) {

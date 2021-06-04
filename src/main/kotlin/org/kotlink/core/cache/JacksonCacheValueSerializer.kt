@@ -1,7 +1,6 @@
 package org.kotlink.core.cache
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.data.redis.serializer.RedisSerializer
@@ -10,7 +9,12 @@ class JacksonCacheValueSerializer : RedisSerializer<Any> {
 
     private val objectMapper =
         jacksonObjectMapper()
-            .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY)
+            .activateDefaultTyping(
+                BasicPolymorphicTypeValidator.builder()
+                    .allowIfSubType("org.kotlink")
+                    .allowIfSubType("java.util")
+                    .build()
+            )
 
     override fun serialize(t: Any?): ByteArray? {
         return objectMapper.writeValueAsBytes(CacheValue(value = t))

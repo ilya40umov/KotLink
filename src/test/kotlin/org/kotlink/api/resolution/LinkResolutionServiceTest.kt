@@ -3,7 +3,7 @@ package org.kotlink.api.resolution
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.shouldBe
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.INBOX_ALIAS
@@ -26,7 +26,7 @@ class LinkResolutionServiceTest(
         kotLinkService.findRedirectUrlByLink(
             userProvidedLink = INBOX_ALIAS.link
         ).also {
-            it shouldEqual INBOX_ALIAS.redirectUrl
+            it shouldBeEqualTo INBOX_ALIAS.redirectUrl
         }
     }
 
@@ -48,7 +48,7 @@ class LinkResolutionServiceTest(
             userProvidedLinkPrefix = "in",
             redirectUri = "http://localhost:8080/api/link/redirect"
         ).also {
-            it shouldEqual OpenSearchSuggestions(
+            it shouldBeEqualTo OpenSearchSuggestions(
                 prefix = "in",
                 links = listOf(INBOX_ALIAS.fullLink),
                 descriptions = listOf(INBOX_ALIAS.fullLink),

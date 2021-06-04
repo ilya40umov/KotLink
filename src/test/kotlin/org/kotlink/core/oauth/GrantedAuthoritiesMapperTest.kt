@@ -9,34 +9,26 @@ import org.kotlink.core.account.UserAccountService
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority
 import javax.servlet.http.HttpSession
 
 @ExtendWith(MockitoExtension::class)
-class OAuthAuthoritiesExtractorTest(
+class GrantedAuthoritiesMapperTest(
     @Mock private val session: HttpSession,
     @Mock private val userAccountService: UserAccountService
 ) {
-
-    private fun extractor(allowedEmails: Set<String> = emptySet(), allowedEmailRegex: Regex = "^$".toRegex()) =
-        OAuthAuthoritiesExtractor(
-            session = session,
-            allowedEmails = allowedEmails,
-            allowedEmailRegex = allowedEmailRegex,
-            userAccountService = userAccountService
-        )
-
     @Test
     fun `'extractAuthorities' should throw BadCredentialsException if user email is blank`() {
         {
-            extractor(allowedEmailRegex = """.*@gmail\.com""".toRegex())
-                .extractAuthorities(mutableMapOf("email" to ""))
+            createMapper(allowedEmailRegex = """.*@gmail\.com""".toRegex())
+                .mapAuthorities(mutableListOf(OAuth2UserAuthority(mapOf("email" to ""))))
         } shouldThrow BadCredentialsException::class
     }
 
     @Test
     fun `'extractAuthorities' should return ROLE_USER if email matches the allowed regex`() {
-        extractor(allowedEmailRegex = """.*@gmail\.com""".toRegex())
-            .extractAuthorities(mutableMapOf("email" to "zorro@gmail.com"))
+        createMapper(allowedEmailRegex = """.*@gmail\.com""".toRegex())
+            .mapAuthorities(mutableListOf(OAuth2UserAuthority(mapOf("email" to "zorro@gmail.com"))))
             .also { authorities ->
                 authorities.map { it.authority } shouldContain "ROLE_USER"
             }
@@ -44,8 +36,8 @@ class OAuthAuthoritiesExtractorTest(
 
     @Test
     fun `'extractAuthorities' should return ROLE_USER if email is one of the allowed set`() {
-        extractor(allowedEmails = setOf("zorro@gmail.com"))
-            .extractAuthorities(mutableMapOf("email" to "zorro@gmail.com"))
+        createMapper(allowedEmails = setOf("zorro@gmail.com"))
+            .mapAuthorities(mutableListOf(OAuth2UserAuthority(mapOf("email" to "zorro@gmail.com"))))
             .also { authorities ->
                 authorities.map { it.authority } shouldContain "ROLE_USER"
             }
@@ -54,17 +46,25 @@ class OAuthAuthoritiesExtractorTest(
     @Test
     fun `'extractAuthorities' should throw BadCredentialsException if email is not allowed`() {
         {
-            extractor(allowedEmailRegex = """.*@gmail\.com""".toRegex())
-                .extractAuthorities(mutableMapOf("email" to "zorro@yahoo.com"))
+            createMapper(allowedEmailRegex = """.*@gmail\.com""".toRegex())
+                .mapAuthorities(mutableListOf(OAuth2UserAuthority(mapOf("email" to "zorro@yahoo.com"))))
         } shouldThrow BadCredentialsException::class
     }
 
     @Test
     fun `'extractAuthorities' should create a user account if email is valid and no account exists for it`() {
-        extractor(allowedEmails = setOf("zorro@gmail.com"))
-            .extractAuthorities(mutableMapOf("email" to "zorro@gmail.com"))
+        createMapper(allowedEmails = setOf("zorro@gmail.com"))
+            .mapAuthorities(mutableListOf(OAuth2UserAuthority(mapOf("email" to "zorro@gmail.com"))))
             .also {
                 verify(userAccountService).findOrCreateAccountForEmail("zorro@gmail.com")
             }
     }
+
+    private fun createMapper(allowedEmails: Set<String> = emptySet(), allowedEmailRegex: Regex = "^$".toRegex()) =
+        OAuthAuthoritiesMapper(
+            session = session,
+            allowedEmails = allowedEmails,
+            allowedEmailRegex = allowedEmailRegex,
+            userAccountService = userAccountService
+        )
 }

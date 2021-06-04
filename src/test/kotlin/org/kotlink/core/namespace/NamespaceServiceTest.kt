@@ -1,10 +1,10 @@
 package org.kotlink.core.namespace
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.amshove.kluent.any
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldThrow
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -44,7 +44,7 @@ class NamespaceServiceTest(
             .thenReturn(ABC_NAMESPACE)
 
         service.create(ABC_NAMESPACE).also {
-            it.keyword shouldEqual ABC_NAMESPACE.keyword
+            it.keyword shouldBeEqualTo ABC_NAMESPACE.keyword
         }
     }
 
@@ -96,7 +96,7 @@ class NamespaceServiceTest(
             .thenReturn(ABC_NAMESPACE)
 
         service.update(ABC_NAMESPACE).also {
-            it.keyword shouldEqual ABC_NAMESPACE.keyword
+            it.keyword shouldBeEqualTo ABC_NAMESPACE.keyword
         }
     }
 
@@ -176,7 +176,7 @@ class NamespaceServiceTest(
             .thenReturn(emptyList())
 
         service.deleteById(ABC_NAMESPACE.id).also {
-            it.keyword shouldEqual ABC_NAMESPACE.keyword
+            it.keyword shouldBeEqualTo ABC_NAMESPACE.keyword
         }
     }
 }

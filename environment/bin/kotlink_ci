@@ -10,4 +10,6 @@ function destroy_environment() {
 trap destroy_environment EXIT
 
 ./environment/lib/env_up ci
-./gradlew clean build jacocoTestReport
+./gradlew clean build jacocoTestReport \
+ -Dspring.datasource.url=jdbc:postgresql://localhost:45432/kotlink \
+ -Dspring.redis.url=redis://localhost:46379

@@ -13,7 +13,7 @@ class SecretAuthToken(
         isAuthenticated = apiSecret != null
     }
 
-    override fun getCredentials(): Any? = secret
+    override fun getCredentials(): Any = secret
 
     override fun getPrincipal(): Any? = apiSecret
 }

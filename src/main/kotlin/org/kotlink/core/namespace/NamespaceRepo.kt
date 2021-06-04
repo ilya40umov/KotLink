@@ -80,7 +80,7 @@ class NamespaceRepoImpl : NamespaceRepo {
 }
 
 internal object Namespaces : Table("namespace") {
-    val id = long("id").autoIncrement("namespace_id_seq").primaryKey()
+    val id = long("id").autoIncrement("namespace_id_seq")
     val keyword = varchar("keyword", length = Namespace.MAX_KEYWORD_LENGTH)
     val description = varchar("description", length = Namespace.MAX_DESCRIPTION_LENGTH)
     val ownerAccountId = long("owner_account_id") references UserAccounts.id
@@ -88,6 +88,8 @@ internal object Namespaces : Table("namespace") {
     val userAccountsAlias = UserAccounts.alias("ns_owner")
     val withJoins =
         join(userAccountsAlias, JoinType.LEFT, ownerAccountId, userAccountsAlias[UserAccounts.id])
+
+    override val primaryKey = PrimaryKey(UserAccounts.id)
 }
 
 internal fun ResultRow.asNamespace() = Namespace(

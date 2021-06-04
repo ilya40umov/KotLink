@@ -16,18 +16,18 @@ infix fun <T : String?> ExpressionWithColumnType<T>.psqlRegexp(pattern: String):
 private class FullTextSearchOp(expr1: Expression<*>, expr2: Expression<*>) : ComparisonOp(expr1, expr2, "@@")
 
 private class ToTsVectorOp<T>(private val expr: ExpressionWithColumnType<T>) : Op<Boolean>() {
-    override fun toSQL(queryBuilder: QueryBuilder): String = buildString {
-        append("to_tsvector('simple', ")
-        append(expr.toSQL(queryBuilder))
-        append(")")
+    override fun toQueryBuilder(queryBuilder: QueryBuilder) {
+        queryBuilder.append("to_tsvector('simple', ")
+        expr.toQueryBuilder(queryBuilder)
+        queryBuilder.append(")")
     }
 }
 
 private class ToTsQueryOp(private val ftsQuery: String) : Op<Boolean>() {
-    override fun toSQL(queryBuilder: QueryBuilder): String = buildString {
-        append("to_tsquery('simple', ")
-        append(QueryParameter(ftsQuery, VarCharColumnType()).toSQL(queryBuilder))
-        append(")")
+    override fun toQueryBuilder(queryBuilder: QueryBuilder) {
+        queryBuilder.append("to_tsquery('simple', ")
+        QueryParameter(ftsQuery, VarCharColumnType()).toQueryBuilder(queryBuilder)
+        queryBuilder.append(")")
     }
 }
 

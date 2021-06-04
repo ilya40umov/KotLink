@@ -1,0 +1,10 @@
+complexity:
+  TooManyFunctions:
+    thresholdInClasses: 20
+    thresholdInInterfaces: 20
+  LongParameterList:
+    constructorThreshold: 10
+
+style:
+  NewLineAtEndOfFile:
+    active: false

@@ -64,7 +64,7 @@ class NamespaceUiController(
             val createdNamespace = namespaceService.create(namespace)
             attributes.addSuccessMessage("Namespace '${createdNamespace.keyword}' has been successfully created.")
             "redirect:/ui/namespace"
-        } catch (e: KeywordTakenException) {
+        } catch (_: KeywordTakenException) {
             bindResult.rejectValue("keyword", "", "keyword is taken")
             model.addAttribute("namespace", namespaceUiValue)
             "namespace/new"
@@ -114,7 +114,7 @@ class NamespaceUiController(
             namespaceService.update(namespace)
             attributes.addSuccessMessage("Namespace '${namespaceUiValue.keyword}' has been successfully updated.")
             "redirect:/ui/namespace"
-        } catch (e: KeywordTakenException) {
+        } catch (_: KeywordTakenException) {
             bindResult.rejectValue("keyword", "", "keyword is taken")
             model.addAttribute("namespace", namespaceUiValue)
             "namespace/edit"
@@ -129,7 +129,6 @@ class NamespaceUiController(
     @DeleteMapping("/{namespaceId}")
     fun deleteNamespace(
         @PathVariable namespaceId: Long,
-        model: Model,
         attributes: RedirectAttributes
     ): String {
         return try {

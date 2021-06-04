@@ -43,8 +43,10 @@ class UserAccountRepoImpl : UserAccountRepo {
 }
 
 object UserAccounts : Table("user_account") {
-    val id = long("id").autoIncrement("user_account_id_seq").primaryKey()
+    val id = long("id").autoIncrement("user_account_id_seq")
     val email = varchar("email", length = 1024)
+
+    override val primaryKey = PrimaryKey(id)
 }
 
 internal fun ResultRow.asUserAccount() = UserAccount(
