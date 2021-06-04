@@ -1,4 +1,4 @@
-name: Build & Test
+name: CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build_and_test:
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -24,3 +24,18 @@ jobs:
         name: jar_file
         path: build/libs/kotlink.jar
     - uses: codecov/codecov-action@v1
+  docker-image:
+    runs-on: ubuntu-latest
+    needs: ci
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download JAR file
+        uses: actions/download-artifact@v2
+        with:
+          name: jar_file
+          path: build/libs/kotlink.jar
+      - run: |
+          ls -la build/libs/
+
+# TODO https://github.com/docker/build-push-action
