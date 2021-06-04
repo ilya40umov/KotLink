@@ -26,12 +26,15 @@ spring:
       name: kotlinkactuator
       password: kotlinkpass
       roles: ACTUATOR
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            client-id: 115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com
-#            client-secret: SZDICodbaLAkNXjbFKfOFZCO
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com
+            client-secret: SZDICodbaLAkNXjbFKfOFZCO
+          scope:
+            - email
+            - profile
 
 server:
   forward-headers-strategy: NATIVE
@@ -44,21 +47,6 @@ server:
   error:
     whitelabel:
       enabled: false
-
-security:
-  oauth2:
-    client:
-      client-id: 115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com
-      client-secret: SZDICodbaLAkNXjbFKfOFZCO
-      user-authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-      access-token-uri: https://www.googleapis.com/oauth2/v4/token
-      authentication-scheme: header
-      client-authentication-scheme: form
-      token-name: oauth_token
-      scope: email
-    resource:
-      user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-      prefer-token-info: false
 
 logging:
   level:

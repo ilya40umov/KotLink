@@ -54,8 +54,13 @@ tasks {
     }
     withType<Test> {
         useJUnitPlatform {
-            systemProperty("spring.datasource.url", "jdbc:postgresql://localhost:55432/kotlink")
-            systemProperty("spring.redis.url", "redis://localhost:6379")
+            val properties = mapOf(
+                "spring.datasource.url" to "jdbc:postgresql://localhost:55432/kotlink",
+                "spring.redis.url" to "redis://localhost:6379"
+            )
+            properties.forEach { (name, defaultValue) ->
+                systemProperty(name, System.getProperty(name) ?: defaultValue)
+            }
         }
         testLogging.apply {
             events("passed", "skipped", "failed")
@@ -92,7 +97,6 @@ tasks {
 
 dependencies {
 
-    val springBootVersion: String by project.extra
     val exposedVersion = "0.31.1"
     val logbackVersion = "1.2.3"
 
@@ -117,7 +121,6 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-configuration-processor")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$springBootVersion")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
 
     implementation("com.github.ben-manes.caffeine:caffeine")

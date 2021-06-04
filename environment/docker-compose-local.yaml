@@ -2,33 +2,15 @@ version: '3.2'
 
 services:
   postgresql:
-    build:
-      context: postgresql
     ports:
       - 55432:5432
     volumes:
       - postgresql:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=kotlink
-      - POSTGRES_USER=kotlinkuser
-      - POSTGRES_PASSWORD=kotlinkpass
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
-      interval: 15s
-      timeout: 30s
-      retries: 3
   redis:
-    build:
-      context: redis
     ports:
       - 6379:6379
     volumes:
       - redis:/data
-    healthcheck:
-      test: ["CMD", "redis-cli","ping"]
-      interval: 15s
-      timeout: 30s
-      retries: 3
 
 volumes:
   postgresql:

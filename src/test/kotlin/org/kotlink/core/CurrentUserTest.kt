@@ -7,26 +7,23 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.kotlink.core.account.UserAccountService
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.oauth2.provider.OAuth2Authentication
-import org.springframework.security.oauth2.provider.OAuth2Request
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.user.OAuth2User
 
 @ExtendWith(MockitoExtension::class)
 class CurrentUserTest(
     @Mock private val userAccountService: UserAccountService,
-    @Mock private val storedRequest: OAuth2Request,
-    @Mock private val authenticationToken: UsernamePasswordAuthenticationToken
+    @Mock private val principal: OAuth2User
 ) {
     private val currentUser = CurrentUser(userAccountService)
 
     @Test
     fun `'getEmail' should return user email if authentication is oauth2`() {
-        SecurityContextHolder.getContext().authentication = OAuth2Authentication(
-            storedRequest,
-            authenticationToken
-        )
-        whenever(authenticationToken.details).thenReturn(mapOf("email" to "batman@gmail.com"))
+        SecurityContextHolder.getContext().authentication =
+            OAuth2AuthenticationToken(principal, listOf<GrantedAuthority>(), "google")
+        whenever(principal.attributes).thenReturn(mapOf("email" to "batman@gmail.com"))
 
         currentUser.getEmail().also {
             it shouldBeEqualTo "batman@gmail.com"

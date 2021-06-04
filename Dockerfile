@@ -1,4 +1,5 @@
-FROM openjdk:11.0.3-jdk
+FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
+
 LABEL maintainer="illia.sorokoumov@gmail.com"
 
 COPY build/libs/kotlink.jar /opt/kotlink/kotlink.jar

@@ -4,10 +4,9 @@ import org.kotlink.core.account.UserAccount
 import org.kotlink.core.account.UserAccountService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.oauth2.provider.OAuth2Authentication
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.RequestScope
 
@@ -20,10 +19,8 @@ class CurrentUser(
 
     fun getEmail(): String {
         val auth: Authentication? = SecurityContextHolder.getContext().authentication
-        if (auth is OAuth2Authentication) {
-            val token = auth.userAuthentication as UsernamePasswordAuthenticationToken
-            val details = token.details as Map<*, *>
-            return details["email"] as String
+        if (auth is OAuth2AuthenticationToken) {
+            return auth.principal.attributes["email"] as String
         }
         return UNKNOWN_USER_EMAIL
     }

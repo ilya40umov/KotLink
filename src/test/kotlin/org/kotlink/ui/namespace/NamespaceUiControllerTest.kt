@@ -219,7 +219,7 @@ class NamespaceUiControllerTest(
             andExpect(status().isFound)
             andExpect(
                 flash()
-                    .attribute("error_message", Matchers.isEmptyOrNullString())
+                    .attribute("error_message", Matchers.emptyOrNullString())
             )
         }
     }

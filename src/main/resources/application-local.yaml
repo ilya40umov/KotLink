@@ -8,13 +8,6 @@ logging:
   level:
     Exposed: DEBUG
 
-# there is also 'server.tomcat.internal-proxies' which by default has a bunch of IP ranges covered, including 127.0.0.1
-server:
-  use-forward-headers: true
-  tomcat:
-    remote-ip-header: x-forwarded-for
-    protocol-header: x-forwarded-proto
-
 kotlink:
   logging:
     enable-access-log: false
