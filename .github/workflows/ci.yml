@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - 'master'
   pull_request:
-    branches: [ master ]
+    branches:
+      - 'master'
 
 jobs:
   test-and-build:
@@ -16,9 +18,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-    - name: Run CI
+    - name: Run Tests & Build JAR
       run: ./environment/bin/kotlink_ci
-    - name: Upload JAR file
+    - name: Upload JAR File
       uses: actions/upload-artifact@v2
       with:
         name: jar_file
@@ -30,12 +32,21 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      - name: Download JAR file
+      - name: Download JAR File
         uses: actions/download-artifact@v2
         with:
           name: jar_file
-          path: build/libs/kotlink.jar
+          path: build/libs/
       - run: |
           ls -la build/libs/
-
-# TODO https://github.com/docker/build-push-action
+      - name: Login To DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build & Push Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64
+          tags: ilya40umov/kotlink:develop
