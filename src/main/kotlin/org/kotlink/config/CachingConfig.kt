@@ -16,7 +16,6 @@ import org.springframework.data.redis.serializer.RedisSerializationContext
 import java.time.Duration
 import javax.annotation.PostConstruct
 
-
 @EnableCaching
 @Configuration
 class CachingConfig {

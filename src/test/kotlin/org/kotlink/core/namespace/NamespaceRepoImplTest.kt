@@ -1,6 +1,10 @@
 package org.kotlink.core.namespace
 
-import org.amshove.kluent.*
+import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeGreaterThan
+import org.amshove.kluent.shouldContain
+import org.amshove.kluent.shouldEndWith
+import org.amshove.kluent.shouldThrow
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -10,7 +14,7 @@ import org.kotlink.core.account.UserAccountRepo
 import org.kotlink.core.exposed.DatabaseException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.util.*
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 @ExposedRepoTest

@@ -151,4 +151,6 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.mockito:mockito-junit-jupiter:3.10.0")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.0")
 }

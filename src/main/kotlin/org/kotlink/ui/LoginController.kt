@@ -4,7 +4,6 @@ import org.kotlink.core.CurrentUser
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 
-
 @Controller
 class LoginController(
     private val currentUser: CurrentUser

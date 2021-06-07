@@ -1,3 +1,8 @@
+# https://detekt.github.io/detekt/configurations.html
+
+build:
+  maxIssues: 25
+
 complexity:
   TooManyFunctions:
     thresholdInClasses: 20
@@ -7,4 +12,8 @@ complexity:
 
 style:
   NewLineAtEndOfFile:
+    active: false
+
+formatting:
+  FinalNewline:
     active: false
