@@ -1,5 +1,6 @@
 # KotLink
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://github.com/ilya40umov/KotLink/actions/workflows/ci.yml/badge.svg)](https://github.com/ilya40umov/KotLink/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/ilya40umov/KotLink/branch/master/graph/badge.svg)](https://codecov.io/gh/ilya40umov/KotLink)
 [![Docker Hub](https://img.shields.io/docker/pulls/ilya40umov/kotlink.svg)](https://hub.docker.com/r/ilya40umov/kotlink/)
 

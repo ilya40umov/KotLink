@@ -37,8 +37,6 @@ jobs:
         with:
           name: jar_file
           path: build/libs/
-      - run: |
-          ls -la build/libs/
       - name: Login To DockerHub
         uses: docker/login-action@v1
         with:
@@ -49,4 +47,5 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
+          push: true
           tags: ilya40umov/kotlink:develop
