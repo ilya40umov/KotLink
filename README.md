@@ -36,14 +36,16 @@ as it's going to store all of the links / namespaces for your team.
 
 * Chrome / Chromium via [Browser Extension](https://chrome.google.com/webstore/detail/kotlink-browser-extension/cdkflkfieefihicjaidafmggjdnkakod)
 * Firefox via [Browser Extension](https://addons.mozilla.org/en-US/firefox/addon/kotlink-browser-extension)
-* Vivaldi via [manually registering KotLink as a search engine](docs/extension-guide.md#vivaldi)
-* Safari (only partially) via 3rd-party [Safari Omnikey Extension](docs/extension-guide.md#safari)
 
-Chrome and Firefox extensions will require some 
+Chrome and Firefox extensions require some
 [configuration](http://kotlink.org/docs/extension-guide.html#kotlink-extension-options)
 before they can be used.
 
-Alternatively, MacOS and [Alfred](https://www.alfredapp.com) users can install [this workflow](https://github.com/augustocdias/alfred-kotlink) (requires [Node.js](https://nodejs.org) 8+ and the Alfred [Powerpack](https://www.alfredapp.com/powerpack/)):
+### Other Known Ways Of Using KotLink
+
+With Vivaldi via [manually registering KotLink as a search engine](docs/extension-guide.md#vivaldi)
+
+MacOS and [Alfred](https://www.alfredapp.com) users can install [this workflow](https://github.com/augustocdias/alfred-kotlink) (requires [Node.js](https://nodejs.org) 8+ and the Alfred [Powerpack](https://www.alfredapp.com/powerpack/)):
 
     npm install --global alfred-kotlink
 
@@ -64,7 +66,7 @@ docker run --name kotlink-postgres \
   -e POSTGRES_USER=kotlinkuser \
   -e POSTGRES_PASSWORD=kotlinkpass \
   -e POSTGRES_DB=kotlink \
-  -d postgres:10.4
+  -d postgres:13.3
 
 docker pull ilya40umov/kotlink
 
