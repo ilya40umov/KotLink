@@ -21,7 +21,7 @@ data class OpenSearchSuggestions(
     constructor(prefix: String, redirectUri: String, aliases: List<Alias>) : this(
         prefix = prefix,
         links = aliases.map { it.fullLink },
-        descriptions = aliases.map { it.fullLink },
+        descriptions = aliases.map { it.description },
         redirectUrls = aliases.map { alias ->
             UriComponentsBuilder
                 .fromUriString(redirectUri)

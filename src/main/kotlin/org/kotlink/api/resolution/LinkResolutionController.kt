@@ -46,7 +46,7 @@ class LinkResolutionController(
         logger.info { "Suggested for $linkPrefix - ${suggestions.links}" }
         when (mode) {
             "opensearch" -> suggestions
-            "simple" -> suggestions.links
+            "simple" -> suggestions.links.zip(suggestions.descriptions)
             else -> {
                 logger.warn { "Unrecognized suggestion mode: $mode" }
                 suggestions.links

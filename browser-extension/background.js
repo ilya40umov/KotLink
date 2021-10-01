@@ -32,8 +32,11 @@ function createSuggestionsFromResponse(response) {
             let suggestions = [];
             for (const i in jsonArray) {
                 if (jsonArray.hasOwnProperty(i)) {
-                    let suggestion = `${jsonArray[i]} `;
-                    suggestions.push({content: suggestion, description: suggestion});
+                    let item = jsonArray[i];
+                    if (item.hasOwnProperty('first') && item.hasOwnProperty('second')) {
+                        item = `${item.first} | ${item.second}`
+                    }
+                    suggestions.push(`${item}`);
                 }
             }
             return resolve(suggestions);
@@ -63,6 +66,7 @@ omnibox.onInputChanged.addListener((userInput, addSuggestions) => {
 omnibox.onInputEntered.addListener(function (userInput, disposition) {
     loadExtensionStorage((extensionStorage) => {
         if (extensionStorage.kotlinkServerUrl) {
+            userInput = userInput.split("|")[0].trim();
             let url = `${getServerUrl(extensionStorage)}api/link/redirect?link=${userInput}`;
             switch (disposition) {
                 case "currentTab":
