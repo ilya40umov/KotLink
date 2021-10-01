@@ -34,10 +34,9 @@ function createSuggestionsFromResponse(response) {
                 if (jsonArray.hasOwnProperty(i)) {
                     let item = jsonArray[i];
                     if (item.hasOwnProperty('first') && item.hasOwnProperty('second')) {
-                        suggestions.push({ content: item.first, description: `${item.first} --- ${item.second}`});
-                    }
-                    else {
-                        suggestions.push({ content: item, description: item});
+                        suggestions.push({content: item.first, description: `${item.first} --- ${item.second}`});
+                    } else {
+                        suggestions.push({content: item, description: item});
                     }
                 }
             }
