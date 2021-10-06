@@ -66,7 +66,7 @@ class LinkResolutionControllerTest(
             andExpect(jsonPath("$[1][0]").value(INBOX_ALIAS.fullLink))
             andExpect(jsonPath("$[1][1]").value(INIT_ALIAS.fullLink))
             andExpect(jsonPath("$[2]").isArray)
-            andExpect(jsonPath("$[2][0]").value(INBOX_ALIAS.fullLink))
+            andExpect(jsonPath("$[2][0]").value(INBOX_ALIAS.description))
             andExpect(jsonPath("$[3]").isArray)
             andExpect(
                 jsonPath("$[3][0]")
@@ -96,8 +96,10 @@ class LinkResolutionControllerTest(
         mvc.perform(get("/api/link/suggest?link=in&mode=simple")) {
             andExpect(status().isOk)
             andExpect(jsonPath("$").isArray)
-            andExpect(jsonPath("$[0]").value(INBOX_ALIAS.fullLink))
-            andExpect(jsonPath("$[1]").value(INIT_ALIAS.fullLink))
+            andExpect(jsonPath("$[0].first").value(INBOX_ALIAS.fullLink))
+            andExpect(jsonPath("$[0].second").value(INBOX_ALIAS.description))
+            andExpect(jsonPath("$[1].first").value(INIT_ALIAS.fullLink))
+            andExpect(jsonPath("$[1].second").isEmpty)
         }
     }
 }

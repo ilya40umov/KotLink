@@ -51,7 +51,7 @@ class LinkResolutionServiceTest(
             it shouldBeEqualTo OpenSearchSuggestions(
                 prefix = "in",
                 links = listOf(INBOX_ALIAS.fullLink),
-                descriptions = listOf(INBOX_ALIAS.fullLink),
+                descriptions = listOf(INBOX_ALIAS.description),
                 redirectUrls = listOf(
                     "http://localhost:8080/api/link/redirect?link=${INBOX_ALIAS.fullLink}"
                         .replace(" ", "%20")
