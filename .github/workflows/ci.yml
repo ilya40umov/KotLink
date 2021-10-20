@@ -73,6 +73,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ilya40umov/kotlink
       - name: Compute Tag Name
         run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
       - name: Build & Push Image
@@ -81,4 +86,4 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
-          tags: ilya40umov/kotlink:latest,ilya40umov/kotlink:${TAG}
+          tags: ${{ steps.meta.outputs.tags }}
