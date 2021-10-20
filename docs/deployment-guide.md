@@ -38,9 +38,11 @@ E.g. The OAuth2 Client ID for local development has `http://localhost:8080/login
  
 #### Set Up OAuth2
  
-* `SECURITY_OAUTH2_CLIENT_CLIENT_ID` - OAuth2 client ID obtained from [Google API Console](https://console.developers.google.com),
+* `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID` - 
+ OAuth2 client ID obtained from [Google API Console](https://console.developers.google.com),
  e.g. `115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com`
-* `SECURITY_OAUTH2_CLIENT_CLIENT_SECRET` - OAuth2 client secret obtained from Google API Console,
+* `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET` - 
+ OAuth2 client secret obtained from Google API Console, 
  e.g. `SZDICodbaLAkNXjbFKfOFZCO`
 
 #### Limit Who Can Access Your Server
