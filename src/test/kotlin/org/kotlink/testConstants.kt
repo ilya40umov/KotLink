@@ -21,7 +21,8 @@ val INBOX_ALIAS = Alias(
     namespace = DEFAULT_NAMESPACE,
     link = "inbox",
     redirectUrl = "https://inbox.google.com/",
-    ownerAccount = TEST_ACCOUNT
+    ownerAccount = TEST_ACCOUNT,
+    description = "Inbox Alias"
 )
 
 val INIT_ALIAS = Alias(
