@@ -21,12 +21,12 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
     - name: Run Tests & Build JAR
-      run: ./environment/bin/kotlink_ci
+      run: ./gradlew clean build jacocoTestReport
     - name: Upload JAR File
       uses: actions/upload-artifact@v2
       with:
         name: jar_file
-        path: build/libs/kotlink.jar
+        path: server-spring/build/libs/kotlink.jar
     - name: Report Detekt Issues
       if: github.ref == 'refs/heads/master'
       uses: github/codeql-action/upload-sarif@v1
@@ -44,7 +44,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: jar_file
-          path: build/libs/
+          path: server-spring/build/libs/
       - name: Login To DockerHub
         uses: docker/login-action@v1
         with:
@@ -53,7 +53,7 @@ jobs:
       - name: Build & Push Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./server-spring/
           platforms: linux/amd64
           push: true
           tags: ilya40umov/kotlink:develop
@@ -67,7 +67,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: jar_file
-          path: build/libs/
+          path: server-spring/build/libs/
       - name: Login To DockerHub
         uses: docker/login-action@v1
         with:
@@ -83,7 +83,7 @@ jobs:
       - name: Build & Push Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./server-spring/
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}

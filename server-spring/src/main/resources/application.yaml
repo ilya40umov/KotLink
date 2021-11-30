@@ -1,0 +1,73 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:55432/kotlink
+    username: kotlinkuser
+    password: kotlinkpass
+  redis:
+    timeout: 200ms
+  flyway:
+    enabled: true
+  cache:
+    cache-names: aliasByFullLink,aliasByFullLinkPrefix,aliasSearch,apiSecret
+    type: redis
+    caffeine:
+      spec: maximumSize=2000,expireAfterWrite=300s
+    redis:
+      time-to-live: 1h
+  session:
+    store-type: redis
+    jdbc:
+      initialize-schema: never
+  security:
+    user:
+      name: kotlinkactuator
+      password: kotlinkpass
+      roles: ACTUATOR
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 115327279391-cqrf3suvt416skdkr8lqvdntgfa90epg.apps.googleusercontent.com
+            client-secret: SZDICodbaLAkNXjbFKfOFZCO
+          scope:
+            - email
+            - profile
+
+server:
+  forward-headers-strategy: NATIVE
+  servlet:
+    session:
+      timeout: 12h
+  compression:
+    enabled: true
+    mime-types: application/javascript,text/css,application/json
+  error:
+    whitelabel:
+      enabled: false
+
+logging:
+  level:
+    Exposed: WARN
+
+kotlink:
+  security:
+    oauth:
+      allowed-email-regex: .*
+      allowed-emails: [ ]
+    restrict-edits-to-ip-regex: .*
+    restrict-edits-to-ip-cidrs: 0.0.0.0/0,::/0
+  logging:
+    enable-access-log: false
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        kotlink.api: true
+  endpoints:
+    web:
+      exposure:
+        include: [ "health", "metrics", "prometheus" ]

@@ -1,0 +1,5 @@
+ALTER TABLE namespace
+    ADD COLUMN owner_account_id BIGINT NOT NULL REFERENCES user_account ON DELETE RESTRICT;
+
+ALTER TABLE alias
+    ADD COLUMN owner_account_id BIGINT NOT NULL REFERENCES user_account ON DELETE RESTRICT;

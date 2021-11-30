@@ -1,0 +1,11 @@
+version: '3.2'
+
+services:
+  postgresql:
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+      - /var/lib/postgresql/data
+  redis:
+    tmpfs:
+      - /data
