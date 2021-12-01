@@ -1,45 +1,75 @@
 import com.avast.gradle.dockercompose.ComposeSettings
+import org.jetbrains.kotlin.gradle.utils.addExtendsFromRelation
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
+    `jvm-test-suite`
+
     kotlin("jvm")
     kotlin("kapt")
     kotlin("plugin.spring")
     kotlin("plugin.allopen")
-    id("org.springframework.boot")
-    id("io.spring.dependency-management")
-    id("com.avast.gradle.docker-compose")
+
+    id("org.springframework.boot") version "2.6.1"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("com.avast.gradle.docker-compose") version "0.14.11"
 }
 
 dockerCompose {
     projectName = "kotlink"
     projectNamePrefix = "kotlink_"
     useComposeFiles.set(listOf("docker-compose.yaml", "docker-compose-local.yaml"))
+    // when set to "false", the plugin automatically tries to reconnect to the containers from the previous run
+    stopContainers.set(false)
 
-    createNested("test").apply {
+    createNested("integrationTest").apply {
         projectName = "kotlink-ci"
         projectNamePrefix = "kotlink_ci_"
         useComposeFiles.set(listOf("docker-compose.yaml", "docker-compose-ci.yaml"))
-        forceRecreate.set(true)
+    }
+}
+
+fun ComposeSettings.postgresUrl() =
+    "jdbc:postgresql://localhost:${servicesInfos["postgresql"]?.port ?: 5432}/kotlink"
+
+fun ComposeSettings.redisUrl() =
+    "redis://localhost:${servicesInfos["redis"]?.port ?: 6379}"
+
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+        }
+        register("integrationTest", JvmTestSuite::class) {
+            useJUnitJupiter()
+            addExtendsFromRelation(
+                extendingConfigurationName = "integrationTestImplementation",
+                extendsFromConfigurationName = "testImplementation",
+                forced = true
+            )
+            dependencies {
+                implementation(project)
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        dependsOn("integrationTestComposeUp")
+                        doFirst {
+                            systemProperty("spring.datasource.url", dockerCompose.nested("integrationTest").postgresUrl())
+                            systemProperty("spring.redis.url", dockerCompose.nested("integrationTest").redisUrl())
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 tasks {
-    fun ComposeSettings.postgresUrl() =
-        "jdbc:postgresql://localhost:${servicesInfos["postgresql"]?.port ?: 5432}/kotlink"
-
-    fun ComposeSettings.redisUrl() =
-        "redis://localhost:${servicesInfos["redis"]?.port ?: 6379}"
-
-    withType<Test> {
-        dependsOn("testComposeUp")
-        finalizedBy("testComposeDown")
-        useJUnitPlatform {}
-        doFirst {
-            systemProperty("spring.datasource.url", dockerCompose.nested("test").postgresUrl())
-            systemProperty("spring.redis.url", dockerCompose.nested("test").redisUrl())
-        }
+    named("check") {
+        dependsOn(testing.suites.named("integrationTest"))
     }
     withType<BootRun> {
         dependsOn("composeUp")
@@ -106,12 +136,14 @@ dependencies {
 
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0")
 
-    val jupiterVersion = "5.8.2"
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    val jupiterVersion = "5.8.2"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
+
     testImplementation("org.amshove.kluent:kluent:1.68")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")

@@ -78,7 +78,7 @@ for more details.
 
 To enable using Redis as a backing store for cache (by default lives in memory) 
 and for session information (by default is stored in Postgres), 
-which in turn will help improving performance and availability 
+which in turn will help to improve performance and availability 
 (e.g. without a stand-alone cache you can only have a single-node deployment of KotLink server, 
 as local caches on each node will quickly become stale and cause issues),
 you can tweak the following properties:

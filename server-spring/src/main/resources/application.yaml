@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: local
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:55432/kotlink

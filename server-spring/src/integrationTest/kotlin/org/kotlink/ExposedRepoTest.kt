@@ -39,9 +39,7 @@ internal class ExposedRepoTypeExcludeFilter(testClass: Class<*>) : AnnotationCus
 
     override fun hasAnnotation(): Boolean = this.annotation != null
 
-    override fun getFilters(
-        type: AnnotationCustomizableTypeExcludeFilter.FilterType
-    ): Array<ComponentScan.Filter> = emptyArray()
+    override fun getFilters(type: FilterType): Array<ComponentScan.Filter> = emptyArray()
 
     override fun isUseDefaultFilters(): Boolean = true
 

@@ -12,11 +12,6 @@ plugins {
     kotlin("plugin.spring") version kotlinVersion apply false
     kotlin("plugin.allopen") version kotlinVersion apply false
 
-    val springVersion = "2.6.1"
-    id("org.springframework.boot") version springVersion apply false
-
-    id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
-    id("com.avast.gradle.docker-compose") version "0.14.11" apply false
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     id("com.github.ben-manes.versions") version "0.39.0"
@@ -84,9 +79,6 @@ tasks {
         autoCorrect = false
         ignoreFailures = false
         reports {
-            html.required.set(false)
-            xml.required.set(false)
-            txt.required.set(false)
             sarif.required.set(true)
         }
     }
@@ -99,7 +91,6 @@ tasks {
     register("jacocoAggregatedReport", JacocoReport::class) {
         reports.html.required.set(true)
         reports.xml.required.set(true)
-        reports.csv.required.set(false)
         subprojects.filter { it.name != "assembly" }.forEach { subProject ->
             dependsOn(subProject.tasks.findByPath("test"))
             executionData(subProject.tasks.findByPath("test"))

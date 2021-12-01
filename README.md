@@ -30,7 +30,7 @@ by typing *kk␣vim␣shortcuts↵*, the user will be redirected to the actual l
 
 Please beware that to make use of the browser extension, 
 you will first need to set up a dedicated KotLink server,
-as it's going to store all of the links / namespaces for your team.
+as it's going to store all the links / namespaces for your team.
 
 ### Supported Browsers
 
@@ -55,9 +55,16 @@ KotLink server requires an instance of PostgreSQL as the backend store,
 and encapsulates all the logic around storing / resolving URL aliases, 
 as well as UI for creating / editing them.
 
-For evaluation purposes, you can run KotLink server on your machine with the following commands, 
-given that you have [Docker](https://en.wikipedia.org/wiki/Docker_(software)) installed
-(you may have to add `sudo` before all calls to `docker` depending on your system): 
+Assuming you have [Docker](https://en.wikipedia.org/wiki/Docker_(software)) and `docker-compose` installed,
+you can run KotLink server on your machine for evaluation purposes with the following commands:
+
+```
+git clone https://github.com/ilya40umov/KotLink.git && cd KotLink
+./gradlew bootRun
+```
+
+Alternatively, if you don't want to clone the repository, you can use the following set of commands:
+
 ```
 docker network create kotlink-network
 
@@ -96,6 +103,10 @@ and provide them to your KotLink server via environment variables
 Through environment variables, you will also be able to restrict who can access your KotLink server.
 
 When you are done evaluating, you can run the following command to clean up containers from your machine:
+
+```./gradlew composeDownForce```
+
+or if you chose the second approach:
 
 ```docker rm -f kotlink-postgres && docker network rm kotlink-network```
 
