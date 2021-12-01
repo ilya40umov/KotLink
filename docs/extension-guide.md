@@ -24,15 +24,8 @@ with your actual data.
 
 ### Safari
 
-Safari is currently only partially supported via 3rd-party 
-[Safari Omnikey](http://marioestrada.github.io/safari-omnikey/) extension.
-
-In order to make it work, first install the extension, then click on the extension icon (looks like a magnifying glass), 
-click *Add Site* and use prefix `kk` with the following URL `http://YOUR_SERVER_ADDRESS/api/link/redirect?link={search}`
-
-Please, make sure to replace `YOUR_SERVER_ADDRESS` in the URL with your actual server address. 
-Also, it's worth to mention that unlike regular KotLink extension for Chrome / FireFox, 
-*Safari Omnikey* does not support autocomplete.
+It used to be possible to get partial support via [Safari Omnikey](http://marioestrada.github.io/safari-omnikey/),
+but since Safari 13 it does not seem to function anymore.
 
 ### KotLink Extension Options
 

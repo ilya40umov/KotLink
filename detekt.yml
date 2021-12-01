@@ -1,0 +1,25 @@
+# https://detekt.github.io/detekt/configurations.html
+
+config:
+  excludes: ''
+
+build:
+  maxIssues: 25
+
+complexity:
+  TooManyFunctions:
+    excludes: ['**/integrationTest/**', '**/test/**', '**/*Test.kt', '**/*Spec.kt']
+    thresholdInClasses: 20
+    thresholdInInterfaces: 20
+  LongParameterList:
+    constructorThreshold: 10
+
+style:
+  MagicNumber:
+    excludes: ['**/integrationTest/**', '**/test/**', '**/*Test.kt', '**/*Spec.kt']
+  NewLineAtEndOfFile:
+    active: false
+
+formatting:
+  FinalNewline:
+    active: false
