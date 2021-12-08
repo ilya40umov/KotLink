@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KotLink</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@13.0.0/dist/material-components-web.min.css">
+    <link th:href="@{~/css/main.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <script src="https://unpkg.com/material-components-web@13.0.0/dist/material-components-web.min.js"></script>
+    <script th:src="@{~/js/main.js}"></script>
+</head>
+<body class="mdc-typography">
+
+<!--/*@thymesVar id="model" type="org.kotlink.framework.mvc.BaseViewModel"*/-->
+
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+    <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+            <img th:src="@{~/img/logo.png}" alt="Logo.png"/>
+            <div class="mdc-top-app-bar__title"
+                 th:text="${'KotLink UI'}">
+                Title
+            </div>
+        </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+            <span class="mdc-top-app-bar__title mdc-typography--overline"
+                  th:text="${'Guest'}">Guest</span>
+            <div class="mdc-menu-surface--anchor">
+                <a id="user-menu-icon"
+                   class="material-icons mdc-top-app-bar__navigation-icon"
+                   href="#"
+                   tabindex="-1">
+                    account_circle
+                </a>
+                <div id="user-menu" class="mdc-menu mdc-menu-surface" tabindex="-1" data-mdc-auto-init="MDCMenu">
+                    <ul class="mdc-menu__items mdc-deprecated-list" role="menu" aria-hidden="true">
+                        <li class="mdc-deprecated-list-item"
+                            role="menuitem"
+                            tabindex="-1"
+                            onclick="document.getElementById('signout-button').click()">
+                            Logout
+                            <form class="signout-form" method="post" th:action="@{~/ui/sign_out}">
+                                <button id="signout-button" type="submit"></button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</header>
+
+<div class="content-wrapper mdc-top-app-bar--fixed-adjust">
+    <aside class="mdc-drawer">
+        <div class="mdc-drawer__content">
+            <div class="mdc-list-group">
+                <ul class="mdc-list">
+                    <li class="mdc-list-item new-alias-button-item" tabindex="-1">
+                        <span class="mdc-list-item__ripple"></span>
+                        <form th:action="@{~/ui/alias/new}" method="get" style="">
+                            <button class="mdc-button mdc-button--raised new-alias-button"
+                                    tabindex="-1">
+                                <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+                                New Alias
+                            </button>
+                        </form>
+                    </li>
+                    <li th:class="'mdc-list-item' + ${(model.klass.name == 'org.kotlink.ui.alias.ListAliases') ? ' mdc-list-item--selected' : '' }"
+                        aria-selected="true"
+                        tabindex="-1">
+                        <span class="mdc-list-item__ripple"></span>
+                        <a class="mdc-list-item"
+                           th:href="@{~/ui/alias}"
+                           tabindex="-1">
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">local_offer</i>
+                            <span class="mdc-list-item__text">Aliases</span>
+                        </a>
+                    </li>
+                    <li class="mdc-list-item"
+                        th:class="'mdc-list-item' + ${(model.klass.name == 'org.kotlink.ui.namespace.ListNamespaces') ? ' mdc-list-item--selected' : '' }"
+                        tabindex="-1">
+                        <span class="mdc-list-item__ripple"></span>
+                        <a class="mdc-list-item"
+                           th:href="@{~/ui/namespace}"
+                           tabindex="-1">
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">folder_open</i>
+                            <span class="mdc-list-item__text">Namespaces</span>
+                        </a>
+                    </li>
+                    <li class="mdc-list-divider">
+                    </li>
+                    <li th:class="'mdc-list-item' + ${(model.klass.name == 'org.kotlink.ui.help.SetupInstructions') ? ' mdc-list-item--selected' : '' }"
+                        tabindex="-1">
+                        <span class="mdc-list-item__ripple"></span>
+                        <a class="mdc-list-item"
+                           th:href="@{~/ui/setup_instructions}"
+                           tabindex="-1">
+                            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">info</i>
+                            <span class="mdc-list-item__text">Setup Instructions</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <main layout:fragment="content" class="main-wrapper"></main>
+</div>
+</body>
+</html>

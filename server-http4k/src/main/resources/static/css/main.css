@@ -1,0 +1,98 @@
+/*
+ * General layout
+ */
+:root {
+    --mdc-theme-primary: #3D5AFE;
+    --mdc-theme-secondary: #018786;
+    --mdc-theme-background: #F4F4F4;
+    --danger-color: #FF5252;
+    --auxiliary-color: #448aff;
+}
+
+html {
+    height: 100%;
+    --mdc-typography-font-family: Roboto, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100%;
+    height: 100vh;
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.main-wrapper {
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 100%;
+}
+
+/*
+ * Header
+ */
+.mdc-top-app-bar .mdc-top-app-bar__navigation-icon {
+    text-decoration: none;
+}
+
+.mdc-top-app-bar .mdc-top-app-bar__title {
+    padding-right: 1em;
+}
+
+.mdc-top-app-bar .mdc-menu-surface--anchor {
+    height: 1.5em;
+}
+
+.mdc-top-app-bar .signout-form {
+    visibility: hidden;
+}
+
+/*
+ * Left Drawer
+ */
+.mdc-drawer .mdc-list-item {
+    height: 3.6em;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    font-weight: 500;
+    align-items: center;
+    width: 100%;
+}
+
+.mdc-drawer .material-icons.mdc-list-item__graphic {
+    padding-right: 1.1em;
+}
+
+.mdc-drawer .mdc-list-item--selected .material-icons.mdc-list-item__graphic {
+    color: var(--mdc-theme-primary);
+}
+
+.mdc-drawer .new-alias-button-item {
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+}
+
+.mdc-drawer .new-alias-button {
+    width: 14em;
+    margin-left: 1.2em;
+}
+
+.mdc-drawer .mdc-list-divider {
+    height: 0.05em;
+}
+
+/*
+ * Utils
+ */
+.kotlink-ready-detect {
+    position: relative;
+}

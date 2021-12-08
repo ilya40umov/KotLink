@@ -1,5 +1,6 @@
 rootProject.name = "kotlink"
 
 include(
-  "server-spring"
+  "server-spring",
+  "server-http4k"
 )
