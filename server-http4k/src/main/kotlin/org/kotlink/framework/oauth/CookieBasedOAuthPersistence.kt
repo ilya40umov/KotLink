@@ -15,6 +15,7 @@ import org.http4k.security.Nonce
 import org.http4k.security.OAuthPersistence
 import org.http4k.security.openid.IdToken
 import org.kotlink.framework.crypto.EncryptionProvider
+import java.security.GeneralSecurityException
 import java.time.Clock
 import java.time.Duration
 import java.time.LocalDateTime
@@ -26,7 +27,7 @@ class CookieBasedOAuthPersistence(
     private val idTokenProcessor: IdTokenProcessor,
     private val encryptionProvider: EncryptionProvider,
     private val cookiePath: String = "/",
-    private val cookieValidity: Duration = Duration.ofHours(12),
+    private val cookieValidity: Duration = Duration.ofHours(DEFAULT_COOKIE_VALIDITY_HOURS),
     private val clock: Clock = Clock.systemDefaultZone()
 ) : OAuthPersistence {
 
@@ -101,7 +102,7 @@ class CookieBasedOAuthPersistence(
         cookie(name)?.value?.let { value ->
             try {
                 encryptionProvider.decrypt(value)
-            } catch (e: Exception) {
+            } catch (e: GeneralSecurityException) {
                 logger.warn(e) { "Couldn't decrypt cookie '$name' with value '$value'" }
                 null
             }
@@ -116,4 +117,8 @@ class CookieBasedOAuthPersistence(
         expires = LocalDateTime.ofInstant(clock.instant().plus(cookieValidity), clock.zone),
         path = cookiePath
     )
+
+    companion object {
+        private const val DEFAULT_COOKIE_VALIDITY_HOURS = 12L
+    }
 }

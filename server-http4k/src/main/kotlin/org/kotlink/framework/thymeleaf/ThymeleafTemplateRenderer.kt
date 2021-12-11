@@ -31,9 +31,10 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
     }
 
     override fun invoke(viewModel: ViewModel): String = try {
-        engine.process(viewModel.template(), Context().apply {
+        val context = Context().apply {
             setVariable("model", viewModel)
-        })
+        }
+        engine.process(viewModel.template(), context)
     } catch (e: TemplateInputException) {
         when (e.cause) {
             is FileNotFoundException -> throw ViewNotFound(viewModel)
@@ -43,7 +44,7 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
 
     companion object {
         fun fileTemplateResolver(): ITemplateResolver = FileTemplateResolver().apply {
-            prefix = "${IDE_RESOURCES_DIRECTORY}/templates/"
+            prefix = "$IDE_RESOURCES_DIRECTORY/templates/"
             suffix = ".html"
         }
 

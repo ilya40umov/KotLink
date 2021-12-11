@@ -7,7 +7,7 @@ fun loadConfig(environment: Environment): KotLinkConfig {
     // TODO implement loading the config from a file / env variables etc.
     var config = KotLinkConfig()
     if (environment == Environment.LOCAL) {
-       config = config.copy(hotReload = true)
+        config = config.copy(hotReload = true)
     }
     return config
 }
