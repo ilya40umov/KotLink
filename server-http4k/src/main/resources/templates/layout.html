@@ -18,7 +18,7 @@
 </head>
 <body class="mdc-typography">
 
-<!--/*@thymesVar id="model" type="org.kotlink.framework.mvc.BaseViewModel"*/-->
+<!--/*@thymesVar id="model" type="org.kotlink.framework.mvc.UiViewModel"*/-->
 
 <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
     <div class="mdc-top-app-bar__row">
@@ -31,7 +31,7 @@
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
             <span class="mdc-top-app-bar__title mdc-typography--overline"
-                  th:text="${'Guest'}">Guest</span>
+                  th:text="${model.principal.email}">Guest</span>
             <div class="mdc-menu-surface--anchor">
                 <a id="user-menu-icon"
                    class="material-icons mdc-top-app-bar__navigation-icon"
@@ -62,17 +62,20 @@
         <div class="mdc-drawer__content">
             <div class="mdc-list-group">
                 <ul class="mdc-list">
-                    <li class="mdc-list-item new-alias-button-item" tabindex="-1">
+                    <li th:class="'mdc-list-item new-alias-button-item' + ${(model.template == 'alias/new') ? ' mdc-list-item--selected' : '' }"
+                        tabindex="-1"
+                        onclick="document.getElementById('new-alias-button').click()">
                         <span class="mdc-list-item__ripple"></span>
-                        <form th:action="@{~/ui/alias/new}" method="get" style="">
-                            <button class="mdc-button mdc-button--raised new-alias-button"
+                        <form th:action="@{~/ui/alias/new}" method="get">
+                            <button id="new-alias-button"
+                                    class="mdc-button mdc-button--raised new-alias-button"
                                     tabindex="-1">
                                 <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
                                 New Alias
                             </button>
                         </form>
                     </li>
-                    <li th:class="'mdc-list-item' + ${(model.klass.name == 'org.kotlink.ui.alias.ListAliases') ? ' mdc-list-item--selected' : '' }"
+                    <li th:class="'mdc-list-item' + ${(model.template == 'alias/list') ? ' mdc-list-item--selected' : '' }"
                         aria-selected="true"
                         tabindex="-1">
                         <span class="mdc-list-item__ripple"></span>
@@ -84,7 +87,7 @@
                         </a>
                     </li>
                     <li class="mdc-list-item"
-                        th:class="'mdc-list-item' + ${(model.klass.name == 'org.kotlink.ui.namespace.ListNamespaces') ? ' mdc-list-item--selected' : '' }"
+                        th:class="'mdc-list-item' + ${(model.template == 'namespace/list') ? ' mdc-list-item--selected' : '' }"
                         tabindex="-1">
                         <span class="mdc-list-item__ripple"></span>
                         <a class="mdc-list-item"
@@ -96,7 +99,7 @@
                     </li>
                     <li class="mdc-list-divider">
                     </li>
-                    <li th:class="'mdc-list-item' + ${(model.klass.name == 'org.kotlink.ui.help.SetupInstructions') ? ' mdc-list-item--selected' : '' }"
+                    <li th:class="'mdc-list-item' + ${(model.template == 'help/setup_instructions') ? ' mdc-list-item--selected' : '' }"
                         tabindex="-1">
                         <span class="mdc-list-item__ripple"></span>
                         <a class="mdc-list-item"
