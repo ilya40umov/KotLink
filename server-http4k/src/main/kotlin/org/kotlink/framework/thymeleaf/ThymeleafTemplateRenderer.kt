@@ -5,6 +5,7 @@ import org.http4k.template.TemplateRenderer
 import org.http4k.template.ViewModel
 import org.http4k.template.ViewNotFound
 import org.kotlink.Constants.IDE_RESOURCES_DIRECTORY
+import org.kotlink.framework.ui.UiViewModel
 import org.thymeleaf.ITemplateEngine
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.cache.StandardCacheManager
@@ -31,8 +32,12 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
     }
 
     override fun invoke(viewModel: ViewModel): String = try {
-        val context = Context().apply {
-            setVariable("model", viewModel)
+        val context = Context()
+        context.setVariable("model", viewModel)
+        if (viewModel is UiViewModel) {
+            viewModel.data.forEach { (key, value) ->
+                context.setVariable(key, value)
+            }
         }
         engine.process(viewModel.template(), context)
     } catch (e: TemplateInputException) {

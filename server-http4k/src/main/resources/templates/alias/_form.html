@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      lang="en">
+<body>
+<!--/* @thymesVar id="form" type="org.kotlink.ui.alias.AliasForm" */-->
+<!--/* @thymesVar id="errors" type="org.kotlink.framework.ui.FormErrors" */-->
+<!--/* @thymesVar id="namespaces" type="java.util.List<org.kotlink.domain.namespace.Namespace>" */-->
+
+<!--/* @thymesVar id="edit" type="java.lang.Boolean" */-->
+
+<!--/* The following variables come from unwrapping "form" object: */-->
+<!--/* @thymesVar id="linkPrefix" type="java.lang.String" */-->
+<!--/* @thymesVar id="link" type="java.lang.String" */-->
+<!--/* @thymesVar id="redirectUrl" type="java.lang.String" */-->
+<!--/* @thymesVar id="description" type="java.lang.String" */-->
+<!--/* @thymesVar id="ownerEmail" type="java.lang.String" */-->
+
+<form layout:fragment="alias-form">
+
+    <div id="go-link-preview"
+         class="mdc-typography--headline6 go-link">
+        kk/
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <input id="link-prefix-input" type="hidden" name="linkPrefix">
+        <div id="link-prefix-select"
+             th:class="'mdc-select mdc-select--filled' + ${edit ? ' mdc-select--disabled' : ''}"
+             data-mdc-auto-init="MDCSelect">
+            <div class="mdc-select__anchor"
+                 th:aria-disabled="${edit}">
+                <span class="mdc-select__ripple"></span>
+                <span class="mdc-floating-label mdc-floating-label--float-above">Namespace*</span>
+                <span class="mdc-select__selected-text-container">
+                  <span class="mdc-select__selected-text">(default)</span>
+                </span>
+                <span class="mdc-select__dropdown-icon">
+                    <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5" focusable="false">
+                        <polygon class="mdc-select__dropdown-icon-inactive"
+                                 stroke="none"
+                                 fill-rule="evenodd"
+                                 points="7 10 12 15 17 10">
+                        </polygon>
+                        <polygon class="mdc-select__dropdown-icon-active"
+                                 stroke="none"
+                                 fill-rule="evenodd"
+                                 points="7 15 12 10 17 15">
+                        </polygon>
+                    </svg>
+                </span>
+                <span class="mdc-line-ripple"></span>
+            </div>
+
+            <div class="mdc-select__menu mdc-menu mdc-menu-surface">
+                <ul class="mdc-deprecated-list">
+                    <li th:each="namespace : ${namespaces}"
+                        th:class="'mdc-deprecated-list-item ' + ${namespace.linkPrefix == form.linkPrefix ? 'mdc-deprecated-list-item--selected' : ''}"
+                        th:data-value="${namespace.linkPrefix.isEmpty() ? ' ' : namespace.linkPrefix}"
+                        th:aria-selected="${namespace.linkPrefix == form.linkPrefix}">
+                        <span class="mdc-deprecated-list-item__ripple"></span>
+                        <span class="mdc-deprecated-list-item__text"
+                              th:text="${namespace.linkPrefix.isEmpty() ? '(default)' : namespace.linkPrefix}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <p th:each="error : ${errors.getForField('linkPrefix')}"
+           class="mdc-select-helper-text mdc-select-helper-text--validation-msg"
+           aria-hidden="true"
+           th:text="${error}">
+        </p>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <input th:if="${edit}" type="hidden" name="link" th:value="*{link}">
+        <label th:class="'mdc-text-field mdc-text-field--outlined' + ${errors.isFieldValid('link') ? '' : ' mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="link-input-label">Shortcut</span>
+            <input id="link-input"
+                   name="link"
+                   type="text"
+                   th:class="'mdc-text-field__input' + ${edit ? ' mdc-text-field--disabled' : ''}"
+                   th:value="*{link}"
+                   aria-labelledby="link-input-label"
+                   aria-controls="link-input-label"
+                   aria-describedby="link-input-label"
+                   required
+                   th:maxlength="${form.maxLinkLength()}"
+                   th:pattern="${form.linkPattern()}"
+                   th:disabled="${edit}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('link')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <label th:class="'mdc-text-field mdc-text-field--outlined ' + ${errors.isFieldValid('redirectUrl') ? '' : 'mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="redirect-url-input-label">Redirect URL</span>
+            <input id="redirect-url-input"
+                   name="redirectUrl"
+                   type="text"
+                   class="mdc-text-field__input"
+                   th:value="*{redirectUrl}"
+                   aria-labelledby="redirect-url-input-label"
+                   aria-controls="redirect-url-input-label"
+                   aria-describedby="redirect-url-input-label"
+                   required
+                   th:maxlength="${form.maxRedirectUrlLength()}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('redirectUrl')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <label th:class="'mdc-text-field mdc-text-field--outlined ' + ${errors.isFieldValid('description') ? '' : 'mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="description-input-label">Description</span>
+            <input id="description-input"
+                   name="description"
+                   type="text"
+                   class="mdc-text-field__input"
+                   th:value="*{description}"
+                   aria-labelledby="description-input-label"
+                   aria-controls="description-input-label"
+                   aria-describedby="description-input-label"
+                   required
+                   th:maxlength="${form.maxDescriptionLength()}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('description')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <label th:class="'mdc-text-field mdc-text-field--outlined ' + ${errors.isFieldValid('ownerEmail') ? '' : 'mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="owner-email-input-label">Owner Email</span>
+            <input id="owner-email-input"
+                   name="ownerEmail"
+                   type="text"
+                   class="mdc-text-field__input"
+                   th:value="*{ownerEmail}"
+                   aria-labelledby="owner-email-input-label"
+                   aria-controls="owner-email-input-label"
+                   aria-describedby="owner-email-input-label"
+                   required
+                   th:maxlength="${form.maxEmailLength()}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('ownerEmail')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 style="display: inline-block"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="submit-button-wrapper">
+        <button id="save-alias-button"
+                class="mdc-button"
+                type="submit">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">Save</span>
+        </button>
+    </div>
+
+    <script>
+        kotlink.onReady(() => {
+            const linkPrefixSelect = document.getElementById("link-prefix-select").MDCSelect;
+
+            function refreshLinkPrefixInput() {
+                document.getElementById("link-prefix-input").value = linkPrefixSelect.value;
+            }
+
+            function refreshGoLinkPreview() {
+                let linkPrefix = linkPrefixSelect.selectedText.textContent;
+                if (linkPrefix === "(default)") {
+                    linkPrefix = "";
+                } else {
+                    linkPrefix = `<b>${linkPrefix}</b> `;
+                }
+                let link = document.getElementById("link-input").value.trim();
+                document.getElementById("go-link-preview").innerHTML =
+                    `kk/${linkPrefix}${link}`.replace(/ /g, "␣");
+            }
+
+            refreshLinkPrefixInput();
+            refreshGoLinkPreview();
+            document.getElementById("link-prefix-select").addEventListener("MDCSelect:change", refreshLinkPrefixInput);
+            document.getElementById("link-prefix-select").addEventListener("MDCSelect:change", refreshGoLinkPreview);
+            document.getElementById("link-input").addEventListener("change", refreshGoLinkPreview);
+            document.getElementById("link-input").addEventListener("keyup", refreshGoLinkPreview);
+            document.getElementById("link-input").addEventListener("paste", refreshGoLinkPreview);
+        });
+    </script>
+</form>
+</body>
+</html>

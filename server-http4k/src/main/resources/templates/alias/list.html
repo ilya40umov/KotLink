@@ -1,14 +1,116 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layout}"
+      lang="en">
 <head>
     <title>KotLink - Aliases</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <!--/*@thymesVar id="model" type="org.kotlink.ui.alias.ListAliasesModel"*/-->
-    <p><b>Aliases</b></p>
+    <!--/*@thymesVar id="model" type="org.kotlink.framework.ui.UiViewModel"*/-->
+    <!--/*@thymesVar id="search" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="aliases" type="java.util.List<org.kotlink.domain.alias.Alias>"*/-->
+    <div class="mdc-card filter-card">
+        <form th:action="@{'~/ui/alias'}" method="get">
+            <label class="mdc-text-field mdc-text-field--filled search-field"
+                   data-mdc-auto-init="MDCTextField">
+                <span class="mdc-text-field__ripple"></span>
+                <span class="mdc-floating-label" id="search-field-label">Keywords</span>
+                <input class="mdc-text-field__input"
+                       name="search"
+                       th:value="${search}"
+                       type="text"
+                       aria-labelledby="search-field-label">
+                <span class="mdc-line-ripple"></span>
+            </label>
+            <button class="mdc-button mdc-button--raised">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">search</i>
+                Filter
+            </button>
+        </form>
+    </div>
+
+    <div class="mdc-data-table" data-mdc-auto-init="MDCDataTable">
+        <div class="mdc-data-table__table-container">
+            <table class="mdc-data-table__table" aria-label="Dessert calories">
+                <thead>
+                    <tr class="mdc-data-table__header-row">
+                        <th class="mdc-data-table__header-cell icon-column" role="columnheader" scope="col"></th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Link</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Redirect URL</th>
+                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Owner</th>
+                        <th class="mdc-data-table__header-cell icon-column" role="columnheader" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="mdc-data-table__content">
+                    <tr th:each="alias: ${aliases}"
+                        th:title="${alias.description}"
+                        class="mdc-data-table__row">
+                        <th class="mdc-data-table__cell">
+                            <a th:href="@{'~/ui/alias/' + ${alias.id} + '/edit?search=' + ${search}}"
+                               class="mdc-icon-button material-icons">
+                                <div class="mdc-icon-button__ripple"></div>
+                                edit
+                            </a>
+                        </th>
+                        <th class="mdc-data-table__cell" scope="row">
+                            <span th:utext="${model.asGoLink(alias)}"
+                                  class="go-link"></span>
+                        </th>
+                        <td class="mdc-data-table__cell">
+                            <a th:text="${model.truncateRedirectUrl(alias.redirectUrl)}"
+                               th:href="${alias.redirectUrl}"
+                               style="color: #006621"
+                               target="_blank"></a>
+                        </td>
+                        <td class="mdc-data-table__cell">
+                            <span th:text="${alias.ownerEmail}"></span>
+                        </td>
+                        <td class="mdc-data-table__cell">
+                            <form th:action="@{'~/ui/alias/' + ${alias.id} + '/delete?search=' + ${search}}"
+                                  method="post">
+                                <button class="mdc-icon-button material-icons"
+                                        onclick="return confirm('Are you sure that you want to delete this alias?')">
+                                    <div class="mdc-icon-button__ripple"></div>
+                                    delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mdc-data-table__pagination">
+            <div class="mdc-data-table__pagination-trailing">
+                <div class="mdc-data-table__pagination-navigation">
+                    <div class="mdc-data-table__pagination-total">
+                        1‑10 of 100
+                    </div>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                            data-first-page="true"
+                            disabled>
+                        <div class="mdc-button__icon">first_page</div>
+                    </button>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                            data-prev-page="true"
+                            disabled>
+                        <div class="mdc-button__icon">chevron_left</div>
+                    </button>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                            data-next-page="true">
+                        <div class="mdc-button__icon">chevron_right</div>
+                    </button>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                            data-last-page="true">
+                        <div class="mdc-button__icon">last_page</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 </body>
 </html>

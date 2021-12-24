@@ -4,10 +4,12 @@ import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
 import org.http4k.core.with
 import org.http4k.lens.RequestContextLens
+import org.kotlink.domain.account.UserAccountService
 
 class OAuthPrincipalFilter(
     private val oAuthPersistence: CookieBasedOAuthPersistence,
-    private val principal: RequestContextLens<OAuthPrincipal>
+    private val oAuthPrincipal: RequestContextLens<OAuthPrincipal>,
+    private val userAccountService: UserAccountService
 ) : Filter {
     override fun invoke(next: HttpHandler): HttpHandler {
         return { request ->
@@ -16,7 +18,8 @@ class OAuthPrincipalFilter(
                 // TODO handle this case properly
                 oAuthPersistence.authFailureResponse()
             } else {
-                next(request.with(principal of OAuthPrincipal(email = userEmail)))
+                userAccountService.findOrCreateAccountForEmail(userEmail)
+                next(request.with(oAuthPrincipal of OAuthPrincipal(email = userEmail)))
             }
         }
     }

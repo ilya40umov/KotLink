@@ -18,6 +18,9 @@ import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.security.OAuthProvider
 import org.http4k.security.google
+import org.kotlink.domain.account.UserAccountService
+import org.kotlink.domain.alias.AliasService
+import org.kotlink.domain.namespace.NamespaceService
 import org.kotlink.framework.crypto.AesEncryptionProvider
 import org.kotlink.framework.oauth.CookieBasedOAuthPersistence
 import org.kotlink.framework.oauth.IdTokenProcessor
@@ -30,6 +33,12 @@ import org.kotlink.ui.namespace.namespaceRoutes
 import java.net.URL
 
 fun allRoutes(config: KotLinkConfig): HttpHandler {
+    val aliasService = AliasService()
+    val namespaceService = NamespaceService()
+    val userAccountService = UserAccountService()
+
+    val contexts = RequestContexts()
+
     val oAuthPersistence = CookieBasedOAuthPersistence(
         cookieNamePrefix = "Google",
         encryptionProvider = AesEncryptionProvider(encryptionKey = config.cookieEncryption.encryptionKey),
@@ -45,9 +54,7 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
         oAuthPersistence = oAuthPersistence,
         scopes = listOf("openid", "email", "profile")
     )
-
-    val contexts = RequestContexts()
-    val principal = RequestContextKey.required<OAuthPrincipal>(contexts)
+    val oAuthPrincipal = RequestContextKey.required<OAuthPrincipal>(contexts)
 
     val templateRenderer = ThymeleafTemplateRenderer(config.hotReload)
     return routes(
@@ -55,7 +62,7 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
         staticResources(config.hotReload),
         InitialiseRequestContext(contexts)
             .then(oauthProvider.authFilter)
-            .then(OAuthPrincipalFilter(oAuthPersistence, principal))
+            .then(OAuthPrincipalFilter(oAuthPersistence, oAuthPrincipal, userAccountService))
             .then(
                 routes(
                     "/" bind Method.GET to {
@@ -65,9 +72,9 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
                     "/ui/sign_out" bind Method.POST to {
                         oAuthPersistence.signOutResponse()
                     },
-                    aliasRoutes(templateRenderer, principal),
-                    namespaceRoutes(templateRenderer, principal),
-                    helpRoutes(templateRenderer, principal)
+                    aliasRoutes(templateRenderer, oAuthPrincipal, aliasService, namespaceService, userAccountService),
+                    namespaceRoutes(templateRenderer, oAuthPrincipal),
+                    helpRoutes(templateRenderer, oAuthPrincipal)
                 )
             )
     )

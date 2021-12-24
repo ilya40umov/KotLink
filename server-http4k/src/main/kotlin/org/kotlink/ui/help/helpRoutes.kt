@@ -12,7 +12,7 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.TemplateRenderer
 import org.http4k.template.viewModel
-import org.kotlink.framework.mvc.UiViewModel.Companion.uiViewModel
+import org.kotlink.framework.ui.UiViewModel.Companion.uiViewModel
 import org.kotlink.framework.oauth.OAuthPrincipal
 
 fun helpRoutes(
@@ -22,13 +22,12 @@ fun helpRoutes(
     return routes(
         "/ui/setup_instructions" bind Method.GET to { request ->
             val view = Body.viewModel(templateRenderer, ContentType.TEXT_HTML).toLens()
-            val data = SetupInstructionsModel(
-                apiSecret = "abcdef"
-            )
             Response(Status.OK).with(
                 view of request.uiViewModel(
                     template = "help/setup_instructions",
-                    data = data,
+                    data = mapOf(
+                        "apiSecret" to "abcdef"
+                    ),
                     principal = principal
                 )
             )

@@ -38,11 +38,11 @@ subprojects {
 
     dependencies {
         "implementation"(platform("org.jetbrains.kotlin:kotlin-bom"))
-        "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.14.1"))
+        "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.15.0"))
         "implementation"("org.slf4j:slf4j-api:1.7.32")
         "implementation"("org.apache.logging.log4j:log4j-core")
         "implementation"("org.apache.logging.log4j:log4j-jul")
-        "implementation"("io.github.microutils:kotlin-logging:2.1.0")
+        "implementation"("io.github.microutils:kotlin-logging:2.1.16")
 
         "runtimeOnly"("org.apache.logging.log4j:log4j-slf4j-impl")
 

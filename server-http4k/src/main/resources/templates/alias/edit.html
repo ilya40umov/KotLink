@@ -18,12 +18,12 @@
                     arrow_back
                 </a>
                 <span class="mdc-typography--headline6 form-title">
-                    New Alias
+                    Edit Alias
                 </span>
             </div>
             <form layout:insert="~{alias/_form :: alias-form}"
-                  th:with="edit=false"
-                  th:action="@{'~/ui/alias/new?search=' + ${search}}"
+                  th:with="edit=true"
+                  th:action="@{'~/ui/alias/' + ${form.aliasId} + '/edit?search=' + ${search}}"
                   method="post"
                   th:object="${form}">
             </form>
