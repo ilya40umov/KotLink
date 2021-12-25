@@ -24,9 +24,12 @@ import org.kotlink.domain.namespace.NamespaceService
 import org.kotlink.framework.crypto.AesEncryptionProvider
 import org.kotlink.framework.oauth.CookieBasedOAuthPersistence
 import org.kotlink.framework.oauth.IdTokenProcessor
-import org.kotlink.framework.oauth.OAuthPrincipal
-import org.kotlink.framework.oauth.OAuthPrincipalFilter
-import org.kotlink.framework.thymeleaf.ThymeleafTemplateRenderer
+import org.kotlink.framework.oauth.OAuthErrorHandlingFilter
+import org.kotlink.framework.oauth.UserPrincipal
+import org.kotlink.framework.oauth.OAuthUserPrincipalFilter
+import org.kotlink.framework.ui.ThymeleafTemplateRenderer
+import org.kotlink.framework.ui.UiErrorHandlingFilter
+import org.kotlink.framework.ui.renderView
 import org.kotlink.ui.alias.aliasRoutes
 import org.kotlink.ui.help.helpRoutes
 import org.kotlink.ui.namespace.namespaceRoutes
@@ -54,17 +57,22 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
         oAuthPersistence = oAuthPersistence,
         scopes = listOf("openid", "email", "profile")
     )
-    val oAuthPrincipal = RequestContextKey.required<OAuthPrincipal>(contexts)
+    val principal = RequestContextKey.required<UserPrincipal>(contexts)
 
     val templateRenderer = ThymeleafTemplateRenderer(config.hotReload)
     return routes(
         oauthProvider.callbackEndpoint,
         staticResources(config.hotReload),
         InitialiseRequestContext(contexts)
+            .then(OAuthErrorHandlingFilter(templateRenderer))
             .then(oauthProvider.authFilter)
-            .then(OAuthPrincipalFilter(oAuthPersistence, oAuthPrincipal, userAccountService))
+            .then(OAuthUserPrincipalFilter(oAuthPersistence, principal, userAccountService))
+            .then(UiErrorHandlingFilter(templateRenderer, principal))
             .then(
                 routes(
+                    aliasRoutes(templateRenderer, principal, aliasService, namespaceService, userAccountService),
+                    namespaceRoutes(templateRenderer, principal),
+                    helpRoutes(templateRenderer, principal),
                     "/" bind Method.GET to {
                         Response(Status.TEMPORARY_REDIRECT)
                             .header("Location", "/ui/alias")
@@ -72,9 +80,14 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
                     "/ui/sign_out" bind Method.POST to {
                         oAuthPersistence.signOutResponse()
                     },
-                    aliasRoutes(templateRenderer, oAuthPrincipal, aliasService, namespaceService, userAccountService),
-                    namespaceRoutes(templateRenderer, oAuthPrincipal),
-                    helpRoutes(templateRenderer, oAuthPrincipal)
+                    "{path:.*}" bind Method.GET to { request ->
+                        templateRenderer.renderView(
+                            status = Status.NOT_FOUND,
+                            template = "error/404",
+                            principal = principal[request],
+                            data = emptyMap<String, Any>()
+                        )
+                    }
                 )
             )
     )

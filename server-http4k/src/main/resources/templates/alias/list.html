@@ -9,6 +9,7 @@
 <body>
 <main layout:fragment="content">
     <!--/*@thymesVar id="model" type="org.kotlink.framework.ui.UiViewModel"*/-->
+    <!--/*@thymesVar id="viewUtils" type="org.kotlink.framework.ui.UiViewUtils"*/-->
     <!--/*@thymesVar id="search" type="java.lang.String"*/-->
     <!--/*@thymesVar id="aliases" type="java.util.List<org.kotlink.domain.alias.Alias>"*/-->
     <div class="mdc-card filter-card">
@@ -55,11 +56,11 @@
                             </a>
                         </th>
                         <th class="mdc-data-table__cell" scope="row">
-                            <span th:utext="${model.asGoLink(alias)}"
+                            <span th:utext="${viewUtils.asGoLink(alias)}"
                                   class="go-link"></span>
                         </th>
                         <td class="mdc-data-table__cell">
-                            <a th:text="${model.truncateRedirectUrl(alias.redirectUrl)}"
+                            <a th:text="${viewUtils.truncateRedirectUrl(alias.redirectUrl)}"
                                th:href="${alias.redirectUrl}"
                                style="color: #006621"
                                target="_blank"></a>

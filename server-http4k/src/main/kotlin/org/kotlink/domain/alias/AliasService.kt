@@ -8,16 +8,17 @@ class AliasService {
 
     fun findById(id: String): Alias? = aliases[id]
 
+    fun findByIdOrThrow(id: String): Alias =
+        findById(id) ?: throw AliasNotFoundException("Alias with ID '$id' not found!")
+
     fun findByFullLink(fullLink: String): Alias? = aliases[Alias.computeId(fullLink)]
 
-    fun findByFullLinkPrefix(fullLinkPrefix: String): List<Alias> =
+    fun findStartingWithPrefix(fullLinkPrefix: String): List<Alias> =
         aliases.values.asSequence().filter { it.fullLink.startsWith(fullLinkPrefix) }.toList()
 
-    fun findAliasesWithFullLinkMatchingEntireInput(
-        userProvidedInput: String
-    ): List<Alias> {
-        val keywords = userProvidedInput.split("\\s+")
-        if (userProvidedInput.isBlank() || keywords.isEmpty()) {
+    fun findContainingAllSearchKeywords(search: String): List<Alias> {
+        val keywords = search.split("\\s+").map(String::trim)
+        if (search.isBlank() || keywords.isEmpty()) {
             return aliases.values.toList()
         }
         return aliases.values.asSequence().filter { alias ->
@@ -35,7 +36,7 @@ class AliasService {
         }
     }
 
-    fun deleteById(id: String): Alias {
-        return aliases.remove(id) ?: throw IllegalArgumentException("Alias not found!")
+    fun deleteById(id: String) {
+        aliases.remove(id) ?: throw IllegalArgumentException("Alias not found!")
     }
 }

@@ -13,7 +13,7 @@ testing {
 }
 
 dependencies {
-    implementation(platform("org.http4k:http4k-bom:4.17.3.0"))
+    implementation(platform("org.http4k:http4k-bom:4.17.6.0"))
     implementation("org.http4k:http4k-core")
     implementation("org.http4k:http4k-template-thymeleaf")
     implementation("org.http4k:http4k-security-oauth")
@@ -24,7 +24,7 @@ dependencies {
     implementation("commons-validator:commons-validator:1.7")
     implementation("com.auth0:java-jwt:3.18.2")
     implementation("com.auth0:jwks-rsa:0.20.0")
-    implementation("software.amazon.awssdk:dynamodb:2.17.99")
+    implementation("software.amazon.awssdk:dynamodb:2.17.102")
 }
 
 tasks {

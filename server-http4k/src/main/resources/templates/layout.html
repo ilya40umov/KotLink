@@ -31,12 +31,13 @@
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
             <span class="mdc-top-app-bar__title mdc-typography--overline"
-                  th:text="${model.principal.email}">Guest</span>
+                  th:text="${!model.principal.isAnonymous() ? model.principal.email : 'anonymous'}"></span>
             <div class="mdc-menu-surface--anchor">
                 <a id="user-menu-icon"
-                   class="material-icons mdc-top-app-bar__navigation-icon"
+                   class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
                    href="#"
                    tabindex="-1">
+                    <div class="mdc-icon-button__ripple"></div>
                     account_circle
                 </a>
                 <div id="user-menu" class="mdc-menu mdc-menu-surface" tabindex="-1" data-mdc-auto-init="MDCMenu">
@@ -58,7 +59,7 @@
 </header>
 
 <div class="content-wrapper mdc-top-app-bar--fixed-adjust">
-    <aside class="mdc-drawer">
+    <aside class="mdc-drawer" th:if="${!model.principal.isAnonymous()}">
         <div class="mdc-drawer__content">
             <div class="mdc-list-group">
                 <ul class="mdc-list">

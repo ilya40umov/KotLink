@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     jacoco
 
-    val kotlinVersion = "1.6.0"
+    val kotlinVersion = "1.6.10"
     kotlin("jvm") version kotlinVersion apply false
     kotlin("kapt") version kotlinVersion apply false
     kotlin("plugin.spring") version kotlinVersion apply false
@@ -38,11 +38,11 @@ subprojects {
 
     dependencies {
         "implementation"(platform("org.jetbrains.kotlin:kotlin-bom"))
-        "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.15.0"))
+        "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.17.0"))
         "implementation"("org.slf4j:slf4j-api:1.7.32")
         "implementation"("org.apache.logging.log4j:log4j-core")
         "implementation"("org.apache.logging.log4j:log4j-jul")
-        "implementation"("io.github.microutils:kotlin-logging:2.1.16")
+        "implementation"("io.github.microutils:kotlin-logging:2.1.21")
 
         "runtimeOnly"("org.apache.logging.log4j:log4j-slf4j-impl")
 

@@ -1,11 +1,10 @@
-package org.kotlink.framework.thymeleaf
+package org.kotlink.framework.ui
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect
 import org.http4k.template.TemplateRenderer
 import org.http4k.template.ViewModel
 import org.http4k.template.ViewNotFound
 import org.kotlink.Constants.IDE_RESOURCES_DIRECTORY
-import org.kotlink.framework.ui.UiViewModel
 import org.thymeleaf.ITemplateEngine
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.cache.StandardCacheManager
@@ -34,6 +33,7 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
     override fun invoke(viewModel: ViewModel): String = try {
         val context = Context()
         context.setVariable("model", viewModel)
+        context.setVariable("viewUtils", UiViewUtils)
         if (viewModel is UiViewModel) {
             viewModel.data.forEach { (key, value) ->
                 context.setVariable(key, value)

@@ -57,6 +57,10 @@ body {
     visibility: hidden;
 }
 
+.mdc-top-app-bar .mdc-menu-surface--anchor {
+    height: 100%
+}
+
 /* Left Drawer */
 .mdc-drawer .mdc-list-item {
     height: 3.6em;
@@ -217,4 +221,18 @@ body {
 
 .go-link-preview-hidden {
     display: none;
+}
+
+/**
+ * Error page
+ */
+
+.error-page-content {
+    width: 100%;
+    text-align: center;
+    padding-top: 35px;
+}
+
+.error-page-content .error-page-icon {
+    font-size: 55px;
 }

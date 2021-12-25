@@ -4,7 +4,6 @@ import org.http4k.core.Uri
 import org.kotlink.KotLinkConfig.Companion.LOCAL_PORT
 
 fun loadConfig(environment: Environment): KotLinkConfig {
-    // TODO implement loading the config from a file / env variables etc.
     var config = KotLinkConfig()
     if (environment == Environment.LOCAL) {
         config = config.copy(hotReload = true)

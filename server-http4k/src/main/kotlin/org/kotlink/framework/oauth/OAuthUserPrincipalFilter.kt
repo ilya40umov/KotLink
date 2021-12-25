@@ -6,20 +6,19 @@ import org.http4k.core.with
 import org.http4k.lens.RequestContextLens
 import org.kotlink.domain.account.UserAccountService
 
-class OAuthPrincipalFilter(
+class OAuthUserPrincipalFilter(
     private val oAuthPersistence: CookieBasedOAuthPersistence,
-    private val oAuthPrincipal: RequestContextLens<OAuthPrincipal>,
+    private val principal: RequestContextLens<UserPrincipal>,
     private val userAccountService: UserAccountService
 ) : Filter {
     override fun invoke(next: HttpHandler): HttpHandler {
         return { request ->
             val userEmail = oAuthPersistence.retrieveUserEmail(request)
-            if (userEmail == null) {
-                // TODO handle this case properly
+            if (userEmail == null || userEmail != "illia.sorokoumov@gmail.com") {
                 oAuthPersistence.authFailureResponse()
             } else {
                 userAccountService.findOrCreateAccountForEmail(userEmail)
-                next(request.with(oAuthPrincipal of OAuthPrincipal(email = userEmail)))
+                next(request.with(principal of OAuthUserPrincipal(email = userEmail)))
             }
         }
     }

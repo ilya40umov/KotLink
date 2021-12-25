@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.spring")
     kotlin("plugin.allopen")
 
-    id("org.springframework.boot") version "2.6.1"
+    id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.avast.gradle.docker-compose") version "0.14.11"
 }
@@ -56,7 +56,7 @@ dependencies {
 
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("org.mockito:mockito-junit-jupiter:4.1.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.2.0")
 }
 
 configurations {
