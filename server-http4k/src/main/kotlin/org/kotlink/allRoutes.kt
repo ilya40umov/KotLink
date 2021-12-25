@@ -9,6 +9,8 @@ import org.http4k.core.RequestContexts
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.then
+import org.http4k.core.with
+import org.http4k.filter.FlashAttributesFilter
 import org.http4k.filter.ServerFilters.InitialiseRequestContext
 import org.http4k.lens.RequestContextKey
 import org.http4k.routing.ResourceLoader
@@ -25,11 +27,11 @@ import org.kotlink.framework.crypto.AesEncryptionProvider
 import org.kotlink.framework.oauth.CookieBasedOAuthPersistence
 import org.kotlink.framework.oauth.IdTokenProcessor
 import org.kotlink.framework.oauth.OAuthErrorHandlingFilter
-import org.kotlink.framework.oauth.UserPrincipal
 import org.kotlink.framework.oauth.OAuthUserPrincipalFilter
+import org.kotlink.framework.oauth.UserPrincipal
 import org.kotlink.framework.ui.ThymeleafTemplateRenderer
 import org.kotlink.framework.ui.UiErrorHandlingFilter
-import org.kotlink.framework.ui.renderView
+import org.kotlink.framework.ui.ViewRendererProvider
 import org.kotlink.ui.alias.aliasRoutes
 import org.kotlink.ui.help.helpRoutes
 import org.kotlink.ui.namespace.namespaceRoutes
@@ -57,22 +59,26 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
         oAuthPersistence = oAuthPersistence,
         scopes = listOf("openid", "email", "profile")
     )
-    val principal = RequestContextKey.required<UserPrincipal>(contexts)
+    val principalLookup = RequestContextKey.required<UserPrincipal>(contexts)
 
-    val templateRenderer = ThymeleafTemplateRenderer(config.hotReload)
+    val viewRenderer = ViewRendererProvider(
+        templateRenderer = ThymeleafTemplateRenderer(config.hotReload),
+        principalLookup = principalLookup
+    )
     return routes(
         oauthProvider.callbackEndpoint,
         staticResources(config.hotReload),
         InitialiseRequestContext(contexts)
-            .then(OAuthErrorHandlingFilter(templateRenderer))
+            .then(OAuthErrorHandlingFilter(viewRenderer))
             .then(oauthProvider.authFilter)
-            .then(OAuthUserPrincipalFilter(oAuthPersistence, principal, userAccountService))
-            .then(UiErrorHandlingFilter(templateRenderer, principal))
+            .then(OAuthUserPrincipalFilter(oAuthPersistence, principalLookup, userAccountService))
+            .then(UiErrorHandlingFilter(viewRenderer))
+            .then(FlashAttributesFilter)
             .then(
                 routes(
-                    aliasRoutes(templateRenderer, principal, aliasService, namespaceService, userAccountService),
-                    namespaceRoutes(templateRenderer, principal),
-                    helpRoutes(templateRenderer, principal),
+                    aliasRoutes(viewRenderer, principalLookup, aliasService, namespaceService, userAccountService),
+                    namespaceRoutes(viewRenderer),
+                    helpRoutes(viewRenderer),
                     "/" bind Method.GET to {
                         Response(Status.TEMPORARY_REDIRECT)
                             .header("Location", "/ui/alias")
@@ -81,11 +87,11 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
                         oAuthPersistence.signOutResponse()
                     },
                     "{path:.*}" bind Method.GET to { request ->
-                        templateRenderer.renderView(
-                            status = Status.NOT_FOUND,
-                            template = "error/404",
-                            principal = principal[request],
-                            data = emptyMap<String, Any>()
+                        Response(Status.NOT_FOUND).with(
+                            viewRenderer[request].doRender(
+                                template = "error/404",
+                                data = emptyMap<String, Any>()
+                            )
                         )
                     }
                 )

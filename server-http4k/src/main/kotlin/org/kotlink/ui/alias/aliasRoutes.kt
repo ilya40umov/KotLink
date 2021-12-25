@@ -5,23 +5,24 @@ import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.body.form
+import org.http4k.core.with
 import org.http4k.lens.RequestContextLens
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
-import org.http4k.template.TemplateRenderer
 import org.kotlink.domain.account.UserAccountService
 import org.kotlink.domain.alias.AliasService
 import org.kotlink.domain.namespace.NamespaceService
-import org.kotlink.framework.oauth.UserPrincipal
 import org.kotlink.framework.exception.BadRequestException
-import org.kotlink.framework.ui.renderView
+import org.kotlink.framework.oauth.UserPrincipal
+import org.kotlink.framework.ui.ViewRendererProvider
+import org.kotlink.framework.ui.withSuccessMessage
 import org.kotlink.ui.alias.AliasForm.Companion.toAliasForm
 
 fun aliasRoutes(
-    templateRenderer: TemplateRenderer,
-    principal: RequestContextLens<UserPrincipal>,
+    viewRenderer: ViewRendererProvider,
+    principalLookup: RequestContextLens<UserPrincipal>,
     aliasService: AliasService,
     namespaceService: NamespaceService,
     userAccountService: UserAccountService
@@ -31,27 +32,29 @@ fun aliasRoutes(
         "/ui/alias" bind Method.GET to { request ->
             val search = request.searchParam()
             val aliases = aliasService.findContainingAllSearchKeywords(search)
-            templateRenderer.renderView(
-                template = "alias/list",
-                principal = principal[request],
-                data = mapOf(
-                    "search" to search,
-                    "aliases" to aliases
+            Response(Status.OK).with(
+                viewRenderer[request].doRender(
+                    template = "alias/list",
+                    data = mapOf(
+                        "search" to search,
+                        "aliases" to aliases
+                    )
                 )
             )
         },
         "/ui/alias/new" bind Method.GET to { request ->
             val search = request.query("search") ?: ""
-            val user = principal[request]
+            val principal = principalLookup[request]
             val emptyForm = AliasForm.empty()
-            templateRenderer.renderView(
-                template = "alias/new",
-                principal = principal[request],
-                data = mapOf(
-                    "form" to emptyForm.copy(ownerEmail = user.email),
-                    "errors" to aliasFormConverter.getPotentialErrors(emptyForm),
-                    "namespaces" to namespaceService.findAll(),
-                    "search" to search
+            Response(Status.OK).with(
+                viewRenderer[request].doRender(
+                    template = "alias/new",
+                    data = mapOf(
+                        "form" to emptyForm.copy(ownerEmail = principal.email),
+                        "errors" to aliasFormConverter.getPotentialErrors(emptyForm),
+                        "namespaces" to namespaceService.findAll(),
+                        "search" to search
+                    )
                 )
             )
         },
@@ -60,20 +63,22 @@ fun aliasRoutes(
             val form = request.form().toAliasForm()
             val errorsOrAlias = aliasFormConverter.convertToAlias(form, isEdit = false)
             errorsOrAlias.fold({ errors ->
-                templateRenderer.renderView(
-                    template = "alias/new",
-                    principal = principal[request],
-                    data = mapOf(
-                        "form" to form,
-                        "errors" to errors,
-                        "namespaces" to namespaceService.findAll(),
-                        "search" to search
+                Response(Status.OK).with(
+                    viewRenderer[request].doRender(
+                        template = "alias/new",
+                        data = mapOf(
+                            "form" to form,
+                            "errors" to errors,
+                            "namespaces" to namespaceService.findAll(),
+                            "search" to search
+                        )
                     )
                 )
             }, { alias ->
                 aliasService.create(alias)
                 Response(Status.FOUND)
                     .header("Location", "/ui/alias?search=$search")
+                    .withSuccessMessage("Alias has been successfully created.")
             })
         },
         "/ui/alias/{id}/edit" bind Method.GET to { request ->
@@ -81,14 +86,15 @@ fun aliasRoutes(
             val aliasId = request.aliasIdParam()
             val alias = aliasService.findByIdOrThrow(aliasId)
             val form = alias.toAliasForm()
-            templateRenderer.renderView(
-                template = "alias/edit",
-                principal = principal[request],
-                data = mapOf(
-                    "form" to form,
-                    "errors" to aliasFormConverter.getPotentialErrors(AliasForm.empty()),
-                    "namespaces" to namespaceService.findAll(),
-                    "search" to search
+            Response(Status.OK).with(
+                viewRenderer[request].doRender(
+                    template = "alias/edit",
+                    data = mapOf(
+                        "form" to form,
+                        "errors" to aliasFormConverter.getPotentialErrors(AliasForm.empty()),
+                        "namespaces" to namespaceService.findAll(),
+                        "search" to search
+                    )
                 )
             )
         },
@@ -99,14 +105,15 @@ fun aliasRoutes(
             val form = request.form().toAliasForm()
             val errorsOrAlias = aliasFormConverter.convertToAlias(form, isEdit = true)
             errorsOrAlias.fold({ errors ->
-                templateRenderer.renderView(
-                    template = "alias/edit",
-                    principal = principal[request],
-                    data = mapOf(
-                        "form" to form.copy(aliasId = aliasId),
-                        "errors" to errors,
-                        "namespaces" to namespaceService.findAll(),
-                        "search" to search
+                Response(Status.OK).with(
+                    viewRenderer[request].doRender(
+                        template = "alias/edit",
+                        data = mapOf(
+                            "form" to form.copy(aliasId = aliasId),
+                            "errors" to errors,
+                            "namespaces" to namespaceService.findAll(),
+                            "search" to search
+                        )
                     )
                 )
             }, { aliasFromClient ->
@@ -116,6 +123,7 @@ fun aliasRoutes(
                 aliasService.update(aliasFromClient)
                 Response(Status.FOUND)
                     .header("Location", "/ui/alias?search=$search")
+                    .withSuccessMessage("Alias has been successfully updated.")
             })
         },
         "/ui/alias/{id}/delete" bind Method.POST to { request ->
@@ -124,6 +132,7 @@ fun aliasRoutes(
             aliasService.deleteById(aliasId)
             Response(Status.FOUND)
                 .header("Location", "/ui/alias?search=$search")
+                .withSuccessMessage("Alias has been successfully deleted.")
         }
     )
 }

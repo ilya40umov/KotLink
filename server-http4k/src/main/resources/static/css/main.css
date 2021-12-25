@@ -236,3 +236,31 @@ body {
 .error-page-content .error-page-icon {
     font-size: 55px;
 }
+
+/**
+ * Dialogs
+ */
+
+#success-dialog .mdc-dialog__title {
+    color: white;
+    background-color: green;
+    padding-bottom: 1em;
+}
+
+#error-dialog .mdc-dialog__title {
+    color: white;
+    background-color: red;
+    padding-bottom: 1em;
+}
+
+.mdc-dialog__title span {
+    vertical-align: middle;
+}
+
+.mdc-dialog__title .material-icons {
+    padding-right: 0.7em;
+}
+
+.mdc-dialog .mdc-dialog__content {
+    padding: 1em;
+}

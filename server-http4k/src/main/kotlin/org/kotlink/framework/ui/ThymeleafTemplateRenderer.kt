@@ -33,7 +33,7 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
     override fun invoke(viewModel: ViewModel): String = try {
         val context = Context()
         context.setVariable("model", viewModel)
-        context.setVariable("viewUtils", UiViewUtils)
+        context.setVariable("viewUtils", ViewUtils)
         if (viewModel is UiViewModel) {
             viewModel.data.forEach { (key, value) ->
                 context.setVariable(key, value)

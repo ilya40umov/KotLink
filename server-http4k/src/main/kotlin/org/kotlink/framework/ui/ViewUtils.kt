@@ -2,7 +2,7 @@ package org.kotlink.framework.ui
 
 import org.kotlink.domain.alias.Alias
 
-object UiViewUtils {
+object ViewUtils {
     private const val DISPLAYED_URL_LENGTH = 60
 
     fun asGoLink(alias: Alias): String {

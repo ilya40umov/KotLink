@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<!--/* @thymesVar id="success_message" type="java.lang.String" */-->
+<body>
+<th:block layout:fragment="success_dialog" th:if="${success_message}">
+    <div id="success-dialog"
+         class="mdc-dialog"
+         role="alertdialog"
+         aria-modal="true"
+         aria-labelledby="success-dialog-title"
+         aria-describedby="success-dialog-content"
+         data-mdc-auto-init="MDCDialog">
+        <div class="mdc-dialog__container">
+            <div class="mdc-dialog__surface">
+                <h2 id="success-dialog-title"
+                    class="mdc-dialog__title"><span class="material-icons">settings</span><span>Notification</span>
+                </h2>
+                <div id="success-dialog-content"
+                     class="mdc-dialog__content">
+                    <span th:text="${success_message}"></span>
+                </div>
+                <footer class="mdc-dialog__actions">
+                    <button type="button"
+                            class="mdc-button mdc-dialog__button mdc-dialog__button--default"
+                            data-mdc-dialog-action="close">
+                        <span class="mdc-button__ripple"></span>
+                        <span class="mdc-button__label">Close</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
+        <div class="mdc-dialog__scrim"></div>
+    </div>
+    <script>
+        kotlink.onReady(() => {
+            const dialog = document.getElementById("success-dialog").MDCDialog;
+            dialog.open();
+        });
+    </script>
+</th:block>
+</body>
+</html>

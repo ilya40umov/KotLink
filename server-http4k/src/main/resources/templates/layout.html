@@ -19,6 +19,7 @@
 <body class="mdc-typography">
 
 <!--/*@thymesVar id="model" type="org.kotlink.framework.ui.UiViewModel"*/-->
+<!--/*@thymesVar id="principal" type="org.kotlink.framework.oauth.UserPrincipal"*/-->
 
 <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
     <div class="mdc-top-app-bar__row">
@@ -31,7 +32,7 @@
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
             <span class="mdc-top-app-bar__title mdc-typography--overline"
-                  th:text="${!model.principal.isAnonymous() ? model.principal.email : 'anonymous'}"></span>
+                  th:text="${!principal.isAnonymous() ? principal.email : 'anonymous'}"></span>
             <div class="mdc-menu-surface--anchor">
                 <a id="user-menu-icon"
                    class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
@@ -59,7 +60,7 @@
 </header>
 
 <div class="content-wrapper mdc-top-app-bar--fixed-adjust">
-    <aside class="mdc-drawer" th:if="${!model.principal.isAnonymous()}">
+    <aside class="mdc-drawer" th:if="${!principal.isAnonymous()}">
         <div class="mdc-drawer__content">
             <div class="mdc-list-group">
                 <ul class="mdc-list">
@@ -116,6 +117,9 @@
     </aside>
 
     <main layout:fragment="content" class="main-wrapper"></main>
+
+    <th:block layout:insert="~{fragment/_error_dialog :: error_dialog}"/>
+    <th:block layout:insert="~{fragment/_success_dialog :: success_dialog}"/>
 </div>
 </body>
 </html>

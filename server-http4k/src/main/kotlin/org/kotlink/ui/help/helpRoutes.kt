@@ -1,25 +1,25 @@
 package org.kotlink.ui.help
 
 import org.http4k.core.Method
-import org.http4k.lens.RequestContextLens
+import org.http4k.core.Response
+import org.http4k.core.Status
+import org.http4k.core.with
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import org.http4k.template.TemplateRenderer
-import org.kotlink.framework.oauth.UserPrincipal
-import org.kotlink.framework.ui.renderView
+import org.kotlink.framework.ui.ViewRendererProvider
 
 fun helpRoutes(
-    templateRenderer: TemplateRenderer,
-    principal: RequestContextLens<UserPrincipal>
+    viewRenderer: ViewRendererProvider
 ): RoutingHttpHandler {
     return routes(
         "/ui/setup_instructions" bind Method.GET to { request ->
-            templateRenderer.renderView(
-                template = "help/setup_instructions",
-                principal = principal[request],
-                data = mapOf(
-                    "apiSecret" to "abcdef"
+            Response(Status.OK).with(
+                viewRenderer[request].doRender(
+                    template = "help/setup_instructions",
+                    data = mapOf(
+                        "apiSecret" to "abcdef"
+                    )
                 )
             )
         }
