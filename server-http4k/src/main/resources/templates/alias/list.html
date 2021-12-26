@@ -72,7 +72,8 @@
                             <form th:action="@{'~/ui/alias/' + ${alias.id} + '/delete?search=' + ${search}}"
                                   method="post">
                                 <button class="mdc-icon-button material-icons"
-                                        onclick="return confirm('Are you sure that you want to delete this alias?')">
+                                        th:data-go-link="${viewUtils.asPlainGoLink(alias)}"
+                                        onclick="const goLink = dataset.goLink; return confirm(`Are you sure that you want to delete alias ${goLink}?`)">
                                     <div class="mdc-icon-button__ripple"></div>
                                     delete
                                 </button>
@@ -86,14 +87,6 @@
         <div class="mdc-data-table__pagination">
             <div class="mdc-data-table__pagination-trailing">
                 <div class="mdc-data-table__pagination-navigation">
-                    <div class="mdc-data-table__pagination-total">
-                        1‑10 of 100
-                    </div>
-                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                            data-first-page="true"
-                            disabled>
-                        <div class="mdc-button__icon">first_page</div>
-                    </button>
                     <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
                             data-prev-page="true"
                             disabled>
@@ -102,10 +95,6 @@
                     <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
                             data-next-page="true">
                         <div class="mdc-button__icon">chevron_right</div>
-                    </button>
-                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                            data-last-page="true">
-                        <div class="mdc-button__icon">last_page</div>
                     </button>
                 </div>
             </div>

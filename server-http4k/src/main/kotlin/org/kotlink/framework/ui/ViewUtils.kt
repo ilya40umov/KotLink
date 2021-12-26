@@ -6,8 +6,13 @@ object ViewUtils {
     private const val DISPLAYED_URL_LENGTH = 60
 
     fun asGoLink(alias: Alias): String {
-        val namespace = if (alias.linkPrefix.isBlank()) "" else "<b>${alias.linkPrefix}</b> "
-        return "kk/$namespace${alias.link}".replace(' ', '␣')
+        val prefix = if (alias.linkPrefix.isBlank()) "" else "<b>${alias.linkPrefix}</b> "
+        return "kk/$prefix${alias.link}".replace(' ', '␣')
+    }
+
+    fun asPlainGoLink(alias: Alias): String {
+        val prefix = if (alias.linkPrefix.isBlank()) "" else "${alias.linkPrefix} "
+        return "kk/$prefix${alias.link}".replace(' ', '␣')
     }
 
     fun truncateRedirectUrl(redirectUrl: String) = when {

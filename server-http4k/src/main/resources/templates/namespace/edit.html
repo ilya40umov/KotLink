@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title>KotLink - Edit Namespace</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <!--/* @thymesVar id="form" type="org.kotlink.ui.namespace.NamespaceForm" */-->
+    <div class="mdc-card edit-record-card">
+        <div class="form-header">
+            <span class="mdc-typography--headline6 form-title">
+                Edit Namespace
+            </span>
+        </div>
+        <section>
+            <form layout:insert="~{namespace/_form :: namespace-form}"
+                  th:with="edit=true"
+                  th:action="@{'~/ui/namespace/' + ${form.namespaceId} + '/edit'}"
+                  method="post"
+                  th:object="${form}">
+            </form>
+        </section>
+    </div>
+</main>
+</body>
+</html>

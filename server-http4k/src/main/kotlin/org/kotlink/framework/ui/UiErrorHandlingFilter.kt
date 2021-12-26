@@ -6,7 +6,7 @@ import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.with
-import org.kotlink.domain.alias.AliasNotFoundException
+import org.kotlink.domain.RecordNotFoundException
 import org.kotlink.framework.exception.BadRequestException
 
 private val logger = KotlinLogging.logger {}
@@ -23,7 +23,7 @@ class UiErrorHandlingFilter(
                 logger.warn(e.message)
                 Response(Status.BAD_REQUEST)
                     .with(viewRenderer[request].doRender400())
-            } catch (e: AliasNotFoundException) {
+            } catch (e: RecordNotFoundException) {
                 logger.warn(e.message)
                 Response(Status.NOT_FOUND)
                     .with(viewRenderer[request].doRender404())

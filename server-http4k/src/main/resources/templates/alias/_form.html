@@ -6,6 +6,7 @@
 <!--/* @thymesVar id="form" type="org.kotlink.ui.alias.AliasForm" */-->
 <!--/* @thymesVar id="errors" type="org.kotlink.framework.ui.FormErrors" */-->
 <!--/* @thymesVar id="namespaces" type="java.util.List<org.kotlink.domain.namespace.Namespace>" */-->
+<!--/* @thymesVar id="search" type="java.lang.String" */-->
 
 <!--/* @thymesVar id="edit" type="java.lang.Boolean" */-->
 
@@ -178,11 +179,24 @@
     </div>
 
     <div class="submit-button-wrapper">
+        <a class="mdc-button"
+           th:href="@{'~/ui/alias?search=' + ${search}}"
+           style="float:left;"
+           onclick="return confirm(`Are you sure? All unsaved changes will be lost.`)">
+            <span class="mdc-button__ripple"></span>
+            <span class="material-icons">
+                arrow_back
+            </span>
+            <span class="mdc-button__label">&nbsp;&nbsp;Back</span>
+        </a>
         <button id="save-alias-button"
                 class="mdc-button"
                 type="submit">
             <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__label">Save</span>
+            <span class="mdc-button__label">Save&nbsp;&nbsp;</span>
+            <span class="material-icons">
+                save
+            </span>
         </button>
     </div>
 

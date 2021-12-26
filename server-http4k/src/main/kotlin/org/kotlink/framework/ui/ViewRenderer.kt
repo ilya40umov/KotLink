@@ -50,7 +50,8 @@ class ViewRenderer(
     private fun extras(): Map<String, Any?> = mapOf(
         "principal" to principal(),
         "success_message" to request.successMessage(),
-        "error_message" to request.errorMessage()
+        "error_message" to request.errorMessage(),
+        "search" to request.searchParam()
     )
 
     private fun principal(): UserPrincipal = try {

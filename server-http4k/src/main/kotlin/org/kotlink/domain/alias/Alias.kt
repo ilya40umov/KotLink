@@ -1,5 +1,7 @@
 package org.kotlink.domain.alias
 
+import org.kotlink.domain.namespace.Namespace
+
 data class Alias(
     val linkPrefix: String,
     val link: String,
@@ -15,11 +17,11 @@ data class Alias(
         val LINK_REGEX = LINK_PATTERN.toRegex()
         const val MAX_LINK_LENGTH = 64
         const val MAX_REDIRECT_URL_LENGTH = 2048
-        const val MAX_DESCRIPTION_LENGTH = 256
-        const val MAX_EMAIL_LENGTH = 256
+        const val MAX_DESCRIPTION_LENGTH = Namespace.MAX_DESCRIPTION_LENGTH
+        const val MAX_EMAIL_LENGTH = Namespace.MAX_EMAIL_LENGTH
 
         fun computeId(fullLink: String): String {
-            val keywords = fullLink.split("\\s+")
+            val keywords = fullLink.split("\\s+".toRegex())
             return keywords.sorted().joinToString(separator = "_")
         }
     }

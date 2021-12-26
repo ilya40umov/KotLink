@@ -3,22 +3,21 @@
       xmlns:layout="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layout}">
 <head>
-    <title>KotLink - New Alias</title>
+    <title>KotLink - New Namespace</title>
 </head>
 <body>
 <main layout:fragment="content">
-    <!--/* @thymesVar id="form" type="org.kotlink.ui.alias.AliasForm" */-->
-    <!--/* @thymesVar id="search" type="java.lang.String" */-->
+    <!--/* @thymesVar id="form" type="org.kotlink.ui.namespace.NamespaceForm" */-->
     <div class="mdc-card edit-record-card">
         <section>
             <div class="form-header">
                 <span class="mdc-typography--headline6 form-title">
-                    New Alias
+                    New Namespace
                 </span>
             </div>
-            <form layout:insert="~{alias/_form :: alias-form}"
+            <form layout:insert="~{namespace/_form :: namespace-form}"
                   th:with="edit=false"
-                  th:action="@{'~/ui/alias/new?search=' + ${search}}"
+                  th:action="@{'~/ui/namespace/new'}"
                   method="post"
                   th:object="${form}">
             </form>

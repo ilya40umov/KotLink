@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      lang="en">
+<body>
+<!--/* @thymesVar id="form" type="org.kotlink.ui.namespace.NamespaceForm" */-->
+<!--/* @thymesVar id="errors" type="org.kotlink.framework.ui.FormErrors" */-->
+
+<!--/* @thymesVar id="edit" type="java.lang.Boolean" */-->
+
+<!--/* The following variables come from unwrapping "form" object: */-->
+<!--/* @thymesVar id="linkPrefix" type="java.lang.String" */-->
+<!--/* @thymesVar id="description" type="java.lang.String" */-->
+<!--/* @thymesVar id="ownerEmail" type="java.lang.String" */-->
+
+<form layout:fragment="namespace-form">
+
+    <div class="input-with-validation-wrapper">
+        <input th:if="${edit}" type="hidden" name="linkPrefix" th:value="*{linkPrefix}">
+        <label th:class="'mdc-text-field mdc-text-field--outlined' + ${errors.isFieldValid('linkPrefix') ? '' : ' mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="link-prefix-input-label">Shortcut</span>
+            <input id="link-input"
+                   name="linkPrefix"
+                   type="text"
+                   th:class="'mdc-text-field__input' + ${edit ? ' mdc-text-field--disabled' : ''}"
+                   th:value="${edit && form.linkPrefix.isEmpty() ? '(default)' : form.linkPrefix}"
+                   aria-labelledby="link-prefix-input-label"
+                   aria-controls="link-prefix-input-label"
+                   aria-describedby="link-input-label"
+                   required
+                   th:maxlength="${form.maxLinkPrefixLength()}"
+                   th:pattern="${form.linkPrefixPattern()}"
+                   th:disabled="${edit}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('linkPrefix')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <label th:class="'mdc-text-field mdc-text-field--outlined ' + ${errors.isFieldValid('description') ? '' : 'mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="description-input-label">Description</span>
+            <input id="description-input"
+                   name="description"
+                   type="text"
+                   class="mdc-text-field__input"
+                   th:value="*{description}"
+                   aria-labelledby="description-input-label"
+                   aria-controls="description-input-label"
+                   aria-describedby="description-input-label"
+                   required
+                   th:maxlength="${form.maxDescriptionLength()}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('description')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="input-with-validation-wrapper">
+        <label th:class="'mdc-text-field mdc-text-field--outlined ' + ${errors.isFieldValid('ownerEmail') ? '' : 'mdc-text-field--invalid'}"
+               data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="owner-email-input-label">Owner Email</span>
+            <input id="owner-email-input"
+                   name="ownerEmail"
+                   type="text"
+                   class="mdc-text-field__input"
+                   th:value="*{ownerEmail}"
+                   aria-labelledby="owner-email-input-label"
+                   aria-controls="owner-email-input-label"
+                   aria-describedby="owner-email-input-label"
+                   required
+                   th:maxlength="${form.maxEmailLength()}">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div class="mdc-text-field-helper-line">
+            <div th:each="error : ${errors.getForField('ownerEmail')}"
+                 class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg"
+                 style="display: inline-block"
+                 aria-hidden="true"
+                 th:text="${error}"></div>
+        </div>
+    </div>
+
+    <div class="submit-button-wrapper">
+        <a class="mdc-button"
+           th:href="@{'~/ui/namespace'}"
+           style="float:left;"
+           onclick="return confirm(`Are you sure? All unsaved changes will be lost.`)">
+            <span class="mdc-button__ripple"></span>
+            <span class="material-icons">
+                arrow_back
+            </span>
+            <span class="mdc-button__label">&nbsp;&nbsp;Back</span>
+        </a>
+        <button class="mdc-button"
+                type="submit">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">Save&nbsp;&nbsp;</span>
+            <span class="material-icons">
+                save
+            </span>
+        </button>
+    </div>
+</form>
+</body>
+</html>

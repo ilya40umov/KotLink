@@ -1,5 +1,6 @@
 package org.kotlink.domain.namespace
 
+import org.kotlink.domain.RecordNotFoundException
 import java.util.concurrent.ConcurrentHashMap
 
 class NamespaceService {
@@ -24,6 +25,9 @@ class NamespaceService {
     }
 
     fun findById(id: String): Namespace? = namespaces[id]
+
+    fun findByIdOrThrow(id: String): Namespace =
+        findById(id) ?: throw RecordNotFoundException("Namespace with ID '$id' not found!")
 
     fun findByLinkPrefix(linkPrefix: String): Namespace? {
         val id = linkPrefix.ifEmpty { Namespace.DEFAULT_NAMESPACE_ID }

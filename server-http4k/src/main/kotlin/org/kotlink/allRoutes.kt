@@ -42,8 +42,6 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
     val namespaceService = NamespaceService()
     val userAccountService = UserAccountService()
 
-    val contexts = RequestContexts()
-
     val oAuthPersistence = CookieBasedOAuthPersistence(
         cookieNamePrefix = "Google",
         encryptionProvider = AesEncryptionProvider(encryptionKey = config.cookieEncryption.encryptionKey),
@@ -59,6 +57,8 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
         oAuthPersistence = oAuthPersistence,
         scopes = listOf("openid", "email", "profile")
     )
+
+    val contexts = RequestContexts()
     val principalLookup = RequestContextKey.required<UserPrincipal>(contexts)
 
     val viewRenderer = ViewRendererProvider(
@@ -77,7 +77,7 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
             .then(
                 routes(
                     aliasRoutes(viewRenderer, principalLookup, aliasService, namespaceService, userAccountService),
-                    namespaceRoutes(viewRenderer),
+                    namespaceRoutes(viewRenderer, principalLookup, namespaceService, userAccountService),
                     helpRoutes(viewRenderer),
                     "/" bind Method.GET to {
                         Response(Status.TEMPORARY_REDIRECT)

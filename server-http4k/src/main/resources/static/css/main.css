@@ -102,7 +102,7 @@ body {
     margin: 0.6em 0 0 0;
 }
 
-/* Alias List */
+/* Alias/Namespace List */
 .filter-card {
     padding: 0.6em 1em 1em 1.5em;
     margin: 0.6em 0 0 0;
@@ -144,8 +144,12 @@ body {
     color: var(--mdc-theme-primary, #3D5AFE);
 }
 
-/* Alias / namespace editing form. */
+.new-namespace-button {
+    margin-top: 0.5em;
+    margin-bottom: 0.1em;
+}
 
+/* Alias / namespace editing form. */
 .edit-record-card {
     width: 75%;
     margin: auto;
@@ -156,25 +160,12 @@ body {
     float: right;
 }
 
+.submit-button-wrapper .back-button {
+    float: left;
+}
+
 .edit-record-card .form-header {
-    height: 1.5em;
-    position: relative;
-}
-
-.edit-record-card .form-header .back-button {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 0.5em;
-    transform: translate(-50%, -50%);
-}
-
-.edit-record-card .form-header .form-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: 0 -50% 0 0;
-    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .input-with-validation-wrapper {
