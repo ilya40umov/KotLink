@@ -19,5 +19,9 @@ class KotLinkFunction : ApiGatewayV2LambdaFunction(
 
 fun main() {
     logger.info { "Starting KotLink on port $LOCAL_PORT for local development." }
-    allRoutes(KotLinkConfig(hotReload = true)).asServer(SunHttp(LOCAL_PORT)).start()
+    allRoutes(
+        loadConfig(Environment.LOCAL)
+    ).asServer(
+        SunHttp(LOCAL_PORT)
+    ).start()
 }

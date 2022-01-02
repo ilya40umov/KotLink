@@ -40,16 +40,18 @@ import org.kotlink.ui.alias.aliasRoutes
 import org.kotlink.ui.help.helpRoutes
 import org.kotlink.ui.namespace.namespaceRoutes
 import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider
-import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.net.URI
 import java.net.URL
 
 fun allRoutes(config: KotLinkConfig): HttpHandler {
     val dynamoDbClient = DynamoDbClient.builder()
-        .endpointOverride(URI("http://localhost:4566"))
-        .credentialsProvider(AnonymousCredentialsProvider.create())
-        .region(Region.EU_CENTRAL_1)
+        .apply {
+            if (config.dynamoDb.endpointOverride != null) {
+                endpointOverride(URI(config.dynamoDb.endpointOverride.toString()))
+                credentialsProvider(AnonymousCredentialsProvider.create())
+            }
+        }
         .build()
 
     val aliasService = AliasService(

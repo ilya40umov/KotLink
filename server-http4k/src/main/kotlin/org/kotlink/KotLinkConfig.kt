@@ -5,8 +5,20 @@ import org.kotlink.KotLinkConfig.Companion.LOCAL_PORT
 
 fun loadConfig(environment: Environment): KotLinkConfig {
     var config = KotLinkConfig()
-    if (environment == Environment.LOCAL) {
-        config = config.copy(hotReload = true)
+    if (environment == Environment.AWS) {
+        config = config.copy(
+            googleOAuth = config.googleOAuth.copy(
+                callbackUri = System.getenv("GOOGLE_OAUTH_CALLBACK_URI")?.let(Uri::of)
+                    ?: config.googleOAuth.callbackUri
+            )
+        )
+    } else if (environment == Environment.LOCAL) {
+        config = config.copy(
+            hotReload = true,
+            dynamoDb = config.dynamoDb.copy(
+                endpointOverride = Uri.of("http://localhost:4566")
+            )
+        )
     }
     return config
 }
@@ -34,5 +46,6 @@ data class CookieEncryptionConfig(
 )
 
 data class DynamoDbConfig(
-    val tableName: String = "kotlink"
+    val tableName: String = "kotlink",
+    val endpointOverride: Uri? = null
 )
