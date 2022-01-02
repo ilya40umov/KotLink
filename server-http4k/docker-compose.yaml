@@ -5,12 +5,10 @@ services:
     image: localstack/localstack:0.13.2
     ports:
       - "4566"
-      - "4571"
     environment:
       - SERVICES=dynamodb
       - DEBUG=1
     volumes:
-      - "./.localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
     healthcheck:
       test: "awslocal dynamodb list-tables"

@@ -14,7 +14,8 @@ fun loadConfig(environment: Environment): KotLinkConfig {
 data class KotLinkConfig(
     val hotReload: Boolean = false,
     val googleOAuth: GoogleOAuthConfig = GoogleOAuthConfig(),
-    val cookieEncryption: CookieEncryptionConfig = CookieEncryptionConfig()
+    val cookieEncryption: CookieEncryptionConfig = CookieEncryptionConfig(),
+    val dynamoDb: DynamoDbConfig = DynamoDbConfig()
 ) {
     companion object {
         const val LOCAL_PORT = 9090
@@ -30,4 +31,8 @@ data class GoogleOAuthConfig(
 data class CookieEncryptionConfig(
     // openssl enc -aes-128-cbc -k secret -P -md sha1
     val encryptionKey: String = "98DF0848919E4FB12A0C0F3DA24C954A"
+)
+
+data class DynamoDbConfig(
+    val tableName: String = "kotlink"
 )

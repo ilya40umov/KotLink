@@ -26,7 +26,7 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
             }
             setTemplateResolver(fileTemplateResolver())
         } else {
-            setTemplateResolver(cachingClasspathResolver())
+            setTemplateResolver(cachingClasspathResolver(javaClass.classLoader))
         }
     }
 
@@ -42,7 +42,9 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
         engine.process(viewModel.template(), context)
     } catch (e: TemplateInputException) {
         when (e.cause) {
-            is FileNotFoundException -> throw ViewNotFound(viewModel)
+            is FileNotFoundException -> {
+                throw ViewNotFound(viewModel)
+            }
             else -> throw e
         }
     }
@@ -53,10 +55,10 @@ class ThymeleafTemplateRenderer(hotReload: Boolean) : TemplateRenderer {
             suffix = ".html"
         }
 
-        fun cachingClasspathResolver(): ITemplateResolver = ClassLoaderTemplateResolver(
-            ClassLoader.getSystemClassLoader()
-        ).apply {
-            prefix = "templates/"
+        fun cachingClasspathResolver(
+            classLoader: ClassLoader
+        ): ITemplateResolver = ClassLoaderTemplateResolver(classLoader).apply {
+            prefix = "/templates/"
             suffix = ".html"
         }
     }

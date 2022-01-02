@@ -7,4 +7,8 @@ class UiViewModel(
     val data: Map<String, *>
 ) : ViewModel {
     override fun template(): String = template
+
+    override fun toString(): String {
+        return "UiViewModel(template='$template')"
+    }
 }

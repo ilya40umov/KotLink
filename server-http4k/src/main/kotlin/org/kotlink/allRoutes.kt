@@ -13,15 +13,18 @@ import org.http4k.core.with
 import org.http4k.filter.FlashAttributesFilter
 import org.http4k.filter.ServerFilters.InitialiseRequestContext
 import org.http4k.lens.RequestContextKey
-import org.http4k.routing.ResourceLoader
-import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import org.http4k.routing.static
 import org.http4k.security.OAuthProvider
 import org.http4k.security.google
+import org.kotlink.api.autocompleteRoute
+import org.kotlink.api.redirectRoute
+import org.kotlink.domain.account.UserAccountRepository
 import org.kotlink.domain.account.UserAccountService
+import org.kotlink.domain.alias.AliasRepository
 import org.kotlink.domain.alias.AliasService
+import org.kotlink.domain.alias.FullLinkRepository
+import org.kotlink.domain.namespace.NamespaceRepository
 import org.kotlink.domain.namespace.NamespaceService
 import org.kotlink.framework.crypto.AesEncryptionProvider
 import org.kotlink.framework.oauth.CookieBasedOAuthPersistence
@@ -32,15 +35,33 @@ import org.kotlink.framework.oauth.UserPrincipal
 import org.kotlink.framework.ui.ThymeleafTemplateRenderer
 import org.kotlink.framework.ui.UiErrorHandlingFilter
 import org.kotlink.framework.ui.ViewRendererProvider
+import org.kotlink.framework.ui.staticResources
 import org.kotlink.ui.alias.aliasRoutes
 import org.kotlink.ui.help.helpRoutes
 import org.kotlink.ui.namespace.namespaceRoutes
+import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import java.net.URI
 import java.net.URL
 
 fun allRoutes(config: KotLinkConfig): HttpHandler {
-    val aliasService = AliasService()
-    val namespaceService = NamespaceService()
-    val userAccountService = UserAccountService()
+    val dynamoDbClient = DynamoDbClient.builder()
+        .endpointOverride(URI("http://localhost:4566"))
+        .credentialsProvider(AnonymousCredentialsProvider.create())
+        .region(Region.EU_CENTRAL_1)
+        .build()
+
+    val aliasService = AliasService(
+        aliasRepository = AliasRepository(dbClient = dynamoDbClient, tableName = config.dynamoDb.tableName),
+        fullLinkRepository = FullLinkRepository(dbClient = dynamoDbClient, tableName = config.dynamoDb.tableName)
+    )
+    val namespaceService = NamespaceService(
+        NamespaceRepository(dbClient = dynamoDbClient, tableName = config.dynamoDb.tableName)
+    )
+    val userAccountService = UserAccountService(
+        UserAccountRepository(dbClient = dynamoDbClient, tableName = config.dynamoDb.tableName)
+    )
 
     val oAuthPersistence = CookieBasedOAuthPersistence(
         cookieNamePrefix = "Google",
@@ -68,6 +89,7 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
     return routes(
         oauthProvider.callbackEndpoint,
         staticResources(config.hotReload),
+        autocompleteRoute(aliasService),
         InitialiseRequestContext(contexts)
             .then(OAuthErrorHandlingFilter(viewRenderer))
             .then(oauthProvider.authFilter)
@@ -79,6 +101,7 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
                     aliasRoutes(viewRenderer, principalLookup, aliasService, namespaceService, userAccountService),
                     namespaceRoutes(viewRenderer, principalLookup, namespaceService, userAccountService),
                     helpRoutes(viewRenderer),
+                    redirectRoute(aliasService),
                     "/" bind Method.GET to {
                         Response(Status.TEMPORARY_REDIRECT)
                             .header("Location", "/ui/alias")
@@ -97,13 +120,4 @@ fun allRoutes(config: KotLinkConfig): HttpHandler {
                 )
             )
     )
-}
-
-private fun staticResources(hotReload: Boolean): RoutingHttpHandler {
-    val resourceLoader = if (hotReload) {
-        ResourceLoader.Directory("${Constants.IDE_RESOURCES_DIRECTORY}/static")
-    } else {
-        ResourceLoader.Classpath("static")
-    }
-    return static(resourceLoader)
 }

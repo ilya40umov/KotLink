@@ -13,7 +13,7 @@ plugins {
 
     id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.avast.gradle.docker-compose") version "0.14.11"
+    id("com.avast.gradle.docker-compose")
 }
 
 dependencies {
@@ -67,15 +67,15 @@ configurations {
 }
 
 dockerCompose {
-    projectName = "kotlink"
-    projectNamePrefix = "kotlink_"
+    projectName = "kk-spring"
+    projectNamePrefix = "kk_spring_"
     useComposeFiles.set(listOf("docker-compose.yaml", "docker-compose-local.yaml"))
     // when set to "false", the plugin automatically tries to reconnect to the containers from the previous run
     stopContainers.set(false)
 
     createNested("integrationTest").apply {
-        projectName = "kotlink-ci"
-        projectNamePrefix = "kotlink_ci_"
+        projectName = "kk-spring-ci"
+        projectNamePrefix = "kk_spring_ci_"
         useComposeFiles.set(listOf("docker-compose.yaml", "docker-compose-ci.yaml"))
     }
 }
