@@ -1,27 +1,30 @@
 package org.kotlink
 
 import mu.KotlinLogging
-import org.http4k.server.SunHttp
-import org.http4k.server.asServer
+import org.http4k.serverless.ApiGatewayV2FnLoader
 import org.http4k.serverless.ApiGatewayV2LambdaFunction
-import org.kotlink.KotLinkConfig.Companion.LOCAL_PORT
+import org.http4k.serverless.AwsLambdaRuntime
+import org.http4k.serverless.asServer
 
 val logger = KotlinLogging.logger {}
 
+/**
+ * Implements `com.amazonaws.services.lambda.runtime.RequestStreamHandler`,
+ * which is used when deploying to AWS Lambda runtime as a JAR file (i.e. running on JVM).
+ */
 @Suppress("unused")
 class KotLinkFunction : ApiGatewayV2LambdaFunction(
-    allRoutes(
-        config = loadConfig(
-            environment = Environment.AWS
-        )
-    )
+    allRoutes(config = loadConfig(environment = Environment.AWS))
 )
 
+/**
+ * Used by ShadowJar which gets converted into a GraalVM image.
+ */
 fun main() {
-    logger.info { "Starting KotLink on port $LOCAL_PORT for local development." }
-    allRoutes(
-        loadConfig(Environment.LOCAL)
+    logger.info { "Starting KotLink using ApiGatewayV2FnLoader." }
+    ApiGatewayV2FnLoader(
+        allRoutes(config = loadConfig(environment = Environment.AWS))
     ).asServer(
-        SunHttp(LOCAL_PORT)
+        AwsLambdaRuntime()
     ).start()
 }

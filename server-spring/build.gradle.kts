@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.spring")
     kotlin("plugin.allopen")
 
-    id("org.springframework.boot") version "2.6.2"
+    id("org.springframework.boot") version "2.6.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.avast.gradle.docker-compose")
 }
@@ -27,7 +27,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+    // implementation("org.springframework.boot:spring-boot-starter-log4j2")
     implementation("org.springframework.boot:spring-boot-devtools")
 
     implementation("org.springframework.session:spring-session-jdbc")
@@ -44,9 +44,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.postgresql:postgresql:42.3.1")
-    implementation("org.flywaydb:flyway-core:8.2.1")
+    implementation("org.flywaydb:flyway-core:8.4.2")
 
-    implementation(platform("org.jetbrains.exposed:exposed-bom:0.36.2"))
+    implementation(platform("org.jetbrains.exposed:exposed-bom:0.37.3"))
     implementation("org.jetbrains.exposed:exposed-core")
     implementation("org.jetbrains.exposed:exposed-jdbc")
     implementation("org.jetbrains.exposed:spring-transaction")
@@ -59,12 +59,12 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:4.2.0")
 }
 
-configurations {
-    all {
-        // Exclude the default logging implementations used by Spring Boot.
-        exclude("org.springframework.boot", "spring-boot-starter-logging")
-    }
-}
+// configurations {
+//     all {
+//         // Exclude the default logging implementations used by Spring Boot.
+//         exclude("org.springframework.boot", "spring-boot-starter-logging")
+//     }
+// }
 
 dockerCompose {
     projectName = "kk-spring"

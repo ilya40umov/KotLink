@@ -13,9 +13,9 @@ plugins {
     kotlin("plugin.allopen") version kotlinVersion apply false
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
-    id("com.github.ben-manes.versions") version "0.39.0"
-    id("com.avast.gradle.docker-compose") version "0.14.11" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    id("com.github.ben-manes.versions") version "0.41.0"
+    id("com.avast.gradle.docker-compose") version "0.14.13" apply false
 }
 
 allprojects {
@@ -39,13 +39,12 @@ subprojects {
 
     dependencies {
         "implementation"(platform("org.jetbrains.kotlin:kotlin-bom"))
-        "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.17.0"))
-        "implementation"("org.slf4j:slf4j-api:1.7.32")
-        "implementation"("org.apache.logging.log4j:log4j-core")
-        "implementation"("org.apache.logging.log4j:log4j-jul")
+        // "implementation"(platform("org.apache.logging.log4j:log4j-bom:2.17.1"))
         "implementation"("io.github.microutils:kotlin-logging:2.1.21")
 
-        "runtimeOnly"("org.apache.logging.log4j:log4j-slf4j-impl")
+        // "implementation"("org.apache.logging.log4j:log4j-core")
+        // "implementation"("org.apache.logging.log4j:log4j-jul")
+        // "runtimeOnly"("org.apache.logging.log4j:log4j-slf4j-impl")
 
         val jupiterVersion = "5.8.2"
         "testImplementation"("org.junit.jupiter:junit-jupiter-api:$jupiterVersion")

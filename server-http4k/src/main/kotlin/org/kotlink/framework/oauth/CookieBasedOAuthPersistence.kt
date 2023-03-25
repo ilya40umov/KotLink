@@ -18,7 +18,6 @@ import org.kotlink.framework.crypto.EncryptionProvider
 import java.security.GeneralSecurityException
 import java.time.Clock
 import java.time.Duration
-import java.time.LocalDateTime
 
 private val logger = KotlinLogging.logger {}
 
@@ -114,7 +113,7 @@ class CookieBasedOAuthPersistence(
     private fun expiring(name: String, value: String) = Cookie(
         name = name,
         value = value,
-        expires = LocalDateTime.ofInstant(clock.instant().plus(cookieValidity), clock.zone),
+        expires = clock.instant().plus(cookieValidity),
         path = cookiePath
     )
 
